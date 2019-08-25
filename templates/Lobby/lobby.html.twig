@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div style="margin-bottom: 6px;">Hi {{ name }}, welcome in the lobby.</div>
+    <div id="users" style="">
+        {{ form_errors(form) }}
+        {{ form_start(form, {'method': 'POST', 'action': path('lobby.invite')}) }}
+        <table>
+        {{ form_row(form._token) }}
+        {{ form_row(form.players) }}
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Invite"></td>
+            </tr>
+        </table>
+        {{ form_end(form) }}
+    </div>
+    <textarea id="chat" style="width: 400px; height: 200px; background: #C9C9C9">{% apply spaceless %}
+    {% for message in messages %}{% apply spaceless %}
+        {{ message.name }}: {{ message.message}}
+    {% endapply %}{{ "\n" }}{% endfor %}
+{% endapply %}</textarea>
+    <br/>
+    <form onsubmit="sendMessage(); return false;">
+    <input id="message" style="width: 412px; background: #C9C9C9"/><input id="send" type="button" onclick="sendMessage()" value="send" style="width: 100px"/>
+    </form>
+
+    <br/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('duizenden/js/Lobby/MessageHandler.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Lobby/Lobby.js') }}"></script>
+
+    <script>
+        let lobby;
+
+    $(document).ready(() => {
+        const lobby_connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:lobby:{{ lobby_id }}'));
+        const lobby_message_handler = new MessageHandler($('#chat'));
+        lobby = new Lobby(lobby_connection, '{{ path('lobby.say', {message: '000'}) }}', lobby_message_handler);
+        lobby.connect();
+    });
+
+    function sendMessage() {
+        const message_input = $('#message');
+        lobby.send(message_input.val());
+        message_input.val('');
+    }
+    </script>
+{% endblock %}

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Lobby\Entity\Invitation" table="invitation" repository-class="App\Lobby\Repository\InvitationRepository">
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="uuid" type="string" length="36" nullable="false"/>
+    <field name="created_at" type="datetime" nullable="false"/>
+    <field name="game_id" type="string" length="36" nullable="true"/>
+    <many-to-one field="Inviter" target-entity="App\Lobby\Entity\Invitee">
+      <join-columns>
+        <join-column name="inviter_id" referenced-column-name="id" on-delete="SET NULL"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-many field="Invitees" target-entity="App\Lobby\Entity\Invitee" mapped-by="Invitation"/>
+  </entity>
+</doctrine-mapping>

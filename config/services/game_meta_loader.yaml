@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+
+  _instanceof:
+    App\Game\Meta\MetaLoaderInterface:
+      tags: [ 'app.game.meta_loader' ]
+
+  App\Game\Meta\GameMetaLoader:
+      arguments: [ !tagged 'app.game.meta_loader' ]
+
+  App\Games\Duizenden\MetaLoader: ~

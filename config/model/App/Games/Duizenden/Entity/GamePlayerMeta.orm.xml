@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Games\Duizenden\Entity\GamePlayerMeta" table="game_player_meta">
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="shuffle_count_min" type="smallint" nullable="false"/>
+    <field name="shuffle_count_max" type="smallint" nullable="false"/>
+    <field name="grab_cards_min" type="decimal" nullable="false" precision="2" scale="2"/>
+    <field name="grab_cards_max" type="decimal" nullable="false" precision="2" scale="2"/>
+    <field name="max_inserts" type="smallint" nullable="false"/>
+    <many-to-one field="Player" target-entity="App\Entity\Player" inversed-by="GamePlayerMetas">
+      <join-columns>
+        <join-column name="player_id" referenced-column-name="id" nullable="false"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="GameMeta" target-entity="App\Games\Duizenden\Entity\GameMeta">
+      <join-columns>
+        <join-column name="game_meta_id" referenced-column-name="id" nullable="false" on-delete="CASCADE"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-many field="GamePlayers" target-entity="App\Games\Duizenden\Entity\GamePlayer" mapped-by="GamePlayerMeta">
+      <cascade>
+        <cascade-remove/>
+      </cascade>
+    </one-to-many>
+  </entity>
+</doctrine-mapping>

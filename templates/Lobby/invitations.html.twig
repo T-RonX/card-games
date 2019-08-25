@@ -1,0 +1,51 @@
+{% import _self as self %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if invitations_create|length %}
+        <div><b>Invitations created</b></div>
+        {% for invitation in invitations_create|filter(invitation => invitation.invitees|length > 1) %}
+            <div style="margin-top: 6px;">
+                {{ invitation.uuid }} {{ invitation.createdAt|date('Y-m-d H:i:s') }}
+                {% if invitation.hasGameId %}
+                    - <a href="{{ path('game.load', {game_name: 'duizenden', uuid: invitation.gameId}) }}">JOIN GAME</a>
+                {% elseif invitation.allInviteesAccepted %}
+                    - <a href="{{ path('duizenden.new', {invitation: invitation.uuid}) }}">CREATE GAME</a>
+                {% elseif invitation.allInviteesResponded %}
+                    - REJECTED :-(
+                {% else %}
+                    - WAITING FOR PLAYERS TO RESPOND
+                {% endif %}
+                {{ self.invitees(invitation, player.uuid) }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <br/>
+    {% if invitations_received|length %}
+        <div><b>Invitations received</b></div>
+        {% for invitation in invitations_received|filter(invitation => invitation.invitees|length > 1) %}
+            <div style="margin-top: 6px;">
+                {{ invitation.uuid }} {{ invitation.createdAt|date('Y-m-d H:i:s') }} -
+                {% if invitation.hasGameId %}
+                     <a href="{{ path('game.load', {game_name: 'duizenden', uuid: invitation.gameId}) }}">JOIN GAME</a>
+                {% elseif invitation.inviteeByPlayer(player).accepted is null %}
+                    <a href="{{ path('lobby.accept_invitation', {invitation: invitation.uuid}) }}">ACCEPT</a> /
+                    <a href="{{ path('lobby.decline_invitation', {invitation: invitation.uuid}) }}">DECLINE</a>
+                {% else %}
+                    ({{ invitation.inviteeByPlayer(player).accepted ? 'ACCEPTED' : 'DECLINED' }})
+                {% endif %}
+                {{ self.invitees(invitation, player.uuid) }}
+            </div>
+        {% endfor %}
+    {% endif  %}
+{% endblock %}
+
+{% macro invitees(invitation, player_id) %}
+<ul style="margin:0;">
+{% for invitee in invitation.invitees %}
+    {% if player_id != invitee.player.uuid %}
+        <li style="color: {{ invitee.accepted ? 'green' : 'red' }};">{{ invitee.player.name }}</li>
+    {% endif %}
+{% endfor %}
+</ul>
+{% endmacro %}

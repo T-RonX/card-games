@@ -1,0 +1,331 @@
+{% extends 'base.html.twig' %}
+{% import _self as self %}
+
+{% block stylesheets %}
+<style>
+    .draggable:hover {
+        cursor: grab;
+    }
+
+    .draggable:active {
+        cursor: grabbing;
+    }
+
+    div.card {
+        font-size: 22px;
+        display: flex;
+        justify-content: center;
+        align-content:center;
+        flex-direction:column;
+        vertical-align: middle;
+        text-align: center;
+        background: #fbfbfb;
+        line-height: 22px;
+        margin-top: 6px;
+        width: 139px; /* height * 0,63 */
+        height: 220px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-size: contain;
+        margin-right: 5px;
+        margin-bottom: 11px;
+        transition: margin-bottom .09s, margin-right .09s, width .09s, height .09s;
+    }
+
+    div.card.small {
+        width: 113px; /* height * 0,63 */
+        height: 180px;
+    }
+
+    a#deal, a#restart {
+        padding: 10px;
+        font-size: 14px;
+        background: #227722;
+        border-radius: 5px;
+    }
+
+    a#deal:hover {
+        padding: 10px;
+        font-size: 14px;
+        background: #226622;
+        border-radius: 5px;
+    }
+
+    .card.selected {
+        outline: 4px solid deepskyblue;
+        outline-offset: -4px;
+    }
+
+    .card_hand.selected {
+        outline: 4px solid deepskyblue;
+        outline-offset: -4px;
+    }
+
+    #hand_container .card_hand {
+        width: 139px; /* height * 0,63 */
+        height: 220px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-size: contain;
+        background-color: #fff;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.09);
+    }
+
+    div.pad {
+        padding: 6px;
+    }
+
+    #undrawn_pool.highlighted {
+        background: #801f0E;
+    }
+
+    #discarded_pool.highlighted {
+        background: #801f0E;
+    }
+
+    .card_hand_dropper {
+        display: none;
+    }
+
+    .card_hand_dropper.highlight .card_hand_dropper_indicator{
+        float: right;
+        opacity: .7;
+        background-color: lawngreen;
+        border-radius: 5px;
+    }
+
+</style>
+{% endblock %}
+{% set discarded_pool_is_first_card = game.state.discardedPool.firstCard %}
+
+{% block body %}
+    {% set game_score = game.scoreCalculator.calculateGameScore(game.id) %}
+    {% set current_player_id = game.state.players.currentPlayer.id %}
+    {% set current_player = game.state.players.currentPlayer %}
+    {% set player = game.state.players.playerById(app.user.uuid) %}
+
+<div>
+    <div style="float: left; height: 260px; width: 312px; border: 3px #034823 solid; border-right: none;">
+        <div  style="float: left; width: 150px; height: 250px;">
+            <div id="undrawn_pool" class="pad">
+                Undrawn
+                {% if game.state.undrawnPool|last %}
+                    {{ self.input(game.state.undrawnPool|last, workflow_can(game, 'draw_from_undrawn'), true) }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="discarded_pool" class="highlight pad" style="height: 250px; width: 150px; float: left;">
+            Discarded
+            {% if game.state.discardedPool|last%}
+                {{ self.input(game.state.discardedPool|last, workflow_can(game, 'draw_from_discarded') and ((not game.state.players.currentPlayer.hasMelds and discarded_pool_is_first_card) or game.scoreCalculator.calculatePlayerMeldsScore(game.state.players.currentPlayer) >= 30)) }}
+            {% endif %}
+        </div>
+
+        <div style="border-top: 3px #034823 solid; clear: left;">
+            <div class="pad">
+                <div style="margin-bottom: 10px">
+                    <b>Allowed actions</b><br/>
+                {% for transition in workflow_transitions(game) %}
+                    {{ transition.name }}<br/>
+                {% else %}
+                    No actions available<br/>
+                {% endfor %}
+                </div>
+
+                <div style="margin-bottom: 10px">
+                {% if workflow_can(game, 'meld') %}
+                    <br/><input type="button" value="Meld cards" onclick="meld()" />
+                {% endif %}
+                </div>
+
+                <div style="margin-bottom: 10px">
+                    <b>Scoreboard</b><br/>
+                {% set scoreboard = [] %}
+                {% for player in game.state.players.freshLoopIterator %}
+                    {% set scoreboard = scoreboard|merge({(player.name): game_score.totalPlayerScore(player.id)}) %}
+                {% endfor %}
+                    {% for player, score in scoreboard|sort|reverse %}
+                    {{ player }}: {{ score }}<br/>
+                    {% endfor %}
+                </div>
+
+                <div style="margin-bottom: 10px">
+                {% if is_granted('deal', game) %}
+                    <br/><a href="#" id="deal">DEAL CARDS</a>
+                {% endif %}
+
+                {% if workflow_can(game, 'restart_game') %}
+                    <br/><a href="{{ path('duizenden.new') }}" id="restart">RESTART</a>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="border-left: 3px #034823 solid; clear: right; ">
+        <div class="pad">
+            {% for player in game.state.players %}
+            <div style="display: flex; height: 230px;">
+                <div style="width: 90px; height: 230px; vertical-align: middle; line-height: 230px">
+                    <span{{ player.id == current_player_id ? ' style="color: #ffcc00; font-weight: bold"' }}>{{ player.name }} ({{ player.melds|length }})</span>
+                </div>
+                {% for meld in player.melds %}
+                    <div class="meld_pool" data-meld-id="{{ loop.index }}" style="display: flex; margin-right: 15px;">
+                        {% for card in meld.cards %}
+                            {{ self.input(card, false, false, true) }}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div id="hand_container" style="display: none; position: fixed; bottom: 0; left: 50%; margin: 0 auto; transform: translate(-50%);">
+    {% for card in player.hand %}
+        <div data-card-order="{{ loop.index }}" data-card-id="{{ card.suit.name ~ card.rank.name }}" class="card_hand draggable" style="background-image: url('/duizenden/cards/{{ (card.suit.name ~ card.rank.name)|lower }}.png')"></div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% macro input(card, draggable = false, turned = false, small) %}
+<div {{ not turned ? 'data-card-id="' ~ card.suit.name ~ card.rank.name ~'" ' }}class="card{{ small ? ' small' }}{{ draggable ? ' draggable' }}" style="background-image: url('/duizenden/cards/{{ turned ? 'back' : (card.suit.name ~ card.rank.name)|lower }}.svg')"></div>
+{% endmacro %}
+
+{% block javascripts %}
+    <script src="{{ asset('duizenden/js/Game/Game.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/GameEvent.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/GameEventMessageHandler.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Helper/MathHelper.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Helper/ZFighter.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Card/CardDragger.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Hand/DroppableHand.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Hand/Hand.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Hand/HandCardDragger.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Hand/HandContainer.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Hand/HandHoverAnimator.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Hand/HandPosition.js') }}"></script>
+<script>
+    let elem = document.querySelector('.card_hand');
+
+    const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
+    const message_handler = new GameEventMessageHandler('{{ app.user.uuid }}');
+    const event_handler = new GameEvent(connection, message_handler);
+    event_handler.initialize();
+
+    if (elem) {
+        let style = window.getComputedStyle(elem);
+
+        $(document).ready(() => {
+            const game = Game.create(
+                connection,
+                event_handler,
+                '#hand_container .card_hand',
+                '{{ path('duizenden.draw_from_discarded', {meld_cards: '000'}) }}',
+                '{{ path('duizenden.draw_from_undrawn') }}',
+                parseInt(style.width),
+                parseInt(style.height),
+                .3
+            );
+
+            game.initialize();
+        });
+    }
+
+
+$("#deal").click(function () {
+    let url = '{{ path('duizenden.deal') }}';
+    $.post(url, null, function (data) {
+        location.reload();
+    });
+});
+
+{% if drawn_card is defined %}
+let drawn_card = $(".card_hand[data-card-id='" + {{ drawn_card.suit.name ~ drawn_card.rank.name }}  + "']");
+drawn_card.css('outline', '4px solid orange');
+drawn_card.css('outline-offset', '-4px');
+{% endif %}
+
+// $( function() {
+//   $(".draggable").draggable();
+// });
+
+function meld() {
+    let cards = [];
+
+    $('#hand_container').find('.card_hand.selected').each(function (item) {
+        cards.push($(this).data('card-id'));
+    });
+
+    $.post('{{ path('duizenden.meld', {cards: '000'}) }}'.replace('000', cards.join()), null, function (data) {
+        location.reload();
+    });
+}
+
+var dragCheck = false;
+
+// $('.card_hand').mouseup(function (){
+//     if(dragCheck === false) {
+//         $(this).toggleClass('selected');
+//     }
+// });
+
+// $('.card_hand').mouseup(function (){
+//     if(dragCheck === false) {
+//         $(this).toggleClass('selected');
+//     }
+// });
+
+let z = 1;
+let drag_source = 'none';
+
+//$(".card_hand.draggable").draggable({});
+
+$(".card.draggable").draggable({
+    drag: function (event, ui) {
+        dragCheck = true;
+
+        $('.card_hand_dropper').css('display', 'block');
+
+    },
+    start: function (event, ui) {
+        $(this).css('z-index', ++z);
+        drag_source = $(this).parent().attr('id');
+    },
+    stop: function( event, ui ) {
+        $(this).css('z-index', z - 1);
+        dragCheck = false;
+
+        $('.card_hand_dropper').css('display', 'none');
+    }
+});
+
+
+$(".meld_pool").droppable({
+  drop: function(event, ui) {
+      if (drag_source === 'hand_container') {
+          let url = '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}'.replace('111', ui.draggable.data('card-id')).replace('000', $(this).data('meld-id') - 1);
+          $.post(url, null, function (data) {
+              location.reload();
+          });
+      }
+  }
+});
+
+$("#discarded_pool").droppable({
+  drop: function(event, ui) {
+      if (drag_source === 'hand_container') {
+          let url = '{{ path('duizenden.discard', { card: '000' }) }}'.replace('000', ui.draggable.data('card-id'));
+          $.post(url, null, function (data) {
+              location.reload();
+          });
+      }
+  }
+});
+
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,4 @@
+services:
+  App\Security\Voter\Duizenden\GameVoter:
+    bind:
+      $state_machine: '@state_machine.duizenden'

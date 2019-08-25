@@ -1,0 +1,10 @@
+services:
+  Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+    arguments:
+      - 'mysql:dbname=duizenden; host=127.0.0.1; port=3306'
+      - { db_username: root, db_password: developer, db_table: session, db_id_col: id, db_data_col: data, db_lifetime_col: lifetime, db_time_col: time }
+      -
+  app.listener.session_secret:
+      class: App\Listener\SessionSecretListener
+      tags:
+        - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

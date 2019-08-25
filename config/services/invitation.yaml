@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autowire: true
+
+  app.lobby.invitation_accepted_by_all:
+    class: App\Lobby\Event\InvitationAcceptedByAllEventListener
+    tags:
+      - { name: kernel.event_listener, event: 'invitation.accepted_by_all' }

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_errors(form) }}
+    {{ form_start(form, {method: 'POST', action: path('lobby.create_registration')}) }}
+    <table>
+    {{ form_row(form._token) }}
+    {{ form_row(form.name) }}
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Create"></td>
+        </tr>
+    </table>
+    {{ form_end(form) }}
+{% endblock %}

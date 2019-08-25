@@ -1,0 +1,13 @@
+services:
+  app.deck_rebuilder.locator:
+    class: Symfony\Component\DependencyInjection\ServiceLocator
+    tags: ['container.service_locator']
+    arguments:
+      -
+
+      distinct: '@App\DeckRebuilders\DistinctDeckRebuilder'
+
+  App\DeckRebuilder\DeckRebuilderFactory:
+      arguments: [ '@app.deck_rebuilder.locator' ]
+
+  App\DeckRebuilders\DistinctDeckRebuilder: ~

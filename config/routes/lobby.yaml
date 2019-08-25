@@ -1,0 +1,37 @@
+lobby.show:
+  path: /
+  controller: App\Controller\MeetingLobby::show
+
+lobby.say:
+  path: /say/{message}
+  controller: App\Controller\MeetingLobby::conveyMessage
+  requirements:
+    message: .*
+
+lobby.new_registration:
+  path: /enter-name
+  methods: ['GET']
+  controller: App\Controller\MeetingLobby::newAnonymousPlayer
+
+lobby.create_registration: # Handled by App\Security\FirewallAnonymousPlayerListener
+  path: /save-name
+
+lobby.invite:
+  path: /invitation/send
+  methods: ['POST']
+  controller: App\Controller\MeetingLobby::invite
+
+lobby.accept_invitation:
+  path: /invitation/accept/{invitation}
+  methods: ['GET']
+  controller: App\Controller\MeetingLobby::acceptInvitation
+
+lobby.decline_invitation:
+  path: /invitation/decline/{invitation}
+  methods: ['GET']
+  controller: App\Controller\MeetingLobby::declineInvitation
+
+lobby.invitations:
+  path: /invitations
+  methods: ['GET']
+  controller: App\Controller\MeetingLobby::invitations

@@ -1,0 +1,14 @@
+services:
+  app.deck.locator:
+    class: Symfony\Component\DependencyInjection\ServiceLocator
+    tags: ['container.service_locator']
+    arguments:
+      -
+
+      standard108: '@App\Decks\Standard108\Deck'
+
+  App\Deck\DeckFactory:
+      arguments: [ '@app.deck.locator' ]
+
+  App\Decks\Standard108\Deck:
+    shared: false

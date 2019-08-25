@@ -1,0 +1,7 @@
+#api_custom_route_name:
+#  path: '/gameplayer/{gameplayer}'
+#  methods:  ['GET']
+#  defaults:
+#    _controller: 'Application\Action\CustomAction'
+#    _api_resource_class: 'App\Games\Duizenden\Entity\GamePlayer'
+#    _api_collection_operation_name: 'event'

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if game_metas|length %}
+        {% for game_name, games in game_metas %}
+            <h3>{{ game_name|capitalize }}</h3>
+            <ul style="font-family: Consolas, serif">
+            {% for game_meta in games %}
+                <li><a href="{{ path('game.load', { game_name: game_name, uuid: game_meta.id }) }}">{{ game_meta.id }} : {{ game_meta.lastActionAt|date('Y-m-d H:i:s') }} : {{ game_meta.place }}</a> <a href="{{ path('duizenden.delete', { uuid: game_meta.id }) }}" style="color: red"><b>X</b></a></li>
+            {% endfor %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        No current games
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Games\Duizenden\Entity\Game" table="game" repository-class="App\Games\Duizenden\Repository\GameRepository">
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="sequence" type="integer" nullable="false"/>
+    <field name="workflow_marking" type="string" nullable="false"/>
+    <field name="created_at" type="datetime_immutable" nullable="false"/>
+    <field name="undrawn_pool" type="json_array" nullable="false"/>
+    <field name="discarded_pool" type="json_array" nullable="false"/>
+    <field name="is_first_card" type="boolean" nullable="false"/>
+    <field name="round" type="integer" nullable="true"/>
+    <unique-constraints>
+      <unique-constraint name="game_id_sequence" columns="sequence,game_id"/>
+    </unique-constraints>
+    <many-to-one field="Game" target-entity="App\Games\Duizenden\Entity\Game" inversed-by="GameStates">
+      <join-columns>
+        <join-column name="game_id" referenced-column-name="id" on-delete="SET NULL"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="GameMeta" target-entity="App\Games\Duizenden\Entity\GameMeta">
+      <join-columns>
+        <join-column name="game_meta_id" referenced-column-name="id" nullable="false" on-delete="CASCADE"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="CurrentPlayer" target-entity="App\Games\Duizenden\Entity\GamePlayer" inversed-by="CurrentPlayerGames">
+      <join-columns>
+        <join-column name="current_player_id" referenced-column-name="id" on-delete="CASCADE"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-many field="GamePlayers" target-entity="App\Games\Duizenden\Entity\GamePlayer" mapped-by="Game"/>
+    <one-to-many field="GameStates" target-entity="App\Games\Duizenden\Entity\Game" mapped-by="Game"/>
+  </entity>
+</doctrine-mapping>

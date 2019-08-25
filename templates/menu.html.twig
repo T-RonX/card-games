@@ -1,0 +1,9 @@
+<nav style="margin-bottom: 10px;">
+    <a href="{{ path('duizenden.new') }}">new</a>
+    <a href="{{ path('game.saved') }}">load</a>
+    <a href="{{ path('lobby.show') }}">lobby</a>
+    <a href="{{ path('lobby.invitations') }}">invitations</a>
+{% if app.user %}
+    <a href="{{ path('logout') }}">terminate<span style="font-size: 10px;"> ({{ app.user.name }})</span></a>
+{% endif %}
+</nav>

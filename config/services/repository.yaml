@@ -1,0 +1,9 @@
+services:
+  App\Repository\PlayerRepository:
+    alias: app.repository.player
+
+  app.repository.player:
+    class: Doctrine\ORM\EntityRepository
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+        - App\Entity\Player

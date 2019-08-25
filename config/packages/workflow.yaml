@@ -1,0 +1,50 @@
+framework:
+  workflows:
+    duizenden:
+      type: state_machine
+      supports:
+        - App\Games\Duizenden\Game
+      initial_marking: create
+      marking_store:
+        service: 'App\Games\Duizenden\Workflow\PersistingMarkingStore'
+      places:
+        - create
+        - configured
+        - start_turn
+        - card_drawn
+        - cards_melted
+        - turn_end
+        - round_end
+        - game_end
+      transitions:
+        configure:
+          from: create
+          to: configured
+        deal:
+          from: [configured, round_end]
+          to: start_turn
+        draw_from_undrawn:
+          from: [start_turn, turn_end]
+          to: card_drawn
+        draw_from_discarded:
+          from: [start_turn, turn_end]
+          to: card_drawn
+        meld:
+          from: [card_drawn, cards_melted]
+          to: cards_melted
+        extend_meld:
+          from: [card_drawn, cards_melted]
+          to: cards_melted
+        discard_end_turn:
+          from: [card_drawn, cards_melted]
+          to: turn_end
+        discard_end_round:
+          from: [card_drawn, cards_melted]
+          to: round_end
+        discard_end_game:
+          from: [card_drawn, cards_melted]
+          to: game_end
+        restart_game:
+          from: [game_end]
+          to: create
+

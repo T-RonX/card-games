@@ -1,0 +1,13 @@
+services:
+  _defaults:
+    autowire: true
+
+  Ahc\Jwt\JWT:
+    bind:
+      $key: '%env(MERCURE_JWT_SECRET)%'
+
+  App\Mercure\JwtProvider: ~
+
+  App\Mercure\SubscriberIdGenerator:
+    bind:
+      $secret: '%env(APP_SECRET)%'

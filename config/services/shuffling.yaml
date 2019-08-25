@@ -1,0 +1,17 @@
+services:
+  app.shuffling.locator:
+    class: Symfony\Component\DependencyInjection\ServiceLocator
+    tags: ['container.service_locator']
+    arguments:
+      -
+
+      overhand: '@App\Shufflers\Overhand\OverhandShuffle'
+      random: '@App\Shufflers\Random\RandomShuffle'
+
+  App\Shuffler\ShufflerFactory:
+      arguments: [ '@app.shuffling.locator' ]
+
+  App\Shufflers\Overhand\OverhandShuffle:
+    shared: false
+
+  App\Shufflers\Random\RandomShuffle: ~

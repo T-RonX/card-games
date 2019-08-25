@@ -1,0 +1,276 @@
+<?xml version="1.0"?>
+<skipper version="3.2.13.1414" mvc="Symfony" orm="Doctrine2" name="model" uuid="cea3ec92-bd9d-4391-940a-b784fe11aef6">
+  <module name="\Duizenden" local-name="Duizenden" namespace="\App\Games\Duizenden\Entity" local-namespace="\App\Games\Duizenden\Entity" export-format="Doctrine2Xml" export-path="config/model" uuid="a2d2131f-136f-483d-94e8-4de5c0a0d5ef">
+    <entity name="\App\Games\Duizenden\Entity\GamePlayer" local-name="GamePlayer" namespace="\App\Games\Duizenden\Entity" uuid="58fff83a-322b-4715-9838-aac022c2caca">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="54abd3e8-7a59-47bf-b10a-64ae013b2cc1"/>
+      <field name="game_id" type="integer" uuid="072e43ee-ee0e-4e8b-a430-3e5e3ee1088a"/>
+      <field name="game_player_meta_id" type="integer" required="true" uuid="e761ad13-7b5d-473a-8664-a160ca67b74c"/>
+      <field name="hand" type="json_array" required="true" uuid="53e7c054-9d1d-43fa-98b0-33f0b6fd6a8e"/>
+      <field name="melds" type="json_array" required="true" uuid="4011f1e7-de2f-4d8a-b19f-bb9c3aa9439a"/>
+      <orm-attributes>
+        <attribute name="table">game_player</attribute>
+        <attribute name="repository-class">App\Games\Duizenden\Repository\GamePlayerRepository</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\App\Games\Duizenden\Entity\GamePlayer" to="\App\Games\Duizenden\Entity\Game" owner-alias="GamePlayers" inverse-alias="Game" many-owner="true" many-inverse="false" uuid="2e984a21-8e96-48b2-99eb-7e8c0e365425">
+      <association-field from="game_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="\App\Games\Duizenden\Entity\GamePlayer" to="\App\Games\Duizenden\Entity\GamePlayerMeta" owner-alias="GamePlayers" inverse-alias="GamePlayerMeta" many-owner="true" many-inverse="false" parent-required="true" uuid="0ef9eafc-9f0a-468e-9cf0-466dcebef723">
+      <association-field from="game_player_meta_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-inverse">
+          <attribute name="cascade">
+            <attribute name="cascade-remove">true</attribute>
+          </attribute>
+        </attribute>
+        <attribute name="side-owning">
+          <attribute name="cascade">
+            <attribute name="cascade-remove">true</attribute>
+          </attribute>
+          <attribute name="orphan-removal">true</attribute>
+        </attribute>
+      </orm-attributes>
+    </association>
+    <entity name="\App\Games\Duizenden\Entity\Game" local-name="Game" namespace="\App\Games\Duizenden\Entity" uuid="f479ea46-f595-4d59-bb05-1e26e3c28cb4">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="dcb97b5b-324f-4f2f-9cab-030dc88d1bad"/>
+      <field name="game_id" type="integer" uuid="5f4bd1f8-1b22-40bf-b7d6-e4f781f12386"/>
+      <field name="game_meta_id" type="integer" required="true" uuid="778f8fa4-a9dc-4b57-9fc9-6493804c8ef0"/>
+      <field name="sequence" type="integer" required="true" uuid="0b4a6177-0333-468c-adce-5193020573bd"/>
+      <field name="workflow_marking" type="string" required="true" uuid="324aff94-ec82-4da8-9bb4-ed84d27675c7"/>
+      <field name="created_at" type="datetime_immutable" required="true" uuid="34e062b6-9164-41d7-884a-fe72c38dccb7"/>
+      <field name="current_player_id" type="integer" uuid="3b3f62d2-0393-4a63-b928-5b1f9f1f3dc5"/>
+      <field name="undrawn_pool" type="json_array" required="true" uuid="2cc9778a-a84e-4e72-a6af-2cc69e7a0889"/>
+      <field name="discarded_pool" type="json_array" required="true" uuid="02b453c8-5229-4d18-a0f8-5724d69836a7"/>
+      <field name="is_first_card" type="boolean" required="true" uuid="0f31c9c4-8116-4338-a6b8-c76892d16f41"/>
+      <field name="round" type="integer" uuid="a28232fe-aa12-44f2-9b09-0df08e31c3d0"/>
+      <index name="game_id_sequence" unique="true">
+        <index-field name="sequence"/>
+        <index-field name="game_id"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">game</attribute>
+        <attribute name="repository-class">App\Games\Duizenden\Repository\GameRepository</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\App\Games\Duizenden\Entity\Game" to="\App\Games\Duizenden\Entity\Game" owner-alias="GameStates" inverse-alias="Game" many-owner="true" many-inverse="false" uuid="f24b8f7e-33ad-482e-b000-d2fe5d39cb89">
+      <association-field from="game_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">SET NULL</attribute>
+      </orm-attributes>
+    </association>
+    <association from="\App\Games\Duizenden\Entity\Game" to="\App\Games\Duizenden\Entity\GameMeta" inverse-alias="GameMeta" many-owner="true" many-inverse="false" parent-required="true" uuid="c7021508-445c-42eb-b344-dc0f2a07452c">
+      <association-field from="game_meta_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="\App\Games\Duizenden\Entity\Game" to="\App\Games\Duizenden\Entity\GamePlayer" owner-alias="CurrentPlayerGames" inverse-alias="CurrentPlayer" many-owner="true" many-inverse="false" uuid="2e0903dc-6706-4c4c-afe1-bd27b15c2f7b">
+      <association-field from="current_player_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="\App\Games\Duizenden\Entity\GameMeta" local-name="GameMeta" namespace="\App\Games\Duizenden\Entity" uuid="6dab956d-4887-4487-a026-523ade58afd4">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="6e9a80ef-9015-4081-9440-1011ce08b4ef"/>
+      <field name="uuid" type="string" size="36" required="true" unique="true" uuid="ad2f2de6-6fce-4f95-bc34-413e2dd320b9"/>
+      <field name="dealing_player_meta_id" type="integer" uuid="5071fd59-3adc-4a96-abaa-bb00f9ec0f1b"/>
+      <field name="target_score" type="integer" uuid="392b13f3-0385-4448-b0c0-c19ca0af2430"/>
+      <field name="first_meld_minimum_points" type="integer" uuid="a76e8fe5-6266-410a-bdf6-57478d2f6d07"/>
+      <field name="deck_rebuilder" type="string" uuid="867d12ec-e2f3-49af-a37a-69bfbe0489ee"/>
+      <orm-attributes>
+        <attribute name="table">game_meta</attribute>
+        <attribute name="repository-class">App\Games\Duizenden\Repository\GameMetaRepository</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\App\Games\Duizenden\Entity\GameMeta" to="\App\Games\Duizenden\Entity\GamePlayerMeta" inverse-alias="DealingPlayerMeta" many-owner="true" many-inverse="false" uuid="634ad429-9f9c-4aaf-b04f-7487e5b9e48f">
+      <association-field from="dealing_player_meta_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">SET NULL</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="\App\Games\Duizenden\Entity\GamePlayerMeta" local-name="GamePlayerMeta" namespace="\App\Games\Duizenden\Entity" uuid="3380811d-9b6b-406a-ac95-394b4278addb">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="aedd1230-7077-4ebb-84d2-f17fdb56873b"/>
+      <field name="game_meta_id" type="integer" required="true" uuid="a39f2333-b6d3-4ab5-86af-4f4d2930179d"/>
+      <field name="player_id" type="integer" required="true" uuid="00a626d1-4d43-4a3d-a9c4-afb61d458e4a"/>
+      <field name="shuffle_count_min" type="smallint" required="true" uuid="99196fcb-34dc-4686-b5ca-7337200eb636"/>
+      <field name="shuffle_count_max" type="smallint" required="true" uuid="ba309503-4e7d-4db2-932c-57ff7fc5e896"/>
+      <field name="grab_cards_min" type="decimal" required="true" uuid="1d164075-ae8d-4720-b87e-2338084c77fb">
+        <orm-attributes>
+          <attribute name="precision">2</attribute>
+          <attribute name="scale">2</attribute>
+        </orm-attributes>
+      </field>
+      <field name="grab_cards_max" type="decimal" required="true" uuid="1628d941-8267-4629-a341-0dab121346b1">
+        <orm-attributes>
+          <attribute name="precision">2</attribute>
+          <attribute name="scale">2</attribute>
+        </orm-attributes>
+      </field>
+      <field name="max_inserts" type="smallint" required="true" uuid="d25c065f-1956-4353-aee8-5a43f93ec2bb"/>
+      <orm-attributes>
+        <attribute name="table">game_player_meta</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\App\Games\Duizenden\Entity\GamePlayerMeta" to="\App\Entity\Player" owner-alias="GamePlayerMetas" inverse-alias="Player" many-owner="true" many-inverse="false" parent-required="true" uuid="883f0990-b63f-43f1-9e54-4a9f9dc10d79">
+      <association-field from="player_id" to="id"/>
+    </association>
+    <association from="\App\Games\Duizenden\Entity\GamePlayerMeta" to="\App\Games\Duizenden\Entity\GameMeta" inverse-alias="GameMeta" many-owner="true" many-inverse="false" parent-required="true" uuid="288b9004-ee5b-460d-9fc7-d620b70c7e7c">
+      <association-field from="game_meta_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <orm-attributes>
+      <attribute name="filename-format">subdirectories-by-namespace</attribute>
+      <attribute name="file-suffix">.orm</attribute>
+    </orm-attributes>
+  </module>
+  <module name="\App" local-name="App" namespace="\App\Entity" local-namespace="\App\Entity" export-format="Doctrine2Xml" export-path="config/model" uuid="851ccd02-4a44-4cad-b221-7bf63aca835d">
+    <entity name="\App\Entity\Player" local-name="Player" namespace="\App\Entity" uuid="0691c4dd-783f-48da-a11a-f4e0ad741940">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="277729ac-587c-403b-b42b-6e9e51d8609d"/>
+      <field name="uuid" type="string" size="36" required="true" unique="true" uuid="36437528-a98e-412c-94d0-cc5bd0cb195b"/>
+      <field name="name" type="string" required="true" uuid="778582d6-3c1b-4fb1-9cee-1245f2664005"/>
+      <field name="is_registered" type="boolean" size="0" required="true" uuid="c821b0bd-6d67-4e8a-a052-059625853a6a"/>
+      <orm-attributes>
+        <attribute name="table">player</attribute>
+        <attribute name="repository-class">App\Repository\PlayerRepository</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="\App\Entity\Session" local-name="Session" namespace="\App\Entity" uuid="d4d7a305-a8fe-4a2a-9202-c3d3f112cd54">
+      <field name="id" type="string" size="128" required="true" unique="true" primary="true" uuid="c22c70cc-9320-4302-abad-0151e7401524"/>
+      <field name="data" type="blob" uuid="7bf4c9ce-6488-403a-908a-bc7efc919b10"/>
+      <field name="time" type="integer" uuid="7fca84d2-1914-481b-bd18-13c898da2938"/>
+      <field name="lifetime" type="integer" uuid="b80b7b1c-0386-4a9e-aea8-4b7257558782"/>
+      <orm-attributes>
+        <attribute name="table">session</attribute>
+      </orm-attributes>
+    </entity>
+    <orm-attributes>
+      <attribute name="file-suffix">.orm</attribute>
+      <attribute name="filename-format">subdirectories-by-namespace</attribute>
+    </orm-attributes>
+  </module>
+  <module name="\Chat" local-name="Chat" namespace="\App\Chat\Entity" local-namespace="\App\Chat\Entity" export-format="Doctrine2Xml" export-path="config/model" uuid="1cea5b4d-337c-49ae-b398-41c121d9d0be">
+    <entity name="\App\Chat\Entity\ChatMessage" local-name="ChatMessage" namespace="\App\Chat\Entity" uuid="91adacc9-237c-4bf0-8a9d-c00ff9f7a171">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="c5c318f3-113c-41af-b40d-69bf2ca6b7e9"/>
+      <field name="chat_room_id" type="integer" required="true" uuid="2d5ce707-98d5-4ba8-8937-ddd5658975a9"/>
+      <field name="player_id" type="integer" required="true" uuid="5267d673-f38f-4d05-8fdb-8b0c58ce28cf"/>
+      <field name="created_at" type="datetime" required="true" uuid="99e4ced7-9f97-4e08-80c7-497c0c431d82"/>
+      <field name="message" type="string" required="true" uuid="aad34c7b-aa88-438b-947d-e707b0cbdfe8"/>
+      <orm-attributes>
+        <attribute name="table">chat_message</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\App\Chat\Entity\ChatMessage" to="\App\Entity\Player" inverse-alias="Player" many-owner="true" many-inverse="false" parent-required="true" uuid="3685f62a-1d0c-44e5-b47a-d597897a1bfa">
+      <association-field from="player_id" to="id"/>
+    </association>
+    <association from="\App\Chat\Entity\ChatMessage" to="\App\Chat\Entity\ChatRoom" owner-alias="ChatMessages" inverse-alias="ChatRoom" many-owner="true" many-inverse="false" parent-required="true" uuid="aa4f6e81-81df-4425-b3b3-12ced5eaec2c">
+      <association-field from="chat_room_id" to="id"/>
+    </association>
+    <entity name="\App\Chat\Entity\ChatRoom" local-name="ChatRoom" namespace="\App\Chat\Entity" uuid="3cee7640-5caa-45b4-a81f-cf424e23bd4b">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="fd709206-6533-45e9-9e7f-db3161555f68"/>
+      <field name="reference" type="string" size="36" required="true" unsigned="true" uuid="58874fc8-2ccd-4d97-81c1-f2988b08aa25"/>
+      <orm-attributes>
+        <attribute name="table">chat_room</attribute>
+        <attribute name="repository-class">App\Chat\Repository\ChatRoomRepository</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="\App\Chat\Entity\ChatRoomPlayer" local-name="ChatRoomPlayer" namespace="\App\Chat\Entity" uuid="b190e747-a5c9-445f-b4da-06ee65de47a3">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="e6cfd963-7018-4899-bd6b-2f9af95ace46"/>
+      <field name="last_activity_at" type="datetime" required="true" uuid="f853515c-d03b-416e-b5d2-45921e930986"/>
+      <field name="player_id" type="integer" uuid="9827d86a-c50e-4028-9da7-c0a68e8d2bba"/>
+      <field name="chat_room_id" type="integer" uuid="bf9bed13-bbb7-47ec-94a6-47a964a76826"/>
+      <orm-attributes>
+        <attribute name="table">chat_room_player</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\App\Chat\Entity\ChatRoomPlayer" to="\App\Entity\Player" inverse-alias="Player" many-owner="true" many-inverse="false" uuid="738a19d4-9ac1-48d8-84e9-7b43d0814fa4">
+      <association-field from="player_id" to="id"/>
+    </association>
+    <association from="\App\Chat\Entity\ChatRoomPlayer" to="\App\Chat\Entity\ChatRoom" owner-alias="ChatRoomPlayers" inverse-alias="ChatRoom" many-owner="true" many-inverse="false" uuid="0e0d5779-125e-4071-8aeb-17ba5c3a5085">
+      <association-field from="chat_room_id" to="id"/>
+    </association>
+    <orm-attributes>
+      <attribute name="file-suffix">.orm</attribute>
+      <attribute name="filename-format">subdirectories-by-namespace</attribute>
+    </orm-attributes>
+  </module>
+  <module name="\Lobby" local-name="Lobby" namespace="\App\Lobby\Entity" local-namespace="\App\Lobby\Entity" export-format="Doctrine2Xml" export-path="config/model" uuid="fb629686-c16c-4d78-9287-3c7df1fbf4d2">
+    <entity name="\App\Lobby\Entity\Invitation" local-name="Invitation" namespace="\App\Lobby\Entity" uuid="943deabe-eb87-425f-9f85-d0f9dca23994">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="ab9b855e-31c1-4934-b2f4-aa23af0cc1ce"/>
+      <field name="uuid" type="string" size="36" required="true" uuid="ca695c27-d51e-4ccc-a6c2-33b1d55b1e31"/>
+      <field name="created_at" type="datetime" required="true" uuid="5d378552-1beb-44a0-91b3-ea452133f6ba"/>
+      <field name="inviter_id" type="integer" uuid="5f8479ac-a190-4c42-b5a2-1c1088bc9ec8"/>
+      <field name="game_id" type="string" size="36" uuid="5edbefea-f8a5-4391-a1df-cd9009186d00"/>
+      <orm-attributes>
+        <attribute name="table">invitation</attribute>
+        <attribute name="repository-class">App\Lobby\Repository\InvitationRepository</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\App\Lobby\Entity\Invitation" to="\App\Lobby\Entity\Invitee" inverse-alias="Inviter" many-owner="true" many-inverse="false" uuid="9e6a0294-c6e6-4a2b-8d03-d511d16914b2">
+      <association-field from="inviter_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">SET NULL</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="\App\Lobby\Entity\Invitee" local-name="Invitee" namespace="\App\Lobby\Entity" uuid="ed23d10e-d188-4126-a915-0aeb06406e17">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="60af1523-1377-42a4-bd99-480ea7242e52"/>
+      <field name="accepted" type="boolean" uuid="e41a6d13-e9e6-4c7d-86fc-7fcdbbdb1855"/>
+      <field name="player_id" type="integer" uuid="07fe1d00-393b-4e82-8002-3c3a353c83c0"/>
+      <field name="invitation_id" type="integer" uuid="f4508322-6eb8-4a9c-ad3f-fb951da8f5eb"/>
+      <orm-attributes>
+        <attribute name="table">invitee</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\App\Lobby\Entity\Invitee" to="\App\Entity\Player" inverse-alias="Player" many-owner="true" many-inverse="false" uuid="547ebf28-ae12-407b-865c-b66288d23da7">
+      <association-field from="player_id" to="id"/>
+    </association>
+    <association from="\App\Lobby\Entity\Invitee" to="\App\Lobby\Entity\Invitation" owner-alias="Invitees" inverse-alias="Invitation" many-owner="true" many-inverse="false" uuid="07ec329a-d165-4572-be87-49fadb9047f3">
+      <association-field from="invitation_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <orm-attributes>
+      <attribute name="filename-format">subdirectories-by-namespace</attribute>
+      <attribute name="file-suffix">.orm</attribute>
+    </orm-attributes>
+  </module>
+  <visual-data>
+    <association uuid="07ec329a-d165-4572-be87-49fadb9047f3" color="#969696"/>
+    <association uuid="0e0d5779-125e-4071-8aeb-17ba5c3a5085" color="#969696"/>
+    <association uuid="0ef9eafc-9f0a-468e-9cf0-466dcebef723" color="#969696"/>
+    <association uuid="288b9004-ee5b-460d-9fc7-d620b70c7e7c" color="#969696"/>
+    <association uuid="2e0903dc-6706-4c4c-afe1-bd27b15c2f7b" color="#969696"/>
+    <association uuid="2e984a21-8e96-48b2-99eb-7e8c0e365425" color="#969696"/>
+    <association uuid="3685f62a-1d0c-44e5-b47a-d597897a1bfa" color="#969696" split="1"/>
+    <association uuid="547ebf28-ae12-407b-865c-b66288d23da7" color="#969696" split="1"/>
+    <association uuid="634ad429-9f9c-4aaf-b04f-7487e5b9e48f" color="#969696"/>
+    <association uuid="738a19d4-9ac1-48d8-84e9-7b43d0814fa4" color="#969696" split="1"/>
+    <association uuid="883f0990-b63f-43f1-9e54-4a9f9dc10d79" color="#969696" split="1"/>
+    <association uuid="9e6a0294-c6e6-4a2b-8d03-d511d16914b2" color="#969696"/>
+    <association uuid="aa4f6e81-81df-4425-b3b3-12ced5eaec2c" color="#969696"/>
+    <association uuid="c7021508-445c-42eb-b344-dc0f2a07452c" color="#969696"/>
+    <association uuid="f24b8f7e-33ad-482e-b000-d2fe5d39cb89" center-position-x="0" center-position-y="-20" color="#969696"/>
+    <entity uuid="0691c4dd-783f-48da-a11a-f4e0ad741940" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="50" size-x="0" size-x2="119" size-y="0" size-y2="73"/>
+    <entity uuid="3380811d-9b6b-406a-ac95-394b4278addb" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="289" position-y="178" size-x="0" size-x2="147" size-y="0" size-y2="129"/>
+    <entity uuid="3cee7640-5caa-45b4-a81f-cf424e23bd4b" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="50" size-x="0" size-x2="123" size-y="0" size-y2="45"/>
+    <entity uuid="58fff83a-322b-4715-9838-aac022c2caca" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="289" position-y="28" size-x="0" size-x2="101" size-y="0" size-y2="45"/>
+    <entity uuid="6dab956d-4887-4487-a026-523ade58afd4" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="39" position-y="278" size-x="0" size-x2="177" size-y="0" size-y2="101"/>
+    <entity uuid="91adacc9-237c-4bf0-8a9d-c00ff9f7a171" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="250" position-y="50" size-x="0" size-x2="100" size-y="0" size-y2="59"/>
+    <entity uuid="943deabe-eb87-425f-9f85-d0f9dca23994" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="50" size-x="0" size-x2="69" size-y="0" size-y2="31"/>
+    <entity uuid="b190e747-a5c9-445f-b4da-06ee65de47a3" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="150" size-x="0" size-x2="135" size-y="0" size-y2="73"/>
+    <entity uuid="d4d7a305-a8fe-4a2a-9202-c3d3f112cd54" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="200" size-x="0" size-x2="93" size-y="0" size-y2="73"/>
+    <entity uuid="ed23d10e-d188-4126-a915-0aeb06406e17" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="250" position-y="50" size-x="0" size-x2="104" size-y="0" size-y2="73"/>
+    <entity uuid="f479ea46-f595-4d59-bb05-1e26e3c28cb4" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="39" position-y="28" size-x="0" size-x2="161" size-y="0" size-y2="101"/>
+    <module uuid="1cea5b4d-337c-49ae-b398-41c121d9d0be" bg-color="#D6ECFF" position-x="50" position-y="550" size-x="0" size-x2="450" size-y="0" size-y2="300"/>
+    <module uuid="851ccd02-4a44-4cad-b221-7bf63aca835d" bg-color="#FEFCE8" position-x="650" position-y="50" size-x="0" size-x2="250" size-y="0" size-y2="350"/>
+    <module uuid="a2d2131f-136f-483d-94e8-4de5c0a0d5ef" bg-color="#E4F3E8" position-x="61" position-y="72" size-x="11" size-x2="539" size-y="22" size-y2="428"/>
+    <module uuid="fb629686-c16c-4d78-9287-3c7df1fbf4d2" bg-color="#FFE9D6" position-x="550" position-y="550" size-x="0" size-x2="450" size-y="0" size-y2="200"/>
+    <project uuid="cea3ec92-bd9d-4391-940a-b784fe11aef6" size-x="0" size-x2="1100" size-y="0" size-y2="950"/>
+  </visual-data>
+</skipper>

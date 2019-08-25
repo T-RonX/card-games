@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Chat\Entity\ChatMessage" table="chat_message">
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="created_at" type="datetime" nullable="false"/>
+    <field name="message" type="string" nullable="false"/>
+    <many-to-one field="Player" target-entity="App\Entity\Player">
+      <join-columns>
+        <join-column name="player_id" referenced-column-name="id" nullable="false"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="ChatRoom" target-entity="App\Chat\Entity\ChatRoom" inversed-by="ChatMessages">
+      <join-columns>
+        <join-column name="chat_room_id" referenced-column-name="id" nullable="false"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

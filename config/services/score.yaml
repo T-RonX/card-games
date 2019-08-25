@@ -1,0 +1,2 @@
+services:
+  App\Games\Duizenden\Score\ScoreCalculator: ~

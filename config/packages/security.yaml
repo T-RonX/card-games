@@ -1,0 +1,26 @@
+security:
+  providers:
+    anonymous_player_provider:
+      id: App\Security\UserProvider\AnonymousPlayerProvider
+
+  firewalls:
+    dev:
+        pattern: ^/(_(profiler|wdt)|css|images|js)/
+        security: false
+    main:
+      pattern: ^/
+      anonymous: true
+      anonymous_player:
+        identification_path: /lobby/enter-name
+        validation_path: /lobby/save-name
+        success_path: /lobby
+        identification_form_type: App\Form\Lobby\NameType
+        identification_form_field: name
+      provider: anonymous_player_provider
+      logout:
+        path: /logout
+        target: /lobby
+
+  access_control:
+    - { path: ^/lobby/enter-name|lobby/save-name, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

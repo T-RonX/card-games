@@ -1,0 +1,15 @@
+main:
+  path: /
+  controller: App\Controller\Main::saved
+
+game:
+    resource: "routes/game.yaml"
+    prefix:   /game
+
+duizenden:
+    resource: "routes/duizenden.yaml"
+    prefix:   /duizenden
+
+lobby:
+    resource: "routes/lobby.yaml"
+    prefix:   /lobby

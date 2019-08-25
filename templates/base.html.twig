@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="{{ asset('jquery.transform2d.js') }}"></script>
+        <script src="{{ asset('duizenden/js/Connection/Connection.js') }}"></script>
+        <script src="{{ asset('duizenden/js/Lobby/PlayerEventMessageHandler.js') }}"></script>
+        <script src="{{ asset('duizenden/js/Lobby/PlayerEvent.js') }}"></script>
+        <style>
+        html {
+            background: #004028;
+            background: url('{{ asset('/duizenden/background.jpg') }}');
+            background-repeat: repeat;
+            color: #ddd;
+            font-family: Arial, serif;
+            font-size: 14px;
+        }
+
+        a, a:link, a:visited, a:active {
+            color: #fff;
+            text-decoration: none;
+        }
+        a:hover{
+            color: #F5871F;
+            text-decoration: none;
+        }
+
+        nav a
+        {
+            margin-right: 6px;
+        }
+        </style>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% include 'menu.html.twig' %}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% block body %}
+        {% endblock %}
+        {% block javascripts %}{% endblock %}
+        {% if app.user %}
+<script>
+    $(document).ready(() => {
+        const player_event_connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:player_event:{{ player_subscriber_event_id() }}'));
+        const player_event_message_handler = new PlayerEventMessageHandler(
+            '{{ uuid_placeholder }}',
+            '{{ path('lobby.accept_invitation', {invitation: '000'}) }}',
+            '{{ path('lobby.decline_invitation', {invitation: '000'}) }}',
+            '{{ path('duizenden.new', {invitation: '000'}) }}',
+            '{{ path('duizenden.play', {uuid: uuid_placeholder}) }}'
+        );
+        const player_event = new PlayerEvent(player_event_connection, null, player_event_message_handler);
+        player_event.connect();
+    });
+</script>
+    {% endif %}
+    </body>
+</html>
+

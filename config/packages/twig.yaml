@@ -1,0 +1,8 @@
+twig:
+  default_path: '%kernel.project_dir%/templates'
+  debug: '%kernel.debug%'
+  strict_variables: '%kernel.debug%'
+  form_themes: ['form_table_layout.html.twig']
+  globals:
+    mercure_publish_url: '%env(MERCURE_PUBLISH_URL)%'
+    uuid_placeholder: '00000000-0000-5000-a000-000000000000'

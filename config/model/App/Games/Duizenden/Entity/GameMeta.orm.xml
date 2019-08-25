@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Games\Duizenden\Entity\GameMeta" table="game_meta" repository-class="App\Games\Duizenden\Repository\GameMetaRepository">
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="uuid" type="string" unique="true" length="36" nullable="false"/>
+    <field name="target_score" type="integer" nullable="true"/>
+    <field name="first_meld_minimum_points" type="integer" nullable="true"/>
+    <field name="deck_rebuilder" type="string" nullable="true"/>
+    <many-to-one field="DealingPlayerMeta" target-entity="App\Games\Duizenden\Entity\GamePlayerMeta">
+      <join-columns>
+        <join-column name="dealing_player_meta_id" referenced-column-name="id" on-delete="SET NULL"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

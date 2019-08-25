@@ -1,0 +1,50 @@
+<?php
+
+namespace App\DeckRebuilders;
+
+use App\CardPool\CardPool;
+use App\DeckRebuilder\DeckRebuilderInterface;
+
+class DistinctDeckRebuilder implements DeckRebuilderInterface
+{
+	/**
+	 * @inheritDoc
+	 */
+	public function rebuild(CardPool $deck_remainder, CardPool $discarded_pool, array $hand_pools, array $meld_pools): CardPool
+	{
+		$cards = [];
+
+		foreach($hand_pools as $hand_pool)
+		{
+			$cards = array_merge($cards, $hand_pool->drawAllCards());
+		}
+
+		foreach($meld_pools as $meld_pool)
+		{
+			$cards = array_merge($cards, $meld_pool->drawAllCards());
+		}
+
+		$cards = array_merge($cards, $discarded_pool->drawAllCards());
+		$cards = array_merge($cards, $deck_remainder->drawAllCards());
+
+		return (new CardPool($cards));
+	}
+
+	private function spreadJokers()
+	{
+
+	}
+
+	private function moveQueenOfSpades()
+	{
+
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getName(): string
+	{
+		return DeckRebuilderType::DISTINCT()->getValue();
+	}
+}
