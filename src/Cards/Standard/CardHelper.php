@@ -40,7 +40,7 @@ class CardHelper
 	 */
 	public static function createCardFromId(string $id)
 	{
-		if (!preg_match('/^([SHDCXY]{1})([0-9]{1,2}|[JQKA]{1})$/', $id, $matches))
+		if (!preg_match('/^([SHDCXY]{1})([0-9]{1,2}|[JQKA]{1})$/i', $id, $matches))
 		{
 			throw new InvalidCardIdException(sprintf("Can not create card, id '%s' is not valid.", $id));
 		}
@@ -48,7 +48,7 @@ class CardHelper
 		$suit = self::createSuitByCode($matches[1]);
 		$rank = self::createRankByValue($matches[2]);
 
-		return new Card($suit, $rank);
+		return new Card($id, $suit, $rank);
 	}
 
 	/**
@@ -60,7 +60,7 @@ class CardHelper
 	 */
 	private static function createRankByValue(string $code): RankInterface
 	{
-		switch ($code)
+		switch (strtoupper($code))
 		{
 			case Rank_0::CODE;
 				return self::createRank0();
@@ -120,7 +120,7 @@ class CardHelper
 	 */
 	private static function createSuitByCode(string $code): SuitInterface
 	{
-		switch ($code)
+		switch (strtoupper($code))
 		{
 			case Spades::CODE:
 				return self::createSpadesSuit();

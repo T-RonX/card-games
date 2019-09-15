@@ -3,13 +3,13 @@ class Hand {
         this.z_fighter = z_fighter;
         this.hand_container = new HandContainer(card_selector);
         this.cards = $(card_selector);
-        this.hand_position = new HandPosition(this.cards, card_separation, card_width, card_height);
+        this.card_fan = new Fan(this.cards, card_separation, card_width, card_height, true, card_height * 1.8, 0, 300);
         this.hover_animator = new HandHoverAnimator(this.cards, card_width, card_height, Math.ceil(card_height * .175));
         this.dropable_hand = new DroppableHand(this.cards, path_draw_from_discarded, path_draw_from_undrawn);
     }
 
     initialize() {
-        this.hand_position.positionCards();
+        this.card_fan.positionCards(true);
 
         if (this.cards.length > 1)
         {

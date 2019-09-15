@@ -9,23 +9,35 @@ use App\Deck\Card\Suit\SuitInterface;
 class Card implements CardInterface
 {
 	/**
+	 * @var string
+	 */
+	private $identifier;
+
+	/**
 	 * @var SuitInterface
 	 */
 	private $suit;
+
 	/**
 	 * @var RankInterface
 	 */
 	private $rank;
 
 	/**
-	 * Card constructor.
+	 * @param string $identifier
 	 * @param SuitInterface $suit
 	 * @param RankInterface $rank
 	 */
-	public function __construct(SuitInterface $suit, RankInterface $rank)
+	public function __construct(string $identifier, SuitInterface $suit, RankInterface $rank)
 	{
+		$this->identifier = $identifier;
 		$this->suit = $suit;
 		$this->rank = $rank;
+	}
+
+	public function getIdentifier(): string
+	{
+		return $this->identifier;
 	}
 
 	/**

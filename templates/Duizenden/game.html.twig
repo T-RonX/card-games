@@ -11,31 +11,6 @@
         cursor: grabbing;
     }
 
-    div.card {
-        font-size: 22px;
-        display: flex;
-        justify-content: center;
-        align-content:center;
-        flex-direction:column;
-        vertical-align: middle;
-        text-align: center;
-        background: #fbfbfb;
-        line-height: 22px;
-        margin-top: 6px;
-        width: 139px; /* height * 0,63 */
-        height: 220px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-size: contain;
-        margin-right: 5px;
-        margin-bottom: 11px;
-        transition: margin-bottom .09s, margin-right .09s, width .09s, height .09s;
-    }
-
-    div.card.small {
-        width: 113px; /* height * 0,63 */
-        height: 180px;
-    }
 
     a#deal, a#restart {
         padding: 10px;
@@ -51,37 +26,159 @@
         border-radius: 5px;
     }
 
+    .card {
+        font-size: 22px;
+        display: flex;
+        justify-content: center;
+        align-content:center;
+        flex-direction:column;
+        vertical-align: middle;
+        text-align: center;
+        /*background: #fbfbfb;*/
+        line-height: 22px;
+        margin-top: 6px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        /*background-size: contain;*/
+        margin-right: 5px;
+        margin-bottom: 11px;
+        transition: margin-bottom .09s, margin-right .09s, width .09s, height .09s;
+        background-image: url("{{ asset('duizenden/deck1.gif') }}");
+    }
+
     .card.selected {
         outline: 4px solid deepskyblue;
         outline-offset: -4px;
     }
 
-    .card_hand.selected {
-        outline: 4px solid deepskyblue;
-        outline-offset: -4px;
-    }
-
-    #hand_container .card_hand {
+    .card.hand {
+        background-size: 1807px; /* .278 */
+        overflow: hidden;
         width: 139px; /* height * 0,63 */
         height: 220px;
         border: 1px solid #ddd;
         border-radius: 5px;
-        background-size: contain;
         background-color: #fff;
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.09);
     }
 
-    div.pad {
-        padding: 6px;
+    .card.table {
+        width: 113px; /* height * 0,63 */
+        height: 180px;
+        background-size: 1469px; /* .226 */
     }
 
-    #undrawn_pool.highlighted {
-        background: #801f0E;
-    }
+    .card.hand.s2 { background-position: 0 0; }
+    .card.hand.s3 { background-position: -139px 0; }
+    .card.hand.s4 { background-position: -278px 0; }
+    .card.hand.s5 { background-position: -417px 0; }
+    .card.hand.s6 { background-position: -556px 0; }
+    .card.hand.s7 { background-position: -695px 0; }
+    .card.hand.s8 { background-position: -834px 0; }
+    .card.hand.s9 { background-position: -973px 0; }
+    .card.hand.s10 { background-position: -1112px 0; }
+    .card.hand.sj { background-position: -1251px 0; }
+    .card.hand.sq { background-position: -1390px 0; }
+    .card.hand.sk { background-position: -1529px 0; }
+    .card.hand.sa { background-position: -1668px 0; }
+    .card.hand.h2 { background-position: 0 -220px; }
+    .card.hand.h3 { background-position: -139px -220px; }
+    .card.hand.h4 { background-position: -278px -220px; }
+    .card.hand.h5 { background-position: -417px -220px; }
+    .card.hand.h6 { background-position: -556px -220px; }
+    .card.hand.h7 { background-position: -695px -220px; }
+    .card.hand.h8 { background-position: -834px -220px; }
+    .card.hand.h9 { background-position: -973px -220px; }
+    .card.hand.h10 { background-position: -1112px -220px; }
+    .card.hand.hj { background-position: -1251px -220px; }
+    .card.hand.hq { background-position: -1390px -220px; }
+    .card.hand.hk { background-position: -1529px -220px; }
+    .card.hand.ha { background-position: -1668px -220px; }
+    .card.hand.d2 { background-position: 0 -440px; }
+    .card.hand.d3 { background-position: -139px -440px; }
+    .card.hand.d4 { background-position: -278px -440px; }
+    .card.hand.d5 { background-position: -417px -440px; }
+    .card.hand.d6 { background-position: -556px -440px; }
+    .card.hand.d7 { background-position: -695px -440px; }
+    .card.hand.d8 { background-position: -834px -440px; }
+    .card.hand.d9 { background-position: -973px -440px; }
+    .card.hand.d10 { background-position: -1112px -440px; }
+    .card.hand.dj { background-position: -1251px -440px; }
+    .card.hand.dq { background-position: -1390px -440px; }
+    .card.hand.dk { background-position: -1529px -440px; }
+    .card.hand.da { background-position: -1668px -440px; }
+    .card.hand.c2 { background-position: 0 -660px; }
+    .card.hand.c3 { background-position: -139px -660px; }
+    .card.hand.c4 { background-position: -278px -660px; }
+    .card.hand.c5 { background-position: -417px -660px; }
+    .card.hand.c6 { background-position: -556px -660px; }
+    .card.hand.c7 { background-position: -695px -660px; }
+    .card.hand.c8 { background-position: -834px -660px; }
+    .card.hand.c9 { background-position: -973px -660px; }
+    .card.hand.c10 { background-position: -1112px -660px; }
+    .card.hand.cj { background-position: -1251px -660px; }
+    .card.hand.cq { background-position: -1390px -660px; }
+    .card.hand.ck { background-position: -1529px -660px; }
+    .card.hand.ca { background-position: -1668px -660px; }
+    .card.hand.y0 { background-position: 0 -880px; }
+    .card.hand.x0 { background-position: -139px -880px; }
+    .card.table.back { background-position: -278px -880px; }
 
-    #discarded_pool.highlighted {
-        background: #801f0E;
-    }
+    .card.table.s2 { background-position: 0 0; }
+    .card.table.s3 { background-position: -113px 0; }
+    .card.table.s4 { background-position: -226px 0; }
+    .card.table.s5 { background-position: -339px 0; }
+    .card.table.s6 { background-position: -452px 0; }
+    .card.table.s7 { background-position: -565px 0; }
+    .card.table.s8 { background-position: -678px 0; }
+    .card.table.s9 { background-position: -791px 0; }
+    .card.table.s10 { background-position: -904px 0; }
+    .card.table.sj { background-position: -1017px 0; }
+    .card.table.sq { background-position: -1130px 0; }
+    .card.table.sk { background-position: -1243px 0; }
+    .card.table.sa { background-position: -1356px 0; }
+    .card.table.h2 { background-position: 0 -179px; }
+    .card.table.h3 { background-position: -113px -179px; }
+    .card.table.h4 { background-position: -226px -179px; }
+    .card.table.h5 { background-position: -339px -179px; }
+    .card.table.h6 { background-position: -452px -179px; }
+    .card.table.h7 { background-position: -565px -179px; }
+    .card.table.h8 { background-position: -678px -179px; }
+    .card.table.h9 { background-position: -791px -179px; }
+    .card.table.h10 { background-position: -904px -179px; }
+    .card.table.hj { background-position: -1017px -179px; }
+    .card.table.hq { background-position: -1130px -179px; }
+    .card.table.hk { background-position: -1243px -179px; }
+    .card.table.ha { background-position: -1356px -179px; }
+    .card.table.d2 { background-position: 0 -358px; }
+    .card.table.d3 { background-position: -113px -358px; }
+    .card.table.d4 { background-position: -226px -358px; }
+    .card.table.d5 { background-position: -339px -358px; }
+    .card.table.d6 { background-position: -452px -358px; }
+    .card.table.d7 { background-position: -565px -358px; }
+    .card.table.d8 { background-position: -678px -358px; }
+    .card.table.d9 { background-position: -791px -358px; }
+    .card.table.d10 { background-position: -904px -358px; }
+    .card.table.dj { background-position: -1017px -358px; }
+    .card.table.dq { background-position: -1130px -358px; }
+    .card.table.dk { background-position: -1243px -358px; }
+    .card.table.da { background-position: -1356px -358px; }
+    .card.table.c2 { background-position: 0 -537px; }
+    .card.table.c3 { background-position: -113px -537px; }
+    .card.table.c4 { background-position: -226px -537px; }
+    .card.table.c5 { background-position: -339px -537px; }
+    .card.table.c6 { background-position: -452px -537px; }
+    .card.table.c7 { background-position: -565px -537px; }
+    .card.table.c8 { background-position: -678px -537px; }
+    .card.table.c9 { background-position: -791px -537px; }
+    .card.table.c10 { background-position: -904px -537px; }
+    .card.table.cj { background-position: -1017px -537px; }
+    .card.table.cq { background-position: -1130px -537px; }
+    .card.table.ck { background-position: -1243px -537px; }
+    .card.table.ca { background-position: -1356px -537px; }
+    .card.table.y0 { background-position: 0 -716px; }
+    .card.table.x0 { background-position: -113px -716px; }
+    .card.table.back { background-position: -226px -716px; }
 
     .card_hand_dropper {
         display: none;
@@ -94,6 +191,32 @@
         border-radius: 5px;
     }
 
+    #undrawn_pool.highlighted {
+        background: #801f0E;
+    }
+
+    #discarded_pool.highlighted {
+        background: #801f0E;
+    }
+
+
+    .meld_container {
+        display: none;
+        position: relative;
+        margin: 10px 15px 10px 10px;
+    }
+
+    .meld_container.highlight_meld {
+        position: relative;
+        background: #801f0E;
+        border: 10px solid #801f0E;
+        border-radius: 2px;
+        margin: 0 5px 0 0;
+    }
+
+    div.pad {
+        padding: 6px;
+    }
 </style>
 {% endblock %}
 {% set discarded_pool_is_first_card = game.state.discardedPool.firstCard %}
@@ -103,14 +226,14 @@
     {% set current_player_id = game.state.players.currentPlayer.id %}
     {% set current_player = game.state.players.currentPlayer %}
     {% set player = game.state.players.playerById(app.user.uuid) %}
-
+    
 <div>
     <div style="float: left; height: 260px; width: 312px; border: 3px #034823 solid; border-right: none;">
         <div  style="float: left; width: 150px; height: 250px;">
             <div id="undrawn_pool" class="pad">
                 Undrawn
                 {% if game.state.undrawnPool|last %}
-                    {{ self.input(game.state.undrawnPool|last, workflow_can(game, 'draw_from_undrawn'), true) }}
+                    {{ self.drawCardTable(game.state.undrawnPool|last, workflow_can(game, 'draw_from_undrawn'), true) }}
                 {% endif %}
             </div>
         </div>
@@ -118,7 +241,7 @@
         <div id="discarded_pool" class="highlight pad" style="height: 250px; width: 150px; float: left;">
             Discarded
             {% if game.state.discardedPool|last%}
-                {{ self.input(game.state.discardedPool|last, workflow_can(game, 'draw_from_discarded') and ((not game.state.players.currentPlayer.hasMelds and discarded_pool_is_first_card) or game.scoreCalculator.calculatePlayerMeldsScore(game.state.players.currentPlayer) >= 30)) }}
+                {{ self.drawCardTable(game.state.discardedPool|last, workflow_can(game, 'draw_from_discarded') and ((not game.state.players.currentPlayer.hasMelds and discarded_pool_is_first_card) or game.scoreCalculator.calculatePlayerMeldsScore(game.state.players.currentPlayer) >= 30)) }}
             {% endif %}
         </div>
 
@@ -163,35 +286,40 @@
         </div>
     </div>
 
-    <div style="border-left: 3px #034823 solid; clear: right; ">
+    <div style="border-left: 3px #034823 solid; clear: right; display: inline-block">
         <div class="pad">
             {% for player in game.state.players %}
-            <div style="display: flex; height: 230px;">
+            <div style="display: flex; height: 230px">
                 <div style="width: 90px; height: 230px; vertical-align: middle; line-height: 230px">
                     <span{{ player.id == current_player_id ? ' style="color: #ffcc00; font-weight: bold"' }}>{{ player.name }} ({{ player.melds|length }})</span>
                 </div>
                 {% for meld in player.melds %}
-                    <div class="meld_pool" data-meld-id="{{ loop.index }}" style="display: flex; margin-right: 15px;">
+                    {% set meld_container_unique = player.id ~ '_' ~ loop.index %}
+                    <div class="meld_container" data-meld-unique="{{ meld_container_unique }}" data-meld-id="{{ loop.index }}">
                         {% for card in meld.cards %}
-                            {{ self.input(card, false, false, true) }}
+                            {{ self.drawCardTable(card, false, false) }}
                         {% endfor %}
                     </div>
                 {% endfor %}
             </div>
             {% endfor %}
         </div>
-    </div>
+   </div>
 </div>
 
 <div id="hand_container" style="display: none; position: fixed; bottom: 0; left: 50%; margin: 0 auto; transform: translate(-50%);">
     {% for card in player.hand %}
-        <div data-card-order="{{ loop.index }}" data-card-id="{{ card.suit.name ~ card.rank.name }}" class="card_hand draggable" style="background-image: url('/duizenden/cards/{{ (card.suit.name ~ card.rank.name)|lower }}.png')"></div>
+        {{ self.drawCardHand(card, loop.index) }}
     {% endfor %}
 </div>
 {% endblock %}
 
-{% macro input(card, draggable = false, turned = false, small) %}
-<div {{ not turned ? 'data-card-id="' ~ card.suit.name ~ card.rank.name ~'" ' }}class="card{{ small ? ' small' }}{{ draggable ? ' draggable' }}" style="background-image: url('/duizenden/cards/{{ turned ? 'back' : (card.suit.name ~ card.rank.name)|lower }}.svg')"></div>
+{% macro drawCardHand(card, index) %}
+    <div data-card-order="{{ index }}" data-card-id="{{ card.identifier|lower }}" class="card hand {{ card.identifier|lower }} draggable"></div>
+{% endmacro %}
+
+{% macro drawCardTable(card, draggable = false, turned = false) %}
+    <div data-card-id="{{ card.identifier|lower }}" class="card table {{  not turned ? card.identifier|lower : 'back' }}{{ draggable ? ' draggable' }}"></div>
 {% endmacro %}
 
 {% block javascripts %}
@@ -206,9 +334,13 @@
     <script src="{{ asset('duizenden/js/Hand/HandCardDragger.js') }}"></script>
     <script src="{{ asset('duizenden/js/Hand/HandContainer.js') }}"></script>
     <script src="{{ asset('duizenden/js/Hand/HandHoverAnimator.js') }}"></script>
-    <script src="{{ asset('duizenden/js/Hand/HandPosition.js') }}"></script>
+    <script src="{{ asset('duizenden/js/CardPositioning/Fan.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Meld/MeldContainer.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Meld/DroppableMeld.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Meld/Meld.js') }}"></script>
 <script>
-    let elem = document.querySelector('.card_hand');
+    let elem = document.querySelector('.card.hand');
+    let elem_style = document.querySelector('.card.table');
 
     const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
     const message_handler = new GameEventMessageHandler('{{ app.user.uuid }}');
@@ -217,17 +349,23 @@
 
     if (elem) {
         let style = window.getComputedStyle(elem);
+        let style_meld = window.getComputedStyle(elem_style);
 
         $(document).ready(() => {
             const game = Game.create(
                 connection,
                 event_handler,
-                '#hand_container .card_hand',
+                '#hand_container .card.hand',
+                '.card',
                 '{{ path('duizenden.draw_from_discarded', {meld_cards: '000'}) }}',
                 '{{ path('duizenden.draw_from_undrawn') }}',
                 parseInt(style.width),
                 parseInt(style.height),
-                .3
+                parseInt(style_meld.width),
+                parseInt(style_meld.height),
+                .3,
+                .26,
+                '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}'
             );
 
             game.initialize();
@@ -243,7 +381,7 @@ $("#deal").click(function () {
 });
 
 {% if drawn_card is defined %}
-let drawn_card = $(".card_hand[data-card-id='" + {{ drawn_card.suit.name ~ drawn_card.rank.name }}  + "']");
+let drawn_card = $(".card.hand[data-card-id='" + {{ drawn_card.suit.name ~ drawn_card.rank.name }}  + "']");
 drawn_card.css('outline', '4px solid orange');
 drawn_card.css('outline-offset', '-4px');
 {% endif %}
@@ -255,7 +393,7 @@ drawn_card.css('outline-offset', '-4px');
 function meld() {
     let cards = [];
 
-    $('#hand_container').find('.card_hand.selected').each(function (item) {
+    $('#hand_container').find('.card.hand.selected').each(function (item) {
         cards.push($(this).data('card-id'));
     });
 
@@ -266,13 +404,13 @@ function meld() {
 
 var dragCheck = false;
 
-// $('.card_hand').mouseup(function (){
+// $('.card.hand').mouseup(function (){
 //     if(dragCheck === false) {
 //         $(this).toggleClass('selected');
 //     }
 // });
 
-// $('.card_hand').mouseup(function (){
+// $('.card.hand').mouseup(function (){
 //     if(dragCheck === false) {
 //         $(this).toggleClass('selected');
 //     }
@@ -281,7 +419,7 @@ var dragCheck = false;
 let z = 1;
 let drag_source = 'none';
 
-//$(".card_hand.draggable").draggable({});
+//$(".card.hand.draggable").draggable({});
 
 $(".card.draggable").draggable({
     drag: function (event, ui) {
@@ -300,18 +438,6 @@ $(".card.draggable").draggable({
 
         $('.card_hand_dropper').css('display', 'none');
     }
-});
-
-
-$(".meld_pool").droppable({
-  drop: function(event, ui) {
-      if (drag_source === 'hand_container') {
-          let url = '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}'.replace('111', ui.draggable.data('card-id')).replace('000', $(this).data('meld-id') - 1);
-          $.post(url, null, function (data) {
-              location.reload();
-          });
-      }
-  }
 });
 
 $("#discarded_pool").droppable({

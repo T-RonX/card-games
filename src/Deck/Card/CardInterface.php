@@ -8,6 +8,11 @@ use App\Deck\Card\Suit\SuitInterface;
 interface CardInterface
 {
 	/**
+	 * @return string
+	 */
+	function getIdentifier(): string;
+
+	/**
 	 * @return SuitInterface
 	 */
 	function getSuit(): SuitInterface;
@@ -22,5 +27,5 @@ interface CardInterface
 	 *
 	 * @return bool
 	 */
-	public function equals(CardInterface $card): bool;
+	function equals(CardInterface $card): bool;
 }
