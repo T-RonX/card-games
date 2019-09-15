@@ -1,17 +1,22 @@
 class Hand {
-    constructor(z_fighter, card_selector, path_draw_from_discarded, path_draw_from_undrawn, card_width, card_height, card_separation) {
+    constructor(z_fighter, selector, hand_cards, path_draw_from_discarded, path_draw_from_undrawn, card_width, card_height, card_separation) {
         this.z_fighter = z_fighter;
-        this.hand_container = new HandContainer(card_selector);
-        this.cards = $(card_selector);
-        this.card_fan = new Fan(this.cards, card_separation, card_width, card_height, true, card_height * 1.8, 0, 300);
-        this.hover_animator = new HandHoverAnimator(this.cards, card_width, card_height, Math.ceil(card_height * .175));
-        this.dropable_hand = new DroppableHand(this.cards, path_draw_from_discarded, path_draw_from_undrawn);
+        this.selector = selector;
+        this.hand_container = new HandContainer(hand_cards, selector);
+       // this.cards = $(selector);
+        this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, true, card_height * 1.8, 0, 300);
+        this.hover_animator = new HandHoverAnimator(this.hand_container, card_width, card_height, Math.ceil(card_height * .175));
+        this.dropable_hand = new DroppableHand(this.hand_container, path_draw_from_discarded, path_draw_from_undrawn);
     }
 
     initialize() {
+        this.initializeCards();
+    }
+
+    initializeCards() {
         this.card_fan.positionCards(true);
 
-        if (this.cards.length > 1)
+        if (this.hand_container.getCards().length > 1)
         {
             this.hover_animator.setAnimations();
         }
@@ -23,18 +28,19 @@ class Hand {
     }
 
     makeCardsSelectable() {
-        this.cards.mouseup((e, x) => {
-            let card = $(e.target);
+        for (const card of this.hand_container.getCards()) {
+            card.mouseup((e, x) => {
+                let card = $(e.target);
 
-            if (!card.data('dragger').isDragging()) {
-                $(e.target).toggleClass('selected');
-            }
-        });
+                if (!card.data('dragger').isDragging()) {
+                    $(e.target).toggleClass('selected');
+                }
+            });
+        }
     }
 
     makeCardsDraggable() {
-        this.cards.each((i, e) => {
-            let card = $(e);
+        for (const card of this.hand_container.getCards()) {
             let dragger = new HandCardDragger(this.z_fighter, card);
             card.data('dragger', dragger);
             card.draggable({
@@ -44,6 +50,11 @@ class Hand {
                 drag: dragger.drag(),
                 stop: dragger.stop()
             })
-        });
+        }
+    }
+
+    addCard(card) {
+        this.hand_container.addCard(card);
+        this.initializeCards();
     }
 }

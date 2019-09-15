@@ -1,6 +1,6 @@
 class Fan {
-    constructor(cards, card_overlap, card_width, card_height, add_random_deviation, offset_y, offset_x, start_z_index) {
-        this.cards = cards;
+    constructor(card_container, card_overlap, card_width, card_height, add_random_deviation, offset_y, offset_x, start_z_index) {
+        this.card_container = card_container;
         this.card_overlap = card_overlap;
         this.card_width = card_width;
         this.card_height = card_height;
@@ -11,7 +11,7 @@ class Fan {
     }
 
     setup() {
-        this.card_count = this.cards.length;
+        this.card_count = this.card_container.getCards().length;
         let radius_increase_ratio = 10 * this.card_count; // increase the radius according to the card count
         this.radius = Math.max(1800, radius_increase_ratio * this.card_count);
         let center_y_offset = this.radius - this.offset_y;
@@ -23,20 +23,17 @@ class Fan {
         this.card_positions = [];
     }
 
-    setCards(cards) {
-        this.cards = cards;
-    }
-
     positionCards(add_dropper) {
         this.setup();
+        let i = 0;
 
-        this.cards.each((i, element) => {
+        for (const card of this.card_container.getCards()) {
             let add_deviation = this.add_random_deviation && this.card_count !== 1;
             let coords = this.getCoordinates(this.angle, add_deviation);
             let rotate = this.getRotation(coords.x, coords.y, add_deviation);
             this.card_positions[i] = { x: coords.x, y: coords.y, rotate: rotate };
 
-            let card = $(element);
+           // let card = $(element);
             card.data('rotation_angle', rotate);
             card.css('position', 'absolute');
             card.css('left', coords.x + 'px');
@@ -46,7 +43,8 @@ class Fan {
 
             ++this.zindex;
             this.angle += this.separation_angle;
-        });
+            ++i;
+        }
 
         if (add_dropper) {
             this.addDroppableArea();
@@ -85,7 +83,7 @@ class Fan {
     }
 
     addDroppableArea() {
-        let container = this.cards.parent();
+        let container = this.card_container.getContainer();
         this.zindex += this.card_count;
 
         this.angle = -90 - (((this.separation_angle * this.card_count) / 2) - (this.separation_angle / 2));

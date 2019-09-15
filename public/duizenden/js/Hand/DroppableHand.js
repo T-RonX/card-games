@@ -1,13 +1,13 @@
 class DroppableHand {
-    constructor(cards, path_draw_from_discarded, path_draw_from_undrawn, hand) {
+    constructor(card_container, path_draw_from_discarded, path_draw_from_undrawn, hand) {
         this.path_draw_from_discarded = path_draw_from_discarded;
         this.path_draw_from_undrawn = path_draw_from_undrawn;
-        this.cards = cards;
+        this.card_container = card_container;
         this.is_hand_dropping = false;
     }
 
     makeDropable() {
-        this.cards.parent().find('.card_hand_dropper').droppable({
+        this.card_container.getContainer().find('.card_hand_dropper').droppable({
             hoverClass: 'highlight',
             drop: async (e, ui) => {
                 //console.log(ui.draggable.data('card-order') + ' to ' + $(this).data('card-order'));
@@ -15,7 +15,7 @@ class DroppableHand {
                 if (drag_source === 'discarded_pool') {
                     let cards = [];
 
-                    this.cards.filter('.selected').each(function (item) {
+                    this.card_container.getContainer().filter('.selected').each(function (item) {
                         cards.push($(this).data('card-id'));
                     });
 
@@ -32,7 +32,7 @@ class DroppableHand {
 
                 if (drag_source === 'hand_container' && !this.is_hand_dropping) {
                     this.is_hand_dropping = true;
-                    let container = this.cards.parent();
+                    let container = this.card_container.getContainer();
 
                     let target = $(e.target);
                     let target_id = target.data('card-order');

@@ -220,12 +220,13 @@
 </style>
 {% endblock %}
 {% set discarded_pool_is_first_card = game.state.discardedPool.firstCard %}
+{% set player = game.state.players.playerById(app.user.uuid) %}
 
 {% block body %}
     {% set game_score = game.scoreCalculator.calculateGameScore(game.id) %}
     {% set current_player_id = game.state.players.currentPlayer.id %}
     {% set current_player = game.state.players.currentPlayer %}
-    {% set player = game.state.players.playerById(app.user.uuid) %}
+
     
 <div>
     <div style="float: left; height: 260px; width: 312px; border: 3px #034823 solid; border-right: none;">
@@ -260,6 +261,7 @@
                 {% if workflow_can(game, 'meld') %}
                     <br/><input type="button" value="Meld cards" onclick="meld()" />
                 {% endif %}
+                    <br/><input type="button" value="Add card to hand" onclick="addCardToHand()" />
                 </div>
 
                 <div style="margin-bottom: 10px">
@@ -295,11 +297,11 @@
                 </div>
                 {% for meld in player.melds %}
                     {% set meld_container_unique = player.id ~ '_' ~ loop.index %}
-                    <div class="meld_container" data-meld-unique="{{ meld_container_unique }}" data-meld-id="{{ loop.index }}">
-                        {% for card in meld.cards %}
-                            {{ self.drawCardTable(card, false, false) }}
-                        {% endfor %}
-                    </div>
+                    {% set meld_cards = [] %}
+                    {% for card in meld.cards %}
+                        {% set meld_cards = meld_cards|merge([card.identifier|lower]) %}
+                    {% endfor %}
+                    <div class="meld_container" data-meld-unique="{{ meld_container_unique }}" data-meld-id="{{ loop.index }}" data-meld-cards="{{ meld_cards|json_encode() }}"></div>
                 {% endfor %}
             </div>
             {% endfor %}
@@ -308,9 +310,9 @@
 </div>
 
 <div id="hand_container" style="display: none; position: fixed; bottom: 0; left: 50%; margin: 0 auto; transform: translate(-50%);">
-    {% for card in player.hand %}
-        {{ self.drawCardHand(card, loop.index) }}
-    {% endfor %}
+{#    {% for card in player.hand %}#}
+{#        {{ self.drawCardHand(card, loop.index) }}#}
+{#    {% endfor %}#}
 </div>
 {% endblock %}
 
@@ -339,38 +341,45 @@
     <script src="{{ asset('duizenden/js/Meld/DroppableMeld.js') }}"></script>
     <script src="{{ asset('duizenden/js/Meld/Meld.js') }}"></script>
 <script>
-    let elem = document.querySelector('.card.hand');
-    let elem_style = document.querySelector('.card.table');
+    //let elem = document.querySelector('.card.hand');
+    //let elem_style = document.querySelector('.card.table');
+    let game;
 
     const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
     const message_handler = new GameEventMessageHandler('{{ app.user.uuid }}');
     const event_handler = new GameEvent(connection, message_handler);
     event_handler.initialize();
 
-    if (elem) {
-        let style = window.getComputedStyle(elem);
-        let style_meld = window.getComputedStyle(elem_style);
+    //if (elem) {
+       // let style = window.getComputedStyle(elem);
+        //let style_meld = window.getComputedStyle(elem_style);
+
+        {% set cards_hand = [] %}
+        {% for card in player.hand %}
+            {% set cards_hand = cards_hand|merge([card.identifier|lower]) %}
+        {% endfor %}
 
         $(document).ready(() => {
-            const game = Game.create(
+            game = Game.create(
                 connection,
                 event_handler,
-                '#hand_container .card.hand',
+                '#hand_container',
+                {{ cards_hand|json_encode()|raw }},
                 '.card',
                 '{{ path('duizenden.draw_from_discarded', {meld_cards: '000'}) }}',
                 '{{ path('duizenden.draw_from_undrawn') }}',
-                parseInt(style.width),
-                parseInt(style.height),
-                parseInt(style_meld.width),
-                parseInt(style_meld.height),
+                139,// parseInt(style.width),
+                220,// parseInt(style.height),
+                113,// parseInt(style_meld.width),
+                180,// parseInt(style_meld.height),
                 .3,
                 .26,
-                '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}'
+                '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}',
             );
 
             game.initialize();
         });
-    }
+   // }
 
 
 $("#deal").click(function () {
@@ -400,6 +409,12 @@ function meld() {
     $.post('{{ path('duizenden.meld', {cards: '000'}) }}'.replace('000', cards.join()), null, function (data) {
         location.reload();
     });
+}
+
+
+function addCardToHand() {
+    game.getHand().addCard('sq');
+    game.getHand().addCard('sq');
 }
 
 var dragCheck = false;
