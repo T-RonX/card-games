@@ -6,7 +6,7 @@ class Hand {
        // this.cards = $(selector);
         this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, true, card_height * 1.8, 0, 300);
         this.hover_animator = new HandHoverAnimator(this.hand_container, card_width, card_height, Math.ceil(card_height * .175));
-        this.dropable_hand = new DroppableHand(this.hand_container, path_draw_from_discarded, path_draw_from_undrawn);
+        this.dropable_hand = new DroppableHand(this, path_draw_from_discarded, path_draw_from_undrawn);
     }
 
     initialize() {
@@ -53,8 +53,17 @@ class Hand {
         }
     }
 
+    getHandContainer() {
+        return this.hand_container;
+    }
+
     addCard(card) {
         this.hand_container.addCard(card);
+        this.initializeCards();
+    }
+
+    reorderCards(from, to) {
+        this.hand_container.reorder(from - 1, to - 1);
         this.initializeCards();
     }
 }

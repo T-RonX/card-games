@@ -26,9 +26,9 @@ class GameNotifier
 		$this->builder = $message_builder;
 	}
 
-	public function notify(string $game_id, string $cause_player_id): void
+	public function notify(string $game_id, string $cause_player_id, ?string $type = null): void
 	{
-		$message = $this->builder->createMessageBuilder($game_id, 'refresh')
+		$message = $this->builder->createMessageBuilder($game_id, 'refresh', $type)
 			->addLogMessages("Refresh me please!")
 			->setCausePlayer($cause_player_id)
 			->create();

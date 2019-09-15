@@ -7,6 +7,8 @@ class GameEventMessageHandler {
         const message = JSON.parse(e.data);
 
         switch (message.type) {
+            case 'reordered':
+                break;
             case 'refresh':
                 this.doRefresh(message.data);
                 break;

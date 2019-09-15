@@ -509,7 +509,7 @@ class Duizenden extends AbstractController
 
 		$game->reorderCard($this->getGamePlayer($game), $source - 1, $target - 1);
 
-		$this->game_notifier->notify($game->getId(), $game->getState()->getPlayers()->getCurrentPlayer()->getId());
+		$this->game_notifier->notify($game->getId(), $game->getState()->getPlayers()->getCurrentPlayer()->getId(), 'reordered');
 
 		return new JsonResponse(['success' => true], 200);
 	}

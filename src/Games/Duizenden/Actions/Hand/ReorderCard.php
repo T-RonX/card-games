@@ -72,7 +72,7 @@ class ReorderCard
 			throw new RuntimeException(sprintf("Unable to reorder hand, cards index out of bound."));
 		}
 
-		if ($target === - 1)
+		if ($target === -1)
 		{
 			array_unshift($hand, array_splice($hand, $source, 1)[0]);
 		}
