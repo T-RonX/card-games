@@ -272,7 +272,7 @@ class GamePersistence
 
 		foreach ($cards as $card)
 		{
-			$return[] = $card->getSuit()->getName() . $card->getRank()->getName();
+			$return[] = $card->getIdentifier();
 		}
 
 		return $return;
