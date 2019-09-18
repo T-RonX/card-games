@@ -22,22 +22,17 @@ class MeldCards extends StateChangeAction
 	/**
 	 * @param Game $game
 	 * @param CardInterface[] $cards
-	 * @param bool $draw_from_hand
 	 *
 	 * @throws CardNotFoundException
 	 * @throws HandException
 	 * @throws InvalidMeldException
 	 * @throws MeldException
 	 */
-	public function meld(Game $game, array $cards, bool $draw_from_hand = true): void
+	public function meld(Game $game, array $cards): void
 	{
 		$state = $game->getState();
 
-		if ($draw_from_hand)
-		{
-			$this->drawFromHand($state->getPlayers()->getCurrentPlayer(), $cards);
-		}
-
+		$this->drawFromHand($state->getPlayers()->getCurrentPlayer(), $cards);
 		$this->meldCards($state, $cards);
 
 		$this->state_machine->apply($game, TransitionType::MELD()->getValue());
@@ -70,7 +65,7 @@ class MeldCards extends StateChangeAction
 	 * @throws InvalidMeldException
 	 * @throws MeldException
 	 */
-	private function meldCards(State $state, array $cards): void
+	public function meldCards(State $state, array $cards): void
 	{
 		OrderHelper::orderCards($cards);
 		$meld_type = TypeHelper::detectMeldType($cards);

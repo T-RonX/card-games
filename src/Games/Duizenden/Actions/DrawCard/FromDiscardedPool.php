@@ -76,7 +76,7 @@ class FromDiscardedPool extends StateChangeAction
 			$state->getPlayers()->getCurrentPlayer()->getHand()->drawCard($card);
 		}
 
-		$this->meld_cards->meld($game, $cards, false);
+		$this->meld_cards->meldCards($game->getState(), $cards);
 
 		$state->getPlayers()->getCurrentPlayer()->getHand()->addCards(
 			$state->getDiscardedPool()->drawAllCards()
