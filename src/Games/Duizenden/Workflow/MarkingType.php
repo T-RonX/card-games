@@ -5,15 +5,15 @@ namespace App\Games\Duizenden\Workflow;
 use App\Enum\Enum;
 
 /**
- * @method static self CREATE()
- * @method static self CONFIGURED()
- * @method static self START_TURN()
- * @method static self CARD_DRAWN()
- * @method static self CARDS_MELTED()
- * @method static self MELT_EXTENDED()
- * @method static self TURN_END()
- * @method static self ROUND_END()
- * @method static self GAME_END()
+ * @method static MarkingType CREATE()
+ * @method static MarkingType CONFIGURED()
+ * @method static MarkingType START_TURN()
+ * @method static MarkingType CARD_DRAWN()
+ * @method static MarkingType CARDS_MELTED()
+ * @method static MarkingType MELT_EXTENDED()
+ * @method static MarkingType TURN_END()
+ * @method static MarkingType ROUND_END()
+ * @method static MarkingType GAME_END()
  */
 class MarkingType extends Enum
 {

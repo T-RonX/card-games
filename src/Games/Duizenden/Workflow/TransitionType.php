@@ -5,16 +5,16 @@ namespace App\Games\Duizenden\Workflow;
 use App\Enum\Enum;
 
 /**
- * @method static self CONFIGURE()
- * @method static self DEAL()
- * @method static self DRAW_FROM_UNDRAWN()
- * @method static self DRAW_FROM_DISCARDED()
- * @method static self MELD()
- * @method static self EXTEND_MELD()
- * @method static self DISCARD_END_TURN()
- * @method static self DISCARD_END_ROUND()
- * @method static self DISCARD_END_GAME()
- * @method static self RESTART_GAME()
+ * @method static TransitionType CONFIGURE()
+ * @method static TransitionType DEAL()
+ * @method static TransitionType DRAW_FROM_UNDRAWN()
+ * @method static TransitionType DRAW_FROM_DISCARDED()
+ * @method static TransitionType MELD()
+ * @method static TransitionType EXTEND_MELD()
+ * @method static TransitionType DISCARD_END_TURN()
+ * @method static TransitionType DISCARD_END_ROUND()
+ * @method static TransitionType DISCARD_END_GAME()
+ * @method static TransitionType RESTART_GAME()
  */
 class TransitionType extends Enum
 {

@@ -5,8 +5,8 @@ namespace App\Shufflers;
 use App\Enum\Enum;
 
 /**
- * @method static self RANDOM()
- * @method static self OVERHAND()
+ * @method static ShufflerType RANDOM()
+ * @method static ShufflerType OVERHAND()
  */
 class ShufflerType extends Enum
 {

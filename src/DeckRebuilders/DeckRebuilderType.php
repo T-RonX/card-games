@@ -5,7 +5,7 @@ namespace App\DeckRebuilders;
 use App\Enum\Enum;
 
 /**
- * @method static self DISTINCT()
+ * @method static DeckRebuilderType DISTINCT()
  */
 class DeckRebuilderType extends Enum
 {

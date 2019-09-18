@@ -5,9 +5,9 @@ namespace App\Games\Duizenden;
 use App\Enum\Enum;
 
 /**
- * @method static self END_TURN()
- * @method static self END_ROUND()
- * @method static self END_GAME()
+ * @method static DiscardCardResultType END_TURN()
+ * @method static DiscardCardResultType END_ROUND()
+ * @method static DiscardCardResultType END_GAME()
  */
 class DiscardCardResultType extends Enum
 {
