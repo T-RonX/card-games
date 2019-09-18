@@ -32,6 +32,7 @@ class Game {
             let container_unique = container.data('meld-unique');
             let cards = container.data('meld-cards');
             melds.push(new Meld(
+                z_fighter,
                 cards,
                 container,
                 card_width_meld,

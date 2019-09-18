@@ -1,5 +1,5 @@
 class DroppableHand {
-    constructor(hand, card_container, path_draw_from_discarded, path_draw_from_undrawn) {
+    constructor(hand, path_draw_from_discarded, path_draw_from_undrawn) {
         this.path_draw_from_discarded = path_draw_from_discarded;
         this.path_draw_from_undrawn = path_draw_from_undrawn;
         this.hand = hand;
@@ -15,7 +15,7 @@ class DroppableHand {
                 if (drag_source === 'discarded_pool') {
                     let cards = [];
 
-                    this.hand.getHandContainer().getContainer().filter('.selected').each(function (item) {
+                    this.hand.getHandContainer().getContainer().find('.selected').each(function (item) {
                         cards.push($(this).data('card-id'));
                     });
 
@@ -36,10 +36,16 @@ class DroppableHand {
                     let target = $(e.target);
                     let target_id = target.data('card-order');
                     let source_id = ui.draggable.data('card-order');
+
+                    if (target_id === undefined || source_id === undefined) {
+                        return;
+                    }
+
                     //await new Promise(resolve => setTimeout(resolve, 0));
                     this.hand.reorderCards(source_id, target_id);
-                    $.post('/duizenden/reorder-card/000/000'.replace('000', source_id).replace('000', target_id));
-                    this.is_hand_dropping = false;
+                    $.post('/duizenden/reorder-card/000/000'.replace('000', source_id).replace('000', target_id), null, (data) => {
+                        this.is_hand_dropping = false;
+                    });
                 }
 
                 if (drag_source === 'undrawn_pool') {

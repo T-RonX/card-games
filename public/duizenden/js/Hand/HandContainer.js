@@ -57,11 +57,9 @@ class HandContainer {
         const moving_card = this.cards.splice(source, 1)[0];
 
         if (target === -1) {
-            this.cards.unshift(this.cards, moving_card);
+            this.cards.unshift(moving_card);
         } else {
             this.cards.splice(source > target ? target + 1 : target, 0, moving_card);
         }
-
-        this.createCards();
     }
 }

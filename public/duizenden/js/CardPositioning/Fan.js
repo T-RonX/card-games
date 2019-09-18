@@ -1,5 +1,5 @@
 class Fan {
-    constructor(card_container, card_overlap, card_width, card_height, add_random_deviation, offset_y, offset_x, start_z_index) {
+    constructor(card_container, card_overlap, card_width, card_height, add_random_deviation, offset_y, offset_x, z_fighter) {
         this.card_container = card_container;
         this.card_overlap = card_overlap;
         this.card_width = card_width;
@@ -7,7 +7,7 @@ class Fan {
         this.add_random_deviation = add_random_deviation;
         this.offset_y = offset_y;
         this.offset_x = offset_x;
-        this.zindex = start_z_index;
+        this.z_fighter = z_fighter;
     }
 
     setup() {
@@ -38,10 +38,9 @@ class Fan {
             card.css('position', 'absolute');
             card.css('left', coords.x + 'px');
             card.css('top', coords.y + 'px');
-            card.css('z-index', this.zindex);
+            card.css('z-index', this.z_fighter.up());
             card.css('transform', 'rotate(' + rotate + 'deg)');
 
-            ++this.zindex;
             this.angle += this.separation_angle;
             ++i;
         }
@@ -84,7 +83,7 @@ class Fan {
 
     addDroppableArea() {
         let container = this.card_container.getContainer();
-        this.zindex += this.card_count;
+        this.z_fighter.up(this.card_count);
 
         this.angle = -90 - (((this.separation_angle * this.card_count) / 2) - (this.separation_angle / 2));
         this.angle  -= this.separation_angle;
@@ -92,12 +91,12 @@ class Fan {
         let rotate = this.getRotation(coords.x, coords.y, false);
         let n = 0;
 
-        this.addDropper(container, 0, coords.x, coords.y, rotate, this.zindex, false);
+        this.addDropper(container, 0, coords.x, coords.y, rotate, this.z_fighter.current(), false);
 
         for (let [i, card_position] of this.card_positions.entries())
         {
-            this.addDropper(container, ++n, card_position.x, card_position.y, card_position.rotate, this.zindex, i === this.card_count - 1);
-            ++this.zindex;
+            this.addDropper(container, ++n, card_position.x, card_position.y, card_position.rotate, this.z_fighter.current(), i === this.card_count - 1);
+            this.z_fighter.up();
         }
     }
 

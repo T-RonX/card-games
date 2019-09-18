@@ -4,7 +4,7 @@ class Hand {
         this.selector = selector;
         this.hand_container = new HandContainer(hand_cards, selector);
        // this.cards = $(selector);
-        this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, true, card_height * 1.8, 0, 300);
+        this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, true, card_height * 1.8, 0, z_fighter);
         this.hover_animator = new HandHoverAnimator(this.hand_container, card_width, card_height, Math.ceil(card_height * .175));
         this.dropable_hand = new DroppableHand(this, path_draw_from_discarded, path_draw_from_undrawn);
     }
@@ -44,7 +44,11 @@ class Hand {
             let dragger = new HandCardDragger(this.z_fighter, card);
             card.data('dragger', dragger);
             card.draggable({
-                revert: 'invalid',
+                revert: (is_valid_drop) => {
+                    if (!is_valid_drop) {
+                        this.redrawCards();
+                    }
+                },
                 revertDuration: 300,
                 start: dragger.start(),
                 drag: dragger.drag(),
@@ -62,8 +66,13 @@ class Hand {
         this.initializeCards();
     }
 
+    redrawCards() {
+        this.hand_container.createCards();
+        this.initializeCards();
+    }
+
     reorderCards(from, to) {
         this.hand_container.reorder(from - 1, to - 1);
-        this.initializeCards();
+        this.redrawCards();
     }
 }

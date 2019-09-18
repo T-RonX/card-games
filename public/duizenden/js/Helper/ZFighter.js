@@ -4,11 +4,23 @@ class ZFighter {
         this.z = 0;
     }
 
-    up() {
-        return this.z += this.step;
+    current() {
+        return this.z;
     }
 
-    down() {
-        return this.z -= this.step;
+    up(step = null) {
+        if (null === step) {
+            step += this.step;
+        }
+
+        return this.z += step;
+    }
+
+    down(step = null) {
+        if (null === step) {
+            step += this.step;
+        }
+
+        return this.z -= step;
     }
 }

@@ -22,9 +22,9 @@ class HandHoverAnimator {
                 let angle = MathHelper.degreesToRadians(card.data('rotation_angle') * -1);
 
                 // Get pointer coordinates within the card
-                var rect = e.target.getBoundingClientRect();
-                var x = e.clientX - rect.x;
-                var y = e.clientY - rect.y;
+                const rect = e.target.getBoundingClientRect();
+                const x = e.clientX - rect.x;
+                const y = e.clientY - rect.y;
 
                 // Correct the angle of the coordinate.
                 let newY = y * Math.cos(angle) + x * Math.sin(angle);
