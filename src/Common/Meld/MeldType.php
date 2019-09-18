@@ -5,8 +5,8 @@ namespace App\Common\Meld;
 use App\Enum\Enum;
 
 /**
- * @method static self RUN()
- * @method static self SET()
+ * @method static MeldType RUN()
+ * @method static MeldType SET()
  */
 class MeldType extends Enum
 {

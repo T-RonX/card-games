@@ -3,28 +3,25 @@ services:
     autowire: true
 
   App\Games\Duizenden\Actions\Deal\Deal:
-      tags: ['app.duizenden.action']
+    bind:
+      $state_machine: "@state_machine.duizenden"
 
   App\Games\Duizenden\Actions\DrawCard\FromUndrawnPool:
-      tags: ['app.duizenden.action']
+    arguments: [ "@state_machine.duizenden" ]
 
   App\Games\Duizenden\Actions\DrawCard\FromDiscardedPool:
-      tags: ['app.duizenden.action']
+    arguments: [ "@state_machine.duizenden" ]
 
   App\Games\Duizenden\Actions\Meld\MeldCards:
-      tags: ['app.duizenden.action']
+    arguments: [ "@state_machine.duizenden" ]
 
   App\Games\Duizenden\Actions\Meld\ExtendMeld:
-      tags: ['app.duizenden.action']
-
-  App\Games\Duizenden\Actions\RecreateUndrawnPool\RecreateUndrawnPool:
-      tags: ['app.duizenden.action']
+    arguments: [ "@state_machine.duizenden" ]
 
   App\Games\Duizenden\Actions\DiscardCard\DiscardCard:
-    tags: ['app.duizenden.action']
+    bind:
+      $state_machine: "@state_machine.duizenden"
 
-  App\Games\Duizenden\Actions\Hand\ReorderCard:
-      tags: ['app.duizenden.action']
+  App\Games\Duizenden\Actions\Hand\ReorderCard: ~
 
-  App\Games\Duizenden\Actions\Meld\RevertMeld:
-      tags: ['app.duizenden.action']
+  App\Games\Duizenden\Actions\Meld\RevertMeld: ~

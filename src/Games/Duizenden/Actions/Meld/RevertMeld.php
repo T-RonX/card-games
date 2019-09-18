@@ -3,6 +3,7 @@
 namespace  App\Games\Duizenden\Actions\Meld;
 
 use App\Deck\Card\CardInterface;
+use App\Games\Duizenden\Actions\StateChangeAction;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Repository\GamePlayerRepository;
@@ -11,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\Workflow\StateMachine;
 
 class RevertMeld
 {
@@ -81,7 +83,7 @@ class RevertMeld
 
 		foreach ($cards as $card)
 		{
-			$storable_cards[] = $card->getSuit()->getName() . $card->getRank()->getName();
+			$storable_cards[] = $card->getIdentifier();
 		}
 
 		return $storable_cards;

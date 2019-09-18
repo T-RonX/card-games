@@ -1,65 +1,63 @@
 duizenden.new:
   path: /new/{invitation}
   methods: ['GET']
-  controller: App\Controller\Duizenden::newGame
+  controller: App\Controller\Duizenden\GameController::newGame
   defaults: { invitation: ~ }
 
 duizenden.create:
   path: /create/{invitation}
   methods: ['POST']
-  controller: App\Controller\Duizenden::create
+  controller: App\Controller\Duizenden\GameController::createGame
   defaults: { invitation: ~ }
-
-duizenden.delete:
-  path: /delete/{uuid}
-  methods: ['GET']
-  controller: App\Controller\Duizenden::delete
 
 duizenden.play:
   path: /play/{uuid}
   methods: ['GET']
-  controller: App\Controller\Duizenden::play
+  controller: App\Controller\Duizenden\GameController::playGame
   requirements:
     uuid: '^[0-9a-f]{8}-[0-9a-f]{4}-[5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+
+duizenden.delete:
+  path: /delete/{uuid}
+  methods: ['GET']
+  controller: App\Controller\Duizenden\GameController::deleteGame
+
+### Game actions ###
 
 duizenden.deal:
   path: /deal
   requirements:
   methods: 'POST'
-  controller: App\Controller\Duizenden::deal
+  controller: App\Controller\Duizenden\DealCardsController::deal
 
 duizenden.draw_from_undrawn:
   path: /draw-from-undrawn
   methods: 'POST'
-  controller: App\Controller\Duizenden::drawFromUndrawn
+  controller: App\Controller\Duizenden\DrawCardController::drawFromUndrawn
 
 duizenden.draw_from_discarded:
   path: /draw-from-discarded/{meld_cards}
   methods: 'POST'
-  controller: App\Controller\Duizenden::drawFromDiscarded
+  controller: App\Controller\Duizenden\DrawCardController::drawFromDiscarded
   defaults: { meld_cards: ~ }
 
 duizenden.meld:
   path: /meld/{cards}
   methods: 'POST'
-  controller: App\Controller\Duizenden::meld
+  controller: App\Controller\Duizenden\MeldCardsController::meld
 
 duizenden.extend_meld:
   path: /extend-meld/{card}/{meld_id}
   methods: 'POST'
-  controller: App\Controller\Duizenden::extendMeld
+  controller: App\Controller\Duizenden\MeldCardsController::extendMeld
 
 duizenden.discard:
   path: /discard/{card}
   methods: 'POST'
-  controller: App\Controller\Duizenden::discard
+  controller: App\Controller\Duizenden\DiscardCardController::discard
 
 duizenden.reorder_card:
   path: /reorder-card/{source}/{target}
   methods: 'POST'
-  controller: App\Controller\Duizenden::reorderCard
+  controller: App\Controller\Duizenden\HandController::reorderCard
 
-duizenden.test:
-  path: /test/
-  methods: 'GET'
-  controller: App\Controller\Duizenden::test

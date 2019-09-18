@@ -197,7 +197,6 @@ class MeetingLobby extends AbstractController
 		$player = $this->getUser();
 
 		$lobby->updatePlayerActivity($player);
-
 		$lobby->addMessage($message, $player);
 
 		return new Response('');

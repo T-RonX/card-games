@@ -2,6 +2,8 @@
 
 namespace  App\Games\Duizenden\Actions\Hand;
 
+use App\Games\Duizenden\Actions\StateChangeAction;
+use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Repository\GamePlayerRepository;
@@ -11,6 +13,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use RuntimeException;
+use Symfony\Component\Workflow\StateMachine;
 
 class ReorderCard
 {
@@ -38,24 +41,24 @@ class ReorderCard
 	}
 
 	/**
-	 * @param string $game_id
+	 * @param Game $game
 	 * @param PlayerInterface $player
 	 * @param int $source
 	 * @param int $target
 	 *
 	 * @throws NonUniqueResultException
-	 * @throws PlayerNotFoundException
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 * @throws PlayerNotFoundException
 	 */
-	public function reorder(string $game_id, PlayerInterface $player, int $source, int $target): void
+	public function reorder(Game $game, PlayerInterface $player, int $source, int $target): void
 	{
 		if ($source === $target)
 		{
 			return;
 		}
 
-		$game_player = $this->game_player_repository->getLatestPlayer($game_id, $player->getId());
+		$game_player = $this->game_player_repository->getLatestPlayer($game->getId(), $player->getId());
 
 		if (!$game_player)
 		{
