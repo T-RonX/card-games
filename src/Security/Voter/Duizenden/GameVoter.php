@@ -93,7 +93,7 @@ class GameVoter extends Voter
 				return $this->canDrawFromUndrawn();
 
 			case self::DRAW_FROM_DISCARDED:
-				return $this->camDrawFromDiscarded();
+				return $this->canDrawFromDiscarded();
 				break;
 
 			case self::MELD:
@@ -131,7 +131,7 @@ class GameVoter extends Voter
 		return $this->isCurrentPlayer() && $this->canTransitionTo(TransitionType::DRAW_FROM_UNDRAWN());
 	}
 
-	private function camDrawFromDiscarded(): bool
+	private function canDrawFromDiscarded(): bool
 	{
 		return $this->isCurrentPlayer() && $this->canTransitionTo(TransitionType::DRAW_FROM_DISCARDED());
 	}
