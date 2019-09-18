@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Player;
 use App\Form\Lobby\InvitePlayersType;
 use App\Form\Lobby\NameType;
 use App\Lobby\Entity\Invitation;
@@ -15,9 +16,11 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * @method Player getUser()
+ */
 class MeetingLobby extends AbstractController
 {
 	/**
