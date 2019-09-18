@@ -10,7 +10,7 @@ class CardDragger {
         return (event, ui) => {
             let card = $(event.target);
             this.is_dragging = true;
-            card.css('z-index', 10000099);
+            card.css('z-index', this.z_fighter.up());
             drag_source = card.parent().attr('id');
 
             $('#discarded_pool').addClass('highlighted');
