@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Game\Meta\GameMetaLoader;
-use App\Games\Duizenden\Game;
+use App\Games\Duizenden\Game as Duizenden;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,7 +58,7 @@ class Main extends AbstractController
 
 		switch ($game_name)
 		{
-			case Game::NAME;
+			case Duizenden::NAME;
 				return $this->redirect($this->generateUrl('duizenden.play', [
 					'uuid' => $uuid
 				]));
