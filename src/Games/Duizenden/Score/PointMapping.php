@@ -102,11 +102,11 @@ class PointMapping
 	public static function getPointsByCardId(string $id): int
 	{
 		if (
-			preg_match('/^([SHDCXY]{1})([0-9]{1,2}|[JQKA]{1})$/', $id, $matches) &&
-			isset(self::$name_map[$matches[2]][$matches[1]])
+			preg_match('/^([SHDCXY]{1})([0-9]{1,2}|[JQKA]{1})$/i', $id, $matches) &&
+			isset(self::$name_map[strtoupper($matches[2])][strtoupper($matches[1])])
 		)
 		{
-			return self::$name_map[$matches[2]][$matches[1]];
+			return self::$name_map[strtoupper($matches[2])][strtoupper($matches[1])];
 		}
 
 		throw new UnmappedCardException(sprintf("Card with '%s' was not found in point name mapping.", $id));
