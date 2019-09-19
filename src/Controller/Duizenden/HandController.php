@@ -2,16 +2,20 @@
 
 namespace App\Controller\Duizenden;
 
+use App\CardPool\Exception\EmptyCardPoolException;
 use App\Cards\Standard\Exception\InvalidCardIdException;
 use App\Entity\Player;
 use App\Enum\Exception\EnumConstantsCouldNotBeResolvedException;
 use App\Enum\Exception\EnumNotDefinedException;
 use App\Games\Duizenden\Actions\Hand\ReorderCard;
 use App\Games\Duizenden\Game;
-use App\Games\Duizenden\Notifier\GameNotifier;
+use App\Games\Duizenden\Networking\Message\Action\ReorderCardsAction;
+use App\Games\Duizenden\Networking\Message\ActionType;
+use App\Games\Duizenden\Networking\Message\InvalidActionException;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
+use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -23,11 +27,8 @@ use Symfony\Component\HttpFoundation\Response;
 class HandController extends AbstractController
 {
 	use LoadGameTrait;
+	use NotifyPlayersTrait;
 
-	/**
-	 * @var GameNotifier
-	 */
-	private $game_notifier;
 	/**
 	 * @var ReorderCard
 	 */
@@ -35,14 +36,9 @@ class HandController extends AbstractController
 
 	/**
 	 * @param ReorderCard $reorder_card
-	 * @param GameNotifier $game_notifier
 	 */
-	public function __construct(
-		ReorderCard $reorder_card,
-		GameNotifier $game_notifier
-	)
+	public function __construct(ReorderCard $reorder_card)
 	{
-		$this->game_notifier = $game_notifier;
 		$this->reorder_card = $reorder_card;
 	}
 
@@ -57,9 +53,12 @@ class HandController extends AbstractController
 	 * @throws GameNotFoundException
 	 * @throws InvalidCardIdException
 	 * @throws NonUniqueResultException
-	 * @throws PlayerNotFoundException
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 * @throws PlayerNotFoundException
+	 * @throws EmptyCardPoolException
+	 * @throws UnmappedCardException
+	 * @throws InvalidActionException
 	 */
 	public function reorderCard(int $source, int $target): Response
 	{
@@ -68,9 +67,9 @@ class HandController extends AbstractController
 
 		$this->reorder_card->reorder($game, $this->getGamePlayer($game), $source - 1, $target - 1);
 
-		$this->game_notifier->notify($game->getId(), $game->getState()->getPlayers()->getCurrentPlayer()->getId(), 'reordered');
+		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::REORDER_CARDS());
 
-		return new JsonResponse(['success' => true], 200);
+		return $this->json([]);
 	}
 
 	/**

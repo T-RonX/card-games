@@ -18,14 +18,14 @@ use App\Enum\Enum;
  */
 class TransitionType extends Enum
 {
-	private const CONFIGURE = 'configure';
-	private const DEAL = 'deal';
-	private const DRAW_FROM_UNDRAWN = 'draw_from_undrawn';
-	private const DRAW_FROM_DISCARDED = 'draw_from_discarded';
-	private const MELD = 'meld';
-	private const EXTEND_MELD = 'extend_meld';
-	private const DISCARD_END_TURN = 'discard_end_turn';
-	private const DISCARD_END_ROUND = 'discard_end_round';
-	private const DISCARD_END_GAME = 'discard_end_game';
-	private const RESTART_GAME = 'restart_game';
+	public const CONFIGURE = 'configure';
+	public const DEAL = 'deal';
+	public const DRAW_FROM_UNDRAWN = 'draw_from_undrawn';
+	public const DRAW_FROM_DISCARDED = 'draw_from_discarded';
+	public const MELD = 'meld';
+	public const EXTEND_MELD = 'extend_meld';
+	public const DISCARD_END_TURN = 'discard_end_turn';
+	public const DISCARD_END_ROUND = 'discard_end_round';
+	public const DISCARD_END_GAME = 'discard_end_game';
+	public const RESTART_GAME = 'restart_game';
 }

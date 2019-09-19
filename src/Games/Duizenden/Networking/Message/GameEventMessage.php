@@ -2,6 +2,11 @@
 
 namespace App\Games\Duizenden\Networking\Message;
 
+use App\CardPool\CardPoolInterface;
+use App\CardPool\Exception\EmptyCardPoolException;
+use App\Games\Duizenden\Initializer\DiscardedCardPool;
+use App\Games\Duizenden\Player\Player;
+use App\Games\Duizenden\Player\PlayerInterface;
 use Symfony\Component\Mercure\Update;
 
 class GameEventMessage
@@ -12,9 +17,14 @@ class GameEventMessage
 	private $builder;
 
 	/**
-	 * @var string
+	 * @var TopicType
 	 */
 	private $topic_type;
+
+	/**
+	 * @var StatusType
+	 */
+	private $status;
 
 	/**
 	 * @var string
@@ -27,37 +37,98 @@ class GameEventMessage
 	private $log_messages = [];
 
 	/**
-	 * @var string
+	 * @var PlayerInterface
 	 */
-	private $cause_player;
+	private $source_player;
 
 	/**
-	 * @var string
+	 * @var ActionType
 	 */
-	private $type;
+	private $source_action;
 
-	public function __construct(MessageBuilder $builder, string $target, string $identifier, string $status, string $type)
+	/**
+	 * @var PlayerInterface
+	 */
+	private $current_player;
+
+	/**
+	 * @var ActionType[]
+	 */
+	private $allowed_actions;
+
+	/**
+	 * @var CardPoolInterface
+	 */
+	private $undrawn_pool;
+
+	/**
+	 * @var DiscardedCardPool
+	 */
+	private $discarded_pool;
+
+	/**
+	 * @var Player[]
+	 */
+	private $players;
+
+	/**
+	 * @var int[]
+	 */
+	private $player_scores;
+
+	public function __construct(MessageBuilder $builder, TopicType $topic, string $identifier, StatusType $status)
 	{
-		$this->topic_type = $target;
+		$this->topic_type = $topic;
 		$this->identifier = $identifier;
 		$this->builder = $builder;
 		$this->status = $status;
-		$this->type = $type;
 	}
 
+
+	/**
+	 * @param ActionType[] $actions
+	 *
+	 * @return GameEventMessage
+	 */
+	public function setAllowedActions(array $actions): self
+	{
+		$this->allowed_actions = $actions;
+
+		return $this;
+	}
+
+	public function addAllowedAction(ActionType $action): void
+	{
+		$this->allowed_actions[] = $action;
+	}
+
+	/**
+	 * @return ActionType[]
+	 */
+	public function getAllowedActions(): array
+	{
+		return $this->allowed_actions;
+	}
+
+	/**
+	 * @return Update
+	 *
+	 * @throws EmptyCardPoolException
+	 * @throws InvalidActionException
+	 */
 	public function create(): Update
 	{
 		return $this->builder->compile($this);
 	}
 
-	public function setStatus(string $status): self
+	public function setStatus(StatusType $status): self
 	{
 		$this->status = $status;
 
 		return $this;
 	}
 
-	public function getStatus(): string
+	public function getStatus(): StatusType
 	{
 		return $this->status;
 	}
@@ -74,7 +145,7 @@ class GameEventMessage
 		return $this->log_messages;
 	}
 
-	public function getTopicType(): string
+	public function getTopicType(): TopicType
 	{
 		return $this->topic_type;
 	}
@@ -84,27 +155,90 @@ class GameEventMessage
 		return $this->identifier;
 	}
 
-	public function setCausePlayer(string $cause_player): self
+	public function setSourcePlayer(PlayerInterface $player): self
 	{
-		$this->cause_player = $cause_player;
+		$this->source_player = $player;
 
 		return $this;
 	}
 
-	public function getCausePlayer(): string
+	public function getSourcePlayer(): PlayerInterface
 	{
-		return $this->cause_player;
+		return $this->source_player;
 	}
 
-	public function setType(string $type): self
+	public function getCurrentPlayer(): PlayerInterface
 	{
-		$this->type = $type;
+		return $this->current_player;
+	}
+
+	public function setCurrentPlayer(PlayerInterface $player): self
+	{
+		$this->current_player = $player;
 
 		return $this;
 	}
 
-	public function getType(): string
+	public function getSourceAction(): ActionType
 	{
-		return $this->type;
+		return $this->source_action;
+	}
+
+	public function setSourceAction(ActionType $action): self
+	{
+		$this->source_action = $action;
+
+		return $this;
+	}
+
+	public function getUndrawnPool(): CardPoolInterface
+	{
+		return $this->undrawn_pool;
+	}
+
+	public function setUndrawnPool(CardPoolInterface $undrawn_pool): self
+	{
+		$this->undrawn_pool = $undrawn_pool;
+
+		return $this;
+	}
+
+	public function getDiscardedPool(): DiscardedCardPool
+	{
+		return $this->discarded_pool;
+	}
+
+	public function setDiscardedPool(DiscardedCardPool $discarded_pool): self
+	{
+		$this->discarded_pool = $discarded_pool;
+
+		return $this;
+	}
+
+	/**
+	 * @return PlayerInterface[]|iterable
+	 */
+	public function getPlayers(): iterable
+	{
+		return $this->players;
+	}
+
+	public function setPlayers(iterable $players): self
+	{
+		$this->players = $players;
+
+		return $this;
+	}
+
+	public function getPlayerScore(PlayerInterface $player): ?int
+	{
+		return $this->player_scores[$player->getId()] ?? null;
+	}
+
+	public function setPlayerScore(PlayerInterface $player, int $score): self
+	{
+		$this->player_scores[$player->getId()] = $score;
+
+		return $this;
 	}
 }

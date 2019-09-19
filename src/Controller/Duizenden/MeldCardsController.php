@@ -4,6 +4,7 @@ namespace App\Controller\Duizenden;
 
 use App\CardPool\CardPool;
 use App\CardPool\Exception\CardNotFoundException;
+use App\CardPool\Exception\EmptyCardPoolException;
 use App\Cards\Standard\Card;
 use App\Cards\Standard\Exception\InvalidCardIdException;
 use App\Common\Meld\Exception\InvalidMeldException;
@@ -13,9 +14,13 @@ use App\Games\Duizenden\Actions\Meld\ExtendMeld;
 use App\Games\Duizenden\Actions\Meld\MeldCards;
 use App\Games\Duizenden\Exception\HandException;
 use App\Games\Duizenden\Meld\Exception\MeldException;
-use App\Games\Duizenden\Notifier\GameNotifier;
+use App\Games\Duizenden\Networking\Message\Action\ExtendMeldAction;
+use App\Games\Duizenden\Networking\Message\Action\MeldCardsAction;
+use App\Games\Duizenden\Networking\Message\ActionType;
+use App\Games\Duizenden\Networking\Message\InvalidActionException;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
+use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,11 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 class MeldCardsController extends AbstractController
 {
 	use LoadGameTrait;
-
-	/**
-	 * @var GameNotifier
-	 */
-	private $game_notifier;
+	use NotifyPlayersTrait;
 
 	/**
 	 * @var MeldCards
@@ -43,15 +44,12 @@ class MeldCardsController extends AbstractController
 	/**
 	 * @param MeldCards $meld_cards
 	 * @param ExtendMeld $extend_meld
-	 * @param GameNotifier $game_notifier
 	 */
 	public function __construct(
 		MeldCards $meld_cards,
-		ExtendMeld $extend_meld,
-		GameNotifier $game_notifier
+		ExtendMeld $extend_meld
 	)
 	{
-		$this->game_notifier = $game_notifier;
 		$this->meld_cards = $meld_cards;
 		$this->extend_meld = $extend_meld;
 	}
@@ -71,6 +69,9 @@ class MeldCardsController extends AbstractController
 	 * @throws MeldException
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
+	 * @throws EmptyCardPoolException
+	 * @throws UnmappedCardException
+	 * @throws InvalidActionException
 	 */
 	public function meld(CardPool $cards): Response
 	{
@@ -79,11 +80,9 @@ class MeldCardsController extends AbstractController
 
 		$this->meld_cards->meld($game, $cards->getCards());
 
-		$this->game_notifier->notify($game->getId(), $game->getState()->getPlayers()->getCurrentPlayer()->getId());
+		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::MELD_CARDS());
 
-		return $this->render('Duizenden\game.html.twig', [
-			'game' => $game
-		]);
+		return $this->json([]);
 	}
 
 	/**
@@ -93,6 +92,7 @@ class MeldCardsController extends AbstractController
 	 * @return Response
 	 *
 	 * @throws CardNotFoundException
+	 * @throws EmptyCardPoolException
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
 	 * @throws GameNotFoundException
@@ -102,6 +102,8 @@ class MeldCardsController extends AbstractController
 	 * @throws MeldException
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
+	 * @throws InvalidActionException
 	 */
 	public function extendMeld(Card $card, int $meld_id): Response
 	{
@@ -110,10 +112,8 @@ class MeldCardsController extends AbstractController
 
 		$this->extend_meld->extend($game, $meld_id, $card);
 
-		$this->game_notifier->notify($game->getId(), $game->getState()->getPlayers()->getCurrentPlayer()->getId());
+		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::EXTEND_MELD());
 
-		return $this->render('Duizenden\game.html.twig', [
-			'game' => $game
-		]);
+		return $this->json([]);
 	}
 }

@@ -346,7 +346,7 @@
     let game;
 
     const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
-    const message_handler = new GameEventMessageHandler('{{ app.user.uuid }}');
+    const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}');
     const event_handler = new GameEvent(connection, message_handler);
     event_handler.initialize();
 

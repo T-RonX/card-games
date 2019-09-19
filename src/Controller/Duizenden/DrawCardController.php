@@ -15,9 +15,12 @@ use App\Games\Duizenden\Exception\DrawCardException;
 use App\Games\Duizenden\Exception\HandException;
 use App\Games\Duizenden\Exception\OutOfCardsException;
 use App\Games\Duizenden\Meld\Exception\MeldException;
-use App\Games\Duizenden\Notifier\GameNotifier;
+use App\Games\Duizenden\Networking\Message\Action\DrawCardAction;
+use App\Games\Duizenden\Networking\Message\ActionType;
+use App\Games\Duizenden\Networking\Message\InvalidActionException;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
+use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,11 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DrawCardController extends AbstractController
 {
 	use LoadGameTrait;
-
-	/**
-	 * @var GameNotifier
-	 */
-	private $game_notifier;
+	use NotifyPlayersTrait;
 
 	/**
 	 * @var FromDiscardedPool
@@ -45,15 +44,12 @@ class DrawCardController extends AbstractController
 	/**
 	 * @param FromDiscardedPool $draw_from_discarded_pool
 	 * @param FromUndrawnPool $draw_from_undrawn_pool
-	 * @param GameNotifier $game_notifier
 	 */
 	public function __construct(
 		FromDiscardedPool $draw_from_discarded_pool,
-		FromUndrawnPool $draw_from_undrawn_pool,
-		GameNotifier $game_notifier
+		FromUndrawnPool $draw_from_undrawn_pool
 	)
 	{
-		$this->game_notifier = $game_notifier;
 		$this->draw_from_discarded_pool = $draw_from_discarded_pool;
 		$this->draw_from_undrawn_pool = $draw_from_undrawn_pool;
 	}
@@ -69,6 +65,8 @@ class DrawCardController extends AbstractController
 	 * @throws NonUniqueResultException
 	 * @throws OutOfCardsException
 	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
+	 * @throws InvalidActionException
 	 */
 	public function drawFromUndrawn(): Response
 	{
@@ -77,12 +75,9 @@ class DrawCardController extends AbstractController
 
 		$card = $this->draw_from_undrawn_pool->draw($game);
 
-		$this->game_notifier->notify($game->getId(), $game->getState()->getPlayers()->getCurrentPlayer()->getId());
+		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::DRAW_CARD());
 
-		return $this->render('Duizenden\game.html.twig', [
-			'game' => $game,
-			'drawn_card' => $card,
-		]);
+		return $this->json([]);
 	}
 
 	/**
@@ -96,12 +91,14 @@ class DrawCardController extends AbstractController
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
 	 * @throws GameNotFoundException
+	 * @throws HandException
 	 * @throws InvalidCardIdException
 	 * @throws InvalidMeldException
 	 * @throws MeldException
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
-	 * @throws HandException
+	 * @throws UnmappedCardException
+	 * @throws InvalidActionException
 	 */
 	public function drawFromDiscarded(CardPool $meld_cards = null): Response
 	{
@@ -117,10 +114,8 @@ class DrawCardController extends AbstractController
 			$this->draw_from_discarded_pool->draw($game);
 		}
 
-		$this->game_notifier->notify($game->getId(), $game->getState()->getPlayers()->getCurrentPlayer()->getId());
+		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::DRAW_CARD());
 
-		return $this->render('Duizenden\game.html.twig', [
-			'game' => $game
-		]);
+		return $this->json([]);
 	}
 }

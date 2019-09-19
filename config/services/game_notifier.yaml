@@ -1,0 +1,5 @@
+services:
+  App\Games\Duizenden\Notifier\GameNotifier:
+    autowire: true
+    bind:
+      $state_machine: "@state_machine.duizenden"

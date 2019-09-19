@@ -10,7 +10,8 @@ use App\Enum\Exception\EnumNotDefinedException;
 use App\Games\Duizenden\Actions\DiscardCard\DiscardCard;
 use App\Games\Duizenden\DiscardCardResultType;
 use App\Games\Duizenden\Exception\DiscardCardException;
-use App\Games\Duizenden\Notifier\GameNotifier;
+use App\Games\Duizenden\Networking\Message\Action\DiscardCardAction;
+use App\Games\Duizenden\Networking\Message\ActionType;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Security\Voter\Duizenden\GameVoter;
@@ -22,11 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DiscardCardController extends AbstractController
 {
 	use LoadGameTrait;
-
-	/**
-	 * @var GameNotifier
-	 */
-	private $game_notifier;
+	use NotifyPlayersTrait;
 
 	/**
 	 * @var DiscardCard
@@ -35,14 +32,9 @@ class DiscardCardController extends AbstractController
 
 	/**
 	 * @param DiscardCard $discard_card
-	 * @param GameNotifier $game_notifier
 	 */
-	public function __construct(
-		DiscardCard $discard_card,
-		GameNotifier $game_notifier
-	)
+	public function __construct(DiscardCard $discard_card)
 	{
-		$this->game_notifier = $game_notifier;
 		$this->discard_card = $discard_card;
 	}
 
@@ -81,10 +73,9 @@ class DiscardCardController extends AbstractController
 				throw new Exception('Game ended');
 		}
 
-		$this->game_notifier->notify($game->getId(), $current_player->getId());
+		$this->notifyPlayers($game, $current_player, ActionType::DISCARD_CARD());
 
-		return $this->render('Duizenden\game.html.twig', [
-			'game' => $game
-		]);
+		return $this->json([]);
 	}
+
 }
