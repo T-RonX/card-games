@@ -102,7 +102,7 @@ class DrawCardController extends AbstractController
 	 */
 	public function drawFromDiscarded(CardPool $meld_cards = null): Response
 	{
-		$game = $this->loadGame($this->session->get('game_id'));
+		$game = $this->loadGame();
 		$this->denyAccessUnlessGranted(GameVoter::DRAW_FROM_DISCARDED, $game);
 
 		if (null !== $meld_cards && $meld_cards->hasCards())
