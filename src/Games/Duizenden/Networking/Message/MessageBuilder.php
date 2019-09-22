@@ -51,9 +51,10 @@ class MessageBuilder
 	{
 		$topic = $this->createTopic($message);
 		$data = json_encode([
+			'type' => 'game_state',
 			'status' => $message->getStatus()->getValue(),
 			'message' => $message->getLogMessages(),
-			'game_id' => $message->getIdentifier(),
+			'game_id' => $message->getGameId(),
 			'source' => [
 				'player' => $this->createPlayerIdData($message->getSourcePlayer()),
 				'action' => $this->createActionData($message->getSourceAction()),
@@ -63,7 +64,7 @@ class MessageBuilder
 				'allowed_actions' => $this->createActionsData($message->getAllowedActions()),
 				'undrawn_pool' => $this->createCardPoolData($message->getUndrawnPool(), false),
 				'discarded_pool' => $this->createDiscardedCardPoolData($message->getDiscardedPool()),
-				'players' => $this->createPlayersData($message->getPlayers()),
+				'players' => $this->createPlayersData($message),
 			]
 		]);
 
@@ -115,17 +116,17 @@ class MessageBuilder
 	}
 
 	/**
-	 * @param PlayerInterface[]|iterable $players
+	 * @param GameEventMessage $message
 	 *
 	 * @return string[]
 	 */
-	private function createPlayersData(iterable $players): array
+	private function createPlayersData(GameEventMessage $message): array
 	{
 		$data = [];
 
-		foreach ($players as $player)
+		foreach ($message->getPlayers() as $player)
 		{
-			$data[] = $this->createPlayerData($player);
+			$data[] = $this->createPlayerData($player, $message);
 		}
 
 		return $data;
@@ -133,15 +134,16 @@ class MessageBuilder
 
 	/**
 	 * @param PlayerInterface $player
+	 * @param GameEventMessage $message
 	 *
 	 * @return string[]
 	 */
-	private function createPlayerData(PlayerInterface $player): array
+	private function createPlayerData(PlayerInterface $player, GameEventMessage $message): array
 	{
 		return [
 			'id' => $player->getId(),
 			'name' => $player->getName(),
-			'hand' => $this->createCardPoolData($player->getHand(), false),
+			'hand' => $this->createCardPoolData($player->getHand(), $message->hasPlayerFullCardPool($player->getId())),
 			'melds' => $this->createMeldsData($player->getMelds()),
 		];
 	}

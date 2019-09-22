@@ -341,22 +341,24 @@
     <script src="{{ asset('duizenden/js/Meld/DroppableMeld.js') }}"></script>
     <script src="{{ asset('duizenden/js/Meld/Meld.js') }}"></script>
 <script>
-    //let elem = document.querySelector('.card.hand');
-    //let elem_style = document.querySelector('.card.table');
-    let game;
+    $(document).ready(() => {
+        //let elem = document.querySelector('.card.hand');
+        //let elem_style = document.querySelector('.card.table');
+        let game;
 
-    const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
-    const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}');
-    const event_handler = new GameEvent(connection, message_handler);
-    event_handler.initialize();
+        const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
+        const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}');
+        const event_handler = new GameEvent(connection, message_handler);
+        window.player_event_message_handler.setGameEventHandler(message_handler);
+        event_handler.initialize();
 
-    //if (elem) {
-       // let style = window.getComputedStyle(elem);
+        //if (elem) {
+        // let style = window.getComputedStyle(elem);
         //let style_meld = window.getComputedStyle(elem_style);
 
         {% set cards_hand = [] %}
         {% for card in player.hand %}
-            {% set cards_hand = cards_hand|merge([card.identifier|lower]) %}
+        {% set cards_hand = cards_hand|merge([card.identifier|lower]) %}
         {% endfor %}
 
         $(document).ready(() => {
@@ -379,13 +381,13 @@
 
             game.initialize();
         });
-   // }
-
+        // }
+    });
 
 $("#deal").click(function () {
     let url = '{{ path('duizenden.deal') }}';
     $.post(url, null, function (data) {
-        location.reload();
+       // location.reload();
     });
 });
 

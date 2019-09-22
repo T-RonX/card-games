@@ -76,6 +76,16 @@ class GameEventMessage
 	 */
 	private $player_scores;
 
+	/**
+	 * @var string[]
+	 */
+	private $players_full_card_pool;
+
+	/**
+	 * @var string
+	 */
+	private $game_id;
+
 	public function __construct(MessageBuilder $builder, TopicType $topic, string $identifier, StatusType $status)
 	{
 		$this->topic_type = $topic;
@@ -238,6 +248,28 @@ class GameEventMessage
 	public function setPlayerScore(PlayerInterface $player, int $score): self
 	{
 		$this->player_scores[$player->getId()] = $score;
+
+		return $this;
+	}
+
+	public function addPlayersFullCardPool(string $id): void
+	{
+		$this->players_full_card_pool[] = $id;
+	}
+
+	public function hasPlayerFullCardPool(string $id): bool
+	{
+		return in_array($id, $this->players_full_card_pool);
+	}
+
+	public function getGameId(): string
+	{
+		return $this->game_id;
+	}
+
+	public function setGameId(string $game_id): self
+	{
+		$this->game_id = $game_id;
 
 		return $this;
 	}

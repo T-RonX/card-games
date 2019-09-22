@@ -20,7 +20,16 @@ class PlayerEventMessageHandler {
             case 'game_started':
                 this.gameStarted(data.data);
                 break;
+            case 'game_state':
+                if (this.game_event_handler) {
+                    this.game_event_handler.handle(e);
+                }
+                break;
         }
+    }
+
+    setGameEventHandler(event_hander) {
+        this.game_event_handler = event_hander;
     }
 
     invitationReceived(data) {

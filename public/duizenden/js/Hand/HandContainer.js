@@ -18,6 +18,10 @@ class HandContainer {
         }
     }
 
+    setCards(cards) {
+        this.cards = cards;
+    }
+
     createCard(identifier, index) {
         return $(`<div data-card-order="${index}" data-card-id="${identifier}" class="card hand ${identifier} draggable"></div>`);
     }

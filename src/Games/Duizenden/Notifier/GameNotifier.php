@@ -52,6 +52,7 @@ class GameNotifier
 	}
 
 	/**
+	 * @param string $identifier
 	 * @param Game $game
 	 * @param TopicType $topic
 	 * @param StatusType|null $status
@@ -61,11 +62,12 @@ class GameNotifier
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	public function createGameMessageBuilder(Game $game, TopicType $topic, ?StatusType $status = null): GameEventMessage
+	public function createGameMessageBuilder(string $identifier, Game $game, TopicType $topic, ?StatusType $status = null): GameEventMessage
 	{
 		$state = $game->getState();
 
-		$message = $this->createMessageBuilder($game, $topic, $status ?? StatusType::OK());
+		$message = $this->createMessageBuilder($identifier, $topic, $status ?? StatusType::OK());
+		$message->setGameId($game->getId());
 		$message->setCurrentPlayer($state->getPlayers()->getCurrentPlayer());
 		$message->setAllowedActions($this->createAllowedActions($game));
 		$message->setUndrawnPool($state->getUndrawnPool());
@@ -134,9 +136,9 @@ class GameNotifier
 		return array_unique($actions);
 	}
 
-	public function createMessageBuilder(GameInterface $game, TopicType $topic, ?StatusType $status = null): GameEventMessage
+	public function createMessageBuilder(string $identifier, TopicType $topic, ?StatusType $status = null): GameEventMessage
 	{
-		return $this->builder->createMessageBuilder($topic, $game->getId(), $status);
+		return $this->builder->createMessageBuilder($topic, $identifier, $status);
 	}
 
 	/**

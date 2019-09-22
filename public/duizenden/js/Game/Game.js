@@ -42,12 +42,24 @@ class Game {
             ));
         });
 
-        return new Game(event_handler, hand, melds);
+        let game = new Game(event_handler, hand, melds);
+        event_handler.setGame(game);
+
+        return game;
     }
 
     initialize() {
         for (const meld of this.meld_containers) {
             meld.initialize();
+        }
+
+        this.initializeHand()
+    }
+
+    initializeHand(cards = null) {
+        if (cards) {
+            this.hand.getHandContainer().setCards(cards);
+            this.hand.getHandContainer().createCards();
         }
 
         this.hand.initialize();

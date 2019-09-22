@@ -4,6 +4,10 @@ class GameEvent {
         this.message_handler = message_handler
     }
 
+    setGame(game) {
+        this.message_handler.setGame(game);
+    }
+
     initialize() {
         this.connection.connect((e) => {
             this.received(e)
