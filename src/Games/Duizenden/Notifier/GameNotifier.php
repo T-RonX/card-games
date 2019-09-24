@@ -3,14 +3,7 @@
 namespace App\Games\Duizenden\Notifier;
 
 use App\CardPool\Exception\EmptyCardPoolException;
-use App\Game\GameInterface;
 use App\Games\Duizenden\Game;
-use App\Games\Duizenden\Networking\Message\Action\DealAction;
-use App\Games\Duizenden\Networking\Message\Action\DiscardCardAction;
-use App\Games\Duizenden\Networking\Message\Action\DrawCardAction;
-use App\Games\Duizenden\Networking\Message\Action\ExtendMeldAction;
-use App\Games\Duizenden\Networking\Message\Action\MeldCardsAction;
-use App\Games\Duizenden\Networking\Message\ActionInterface;
 use App\Games\Duizenden\Networking\Message\ActionType;
 use App\Games\Duizenden\Networking\Message\GameEventMessage;
 use App\Games\Duizenden\Networking\Message\InvalidActionException;
@@ -113,14 +106,23 @@ class GameNotifier
 					break;
 
 				case TransitionType::DISCARD_END_TURN:
+					$actions[] = ActionType::DISCARD_END_TURN();
+					break;
+
 				case TransitionType::DISCARD_END_ROUND:
+					$actions[] = ActionType::DISCARD_END_ROUND();
+					break;
+
 				case TransitionType::DISCARD_END_GAME:
-					$actions[] = ActionType::DISCARD_CARD();
+					$actions[] = ActionType::DISCARD_END_GAME();
+					break;
+
+				case TransitionType::DRAW_FROM_UNDRAWN:
+					$actions[] = ActionType::DRAW_FROM_UNDRAWN();
 					break;
 
 				case TransitionType::DRAW_FROM_DISCARDED:
-				case TransitionType::DRAW_FROM_UNDRAWN:
-					$actions[] = ActionType::DRAW_CARD();
+					$actions[] = ActionType::DRAW_FROM_DISCARDED();
 					break;
 
 				case TransitionType::MELD:

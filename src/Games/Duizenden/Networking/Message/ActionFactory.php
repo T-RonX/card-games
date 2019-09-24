@@ -3,8 +3,12 @@
 namespace App\Games\Duizenden\Networking\Message;
 
 use App\Games\Duizenden\Networking\Message\Action\DealAction;
-use App\Games\Duizenden\Networking\Message\Action\DiscardCardAction;
-use App\Games\Duizenden\Networking\Message\Action\DrawCardAction;
+use App\Games\Duizenden\Networking\Message\Action\DiscardEndGameAction;
+use App\Games\Duizenden\Networking\Message\Action\DiscardEndRoundAction;
+use App\Games\Duizenden\Networking\Message\Action\DiscardEndTurnAction;
+use App\Games\Duizenden\Networking\Message\Action\DrawFromDiscardedAction;
+use App\Games\Duizenden\Networking\Message\Action\DrawFromUndrawnAction;
+use App\Games\Duizenden\Networking\Message\Action\DrawFromUndrawnAndMeldAction;
 use App\Games\Duizenden\Networking\Message\Action\ExtendMeldAction;
 use App\Games\Duizenden\Networking\Message\Action\MeldCardsAction;
 use App\Games\Duizenden\Networking\Message\Action\ReorderCardsAction;
@@ -25,8 +29,14 @@ class ActionFactory
 			case ActionType::DEAL:
 				return new DealAction();
 
-			case ActionType::DRAW_CARD:
-				return new DrawCardAction();
+			case ActionType::DRAW_FROM_UNDRAWN:
+				return new DrawFromUndrawnAction();
+
+			case ActionType::DRAW_FROM_DISCARDED:
+				return new DrawFromDiscardedAction();
+
+			case ActionType::DRAW_FROM_DISCARDED_AND_MELD:
+				return new DrawFromUndrawnAndMeldAction();
 
 			case ActionType::MELD_CARDS:
 				return new MeldCardsAction();
@@ -34,8 +44,14 @@ class ActionFactory
 			case ActionType::EXTEND_MELD:
 				return new ExtendMeldAction();
 
-			case ActionType::DISCARD_CARD:
-				return new DiscardCardAction();
+			case ActionType::DISCARD_END_TURN:
+				return new DiscardEndTurnAction();
+
+			case ActionType::DISCARD_END_ROUND:
+				return new DiscardEndRoundAction();
+
+			case ActionType::DISCARD_END_GAME:
+				return new DiscardEndGameAction();
 
 			case ActionType::REORDER_CARDS:
 				return new ReorderCardsAction();

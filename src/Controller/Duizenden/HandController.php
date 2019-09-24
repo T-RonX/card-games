@@ -9,7 +9,6 @@ use App\Enum\Exception\EnumConstantsCouldNotBeResolvedException;
 use App\Enum\Exception\EnumNotDefinedException;
 use App\Games\Duizenden\Actions\Hand\ReorderCard;
 use App\Games\Duizenden\Game;
-use App\Games\Duizenden\Networking\Message\Action\ReorderCardsAction;
 use App\Games\Duizenden\Networking\Message\ActionType;
 use App\Games\Duizenden\Networking\Message\InvalidActionException;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
@@ -21,7 +20,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class HandController extends AbstractController
@@ -67,7 +65,8 @@ class HandController extends AbstractController
 
 		$this->reorder_card->reorder($game, $this->getGamePlayer($game), $source - 1, $target - 1);
 
-		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::REORDER_CARDS());
+		$source_player = $game->getState()->getPlayers()->getPlayerById($this->getUser()->getUuid());
+		$this->notifyPlayers($game, $source_player, ActionType::REORDER_CARDS());
 
 		return $this->json([]);
 	}

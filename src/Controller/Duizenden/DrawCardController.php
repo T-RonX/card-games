@@ -14,12 +14,14 @@ use App\Games\Duizenden\Actions\DrawCard\FromUndrawnPool;
 use App\Games\Duizenden\Exception\DrawCardException;
 use App\Games\Duizenden\Exception\HandException;
 use App\Games\Duizenden\Exception\OutOfCardsException;
+use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Meld\Exception\MeldException;
-use App\Games\Duizenden\Networking\Message\Action\DrawCardAction;
 use App\Games\Duizenden\Networking\Message\ActionType;
 use App\Games\Duizenden\Networking\Message\InvalidActionException;
+use App\Games\Duizenden\Networking\Message\TopicType;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
+use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;
@@ -75,7 +77,7 @@ class DrawCardController extends AbstractController
 
 		$card = $this->draw_from_undrawn_pool->draw($game);
 
-		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::DRAW_CARD());
+		$this->notifyPlayers($game, ActionType::DRAW_FROM_UNDRAWN());
 
 		return $this->json([]);
 	}
@@ -108,10 +110,12 @@ class DrawCardController extends AbstractController
 		if (null !== $meld_cards && $meld_cards->hasCards())
 		{
 			$this->draw_from_discarded_pool->drawAndMeld($game, $meld_cards->getCards());
+			$action = ActionType::DRAW_FROM_DISCARDED_AND_MELD();
 		}
 		else
 		{
 			$this->draw_from_discarded_pool->draw($game);
+			$action = ActionType::DRAW_FROM_DISCARDED();
 		}
 
 		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::DRAW_CARD());
