@@ -79,7 +79,7 @@ class GameEventMessage
 	/**
 	 * @var string[]
 	 */
-	private $players_full_card_pool;
+	private $players_full_card_pool = [];
 
 	/**
 	 * @var string

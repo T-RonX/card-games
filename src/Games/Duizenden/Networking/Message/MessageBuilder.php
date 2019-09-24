@@ -108,7 +108,7 @@ class MessageBuilder
 	{
 		$data = [
 			'count' => $pool->getCardCount(),
-			'top_card' => strtolower($pool->getTopCard()->getIdentifier()),
+			'top_card' => $pool->hasCards() ? strtolower($pool->getTopCard()->getIdentifier()) : null,
 			'is_first_card' => $pool->isFirstCard()
 		];
 
