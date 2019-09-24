@@ -307,7 +307,23 @@
             {% endfor %}
         </div>
    </div>
+
+    <div style="position: fixed; top: 0; right: 0; width: 300px; padding-bottom: 20px;">
+        <div id="log" style="font-family: 'Lucida Console'; font-size: 13px; width: inherit; height: 400px; background-color: rgba(255,0,0,.25); overflow-y: scroll; overflow-x: hidden; border-bottom-left-radius: 10px; padding: 0 0 3px 5px;"></div>
+        <div id="log_slider" onclick="logSlide()" style="position: absolute; width: inherit; height: 20px; bottom: 0; left: 0; background-color: rgba(255,0,0,.7); text-align: center; font-weight: bold; font-size: 14px; cursor: pointer; border-bottom-left-radius: 10px;">hide</div>
+    </div>
 </div>
+
+    <script>
+        function logSlide() {
+            const log = $('#log');
+            const log_slider = $('#log_slider');
+
+            log_slider.html(log.is(':visible') ? 'show': 'hide');
+
+            log.slideToggle();
+        }
+    </script>
 
 <div id="hand_container" style="display: none; position: fixed; bottom: 0; left: 50%; margin: 0 auto; transform: translate(-50%);">
 {#    {% for card in player.hand %}#}
@@ -462,7 +478,7 @@ $("#discarded_pool").droppable({
       if (drag_source === 'hand_container') {
           let url = '{{ path('duizenden.discard', { card: '000' }) }}'.replace('000', ui.draggable.data('card-id'));
           $.post(url, null, function (data) {
-              location.reload();
+              //location.reload();
           });
       }
   }
