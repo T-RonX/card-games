@@ -1,6 +1,0 @@
-player entity gebruiken ipv eigen entity
-messenger component gebruiken?
-first_card opslaan in db
-joker kleur bij laden is incorrect
-rechten checken ook op allowedtransitions
-
