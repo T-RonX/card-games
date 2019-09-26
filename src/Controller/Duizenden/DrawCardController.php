@@ -118,8 +118,34 @@ class DrawCardController extends AbstractController
 			$action = ActionType::DRAW_FROM_DISCARDED();
 		}
 
-		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::DRAW_CARD());
+		$this->notifyPlayers($game, $action);
 
 		return $this->json([]);
+	}
+
+	/**
+	 * @param Game $game
+	 * @param ActionType $action
+	 *
+	 * @throws EmptyCardPoolException
+	 * @throws InvalidActionException
+	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
+	 */
+	private function notifyPlayers(Game $game, ActionType $action)
+	{
+		$current_player = $game->getState()->getPlayers()->getCurrentPlayer();
+
+		foreach ($game->getState()->getPlayers()->getFreshLoopIterator() as $player)
+		{
+			$message = $this->createNotifyPlayerMessage($player->getId(), $game, $game->getState()->getPlayers()->getCurrentPlayer(), $action, TopicType::PLAYER_EVENT());
+
+			if ($player->equals($current_player))
+			{
+				$message->addPlayersFullCardPool($player->getId());
+			}
+
+			$this->game_notifier->notifyMessage($message);
+		}
 	}
 }

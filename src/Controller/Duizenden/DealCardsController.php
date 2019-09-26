@@ -74,7 +74,7 @@ class DealCardsController extends AbstractController
 	 */
 	private function notifyPlayers(Game $game, PlayerInterface $current_player)
 	{
-		foreach ($game->getState()->getPlayers() as $player)
+		foreach ($game->getState()->getPlayers()->getFreshLoopIterator() as $player)
 		{
 			$message = $this->createNotifyPlayerMessage($player->getId(), $game, $current_player, ActionType::DEAL(), TopicType::PLAYER_EVENT());
 			$message->addPlayersFullCardPool($player->getId());
