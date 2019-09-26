@@ -234,7 +234,7 @@
             <div id="undrawn_pool" class="pad">
                 Undrawn
                 {% if game.state.undrawnPool|last %}
-                    {{ self.drawCardTable(game.state.undrawnPool|last, workflow_can(game, 'draw_from_undrawn'), true) }}
+                    {{ self.drawCardTable(game.state.undrawnPool|last, workflow_can(game, 'draw_from_undrawn'), true, 'card_undrawn_pool') }}
                 {% endif %}
             </div>
         </div>
@@ -242,7 +242,7 @@
         <div id="discarded_pool" class="highlight pad" style="height: 250px; width: 150px; float: left;">
             Discarded
             {% if game.state.discardedPool|last%}
-                {{ self.drawCardTable(game.state.discardedPool|last, workflow_can(game, 'draw_from_discarded') and ((not game.state.players.currentPlayer.hasMelds and discarded_pool_is_first_card) or game.scoreCalculator.calculatePlayerMeldsScore(game.state.players.currentPlayer) >= 30)) }}
+                {{ self.drawCardTable(game.state.discardedPool|last, workflow_can(game, 'draw_from_discarded') and ((not game.state.players.currentPlayer.hasMelds and discarded_pool_is_first_card) or game.scoreCalculator.calculatePlayerMeldsScore(game.state.players.currentPlayer) >= 30), false, 'card_discarded_pool') }}
             {% endif %}
         </div>
 
@@ -261,7 +261,6 @@
                 {% if workflow_can(game, 'meld') %}
                     <br/><input type="button" value="Meld cards" onclick="meld()" />
                 {% endif %}
-                    <br/><input type="button" value="Add card to hand" onclick="addCardToHand()" />
                 </div>
 
                 <div style="margin-bottom: 10px">
@@ -336,8 +335,8 @@
     <div data-card-order="{{ index }}" data-card-id="{{ card.identifier|lower }}" class="card hand {{ card.identifier|lower }} draggable"></div>
 {% endmacro %}
 
-{% macro drawCardTable(card, draggable = false, turned = false) %}
-    <div data-card-id="{{ card.identifier|lower }}" class="card table {{  not turned ? card.identifier|lower : 'back' }}{{ draggable ? ' draggable' }}"></div>
+{% macro drawCardTable(card, draggable = false, turned = false, id = false) %}
+    <div {{ id ? 'id=' ~ id ~ ' ' }}data-card-id="{{ card.identifier|lower }}" class="card table {{  not turned ? card.identifier|lower : 'back' }}{{ draggable ? ' draggable' }}"></div>
 {% endmacro %}
 
 {% block javascripts %}
@@ -356,6 +355,8 @@
     <script src="{{ asset('duizenden/js/Meld/MeldContainer.js') }}"></script>
     <script src="{{ asset('duizenden/js/Meld/DroppableMeld.js') }}"></script>
     <script src="{{ asset('duizenden/js/Meld/Meld.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/Action/DiffCalculator.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/Action/ResetUndrawnCard.js') }}"></script>
 <script>
     $(document).ready(() => {
         //let elem = document.querySelector('.card.hand');
@@ -396,8 +397,9 @@
             );
 
             game.initialize();
+
+            ResetUndrawnCard.resetCard();
         });
-        // }
     });
 
 $("#deal").click(function () {
@@ -425,14 +427,8 @@ function meld() {
     });
 
     $.post('{{ path('duizenden.meld', {cards: '000'}) }}'.replace('000', cards.join()), null, function (data) {
-        location.reload();
+        //location.reload();
     });
-}
-
-
-function addCardToHand() {
-    game.getHand().addCard('sq');
-    game.getHand().addCard('sq');
 }
 
 var dragCheck = false;
@@ -454,24 +450,6 @@ let drag_source = 'none';
 
 //$(".card.hand.draggable").draggable({});
 
-$(".card.draggable").draggable({
-    drag: function (event, ui) {
-        dragCheck = true;
-
-        $('.card_hand_dropper').css('display', 'block');
-
-    },
-    start: function (event, ui) {
-        $(this).css('z-index', ++z);
-        drag_source = $(this).parent().attr('id');
-    },
-    stop: function( event, ui ) {
-        $(this).css('z-index', z - 1);
-        dragCheck = false;
-
-        $('.card_hand_dropper').css('display', 'none');
-    }
-});
 
 $("#discarded_pool").droppable({
   drop: function(event, ui) {

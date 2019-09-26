@@ -21,11 +21,11 @@ class DroppableHand {
 
                     if (cards.length) {
                         $.post(this.path_draw_from_discarded.replace('000', cards.join()), null, function (data) {
-                            location.reload();
+                            //location.reload();
                         });
                     } else {
                         $.post(this.path_draw_from_discarded, null, function (data) {
-                            location.reload();
+                            //location.reload();
                         });
                     }
                 }
@@ -51,7 +51,7 @@ class DroppableHand {
                 if (drag_source === 'undrawn_pool') {
 
                     $.post(this.path_draw_from_undrawn, null, function (data) {
-                        location.reload();
+                        //location.reload();
                     });
                 }
             }

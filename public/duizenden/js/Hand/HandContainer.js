@@ -34,19 +34,21 @@ class HandContainer {
         this.container.fadeIn(200);
     }
 
-    getCards() {
-        return this.card_elems
+    getCards(plain = false) {
+        return plain ? this.cards : this.card_elems;
     }
 
     getContainer() {
         return this.container;
     }
 
-    addCard(card) {
-        this.cards.push(card);
-        const card_elem = this.createCard(card, this.cards.length);
-        this.card_elems.push(card_elem);
-        this.container.append(card_elem);
+    addCards(cards) {
+        for (const card of Array.isArray(cards) ? cards : [cards]) {
+            this.cards.concat();
+            const card_elem = this.createCard(card, this.cards.length);
+            this.card_elems.push(card_elem);
+            this.container.append(card_elem);
+        }
     }
 
     reorder(source, target) {
