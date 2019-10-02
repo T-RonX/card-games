@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Games\Duizenden\Networking\Message;
+namespace App\Games\Duizenden\StateCompiler;
 
 interface ActionInterface
 {

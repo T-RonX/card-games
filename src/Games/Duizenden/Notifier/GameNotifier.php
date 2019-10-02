@@ -2,19 +2,16 @@
 
 namespace App\Games\Duizenden\Notifier;
 
-use App\CardPool\Exception\EmptyCardPoolException;
 use App\Games\Duizenden\Game;
-use App\Games\Duizenden\Networking\Message\ActionType;
-use App\Games\Duizenden\Networking\Message\GameEventMessage;
-use App\Games\Duizenden\Networking\Message\InvalidActionException;
+use App\Games\Duizenden\Networking\Message\GameEventData;
+use App\Games\Duizenden\Networking\Message\GameEventMessageCompiler;
 use App\Games\Duizenden\Networking\Message\MessageBuilder;
-use App\Games\Duizenden\Networking\Message\StatusType;
-use App\Games\Duizenden\Networking\Message\TopicType;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
-use App\Games\Duizenden\Workflow\TransitionType;
+use App\Games\Duizenden\StateBuilder\StateBuilder;
+use App\Games\Duizenden\StateCompiler\StatusType;
+use App\Games\Duizenden\StateCompiler\TopicType;
 use Symfony\Component\Mercure\Publisher;
-use Symfony\Component\Workflow\StateMachine;
 
 class GameNotifier
 {
@@ -24,24 +21,31 @@ class GameNotifier
 	private $publisher;
 
 	/**
-	 * @var MessageBuilder
+	 * @var StateBuilder
 	 */
-	private $builder;
+	private $state_builder;
 
 	/**
-	 * @var StateMachine
+	 * @var MessageBuilder
 	 */
-	private $state_machine;
+	private $message_builder;
+
+	/**
+	 * @var GameEventMessageCompiler
+	 */
+	private $message_compiler;
 
 	public function __construct(
 		Publisher $publisher,
-		MessageBuilder $message_builder,
-		StateMachine $state_machine
+		StateBuilder $state_builder,
+		GameEventMessageCompiler $state_compiler,
+		MessageBuilder $message_builder
 	)
 	{
 		$this->publisher = $publisher;
-		$this->builder = $message_builder;
-		$this->state_machine = $state_machine;
+		$this->state_builder = $state_builder;
+		$this->message_compiler = $state_compiler;
+		$this->message_builder = $message_builder;
 	}
 
 	/**
@@ -50,107 +54,29 @@ class GameNotifier
 	 * @param TopicType $topic
 	 * @param StatusType|null $status
 	 *
-	 * @return GameEventMessage
+	 * @return GameEventData
 	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	public function createGameMessageBuilder(string $identifier, Game $game, TopicType $topic, ?StatusType $status = null): GameEventMessage
+	public function createGameMessageBuilder(string $identifier, Game $game, TopicType $topic, ?StatusType $status = null): GameEventData
 	{
-		$state = $game->getState();
-
-		$message = $this->createMessageBuilder($identifier, $topic, $status ?? StatusType::OK());
-		$message->setGameId($game->getId());
-		$message->setCurrentPlayer($state->getPlayers()->getCurrentPlayer());
-		$message->setAllowedActions($this->createAllowedActions($game));
-		$message->setUndrawnPool($state->getUndrawnPool());
-		$message->setDiscardedPool($state->getDiscardedPool());
-		$message->setPlayers($state->getPlayers()->getFreshLoopIterator());
-		$this->addPlayerScores($message, $game);
+		$message = $this->createMessageBuilder($identifier, $topic, $status);
+		$this->state_builder->fillStateData($message, $game);
 
 		return $message;
 	}
 
-	/**
-	 * @param GameEventMessage $message
-	 * @param Game $game
-	 *
-	 * @throws UnmappedCardException
-	 * @throws PlayerNotFoundException
-	 */
-	private function addPlayerScores(GameEventMessage $message, Game $game): void
+	public function createMessageBuilder(string $identifier, TopicType $topic, ?StatusType $status = null): GameEventData
 	{
-		$score = $game->getScoreCalculator()->calculateGameScore($game->getId());
-
-		foreach ($message->getPlayers() as $player)
-		{
-			$message->setPlayerScore($player, $score->getTotalPlayerScore($player->getId()));
-		}
+		return new GameEventData($this->message_compiler, $topic, $identifier, $status ?? StatusType::OK());
 	}
 
 	/**
-	 * @param Game $game
-	 *
-	 * @return ActionType[]
+	 * @param GameEventData $message
 	 */
-	private function createAllowedActions(Game $game): array
+	public function notifyMessage(GameEventData $message): void
 	{
-		$actions = [];
-
-		foreach ($this->state_machine->getEnabledTransitions($game) as $marking)
-		{
-			switch ($marking->getName())
-			{
-				case TransitionType::DEAL:
-					$actions[] = ActionType::DEAL();
-					break;
-
-				case TransitionType::DISCARD_END_TURN:
-					$actions[] = ActionType::DISCARD_END_TURN();
-					break;
-
-				case TransitionType::DISCARD_END_ROUND:
-					$actions[] = ActionType::DISCARD_END_ROUND();
-					break;
-
-				case TransitionType::DISCARD_END_GAME:
-					$actions[] = ActionType::DISCARD_END_GAME();
-					break;
-
-				case TransitionType::DRAW_FROM_UNDRAWN:
-					$actions[] = ActionType::DRAW_FROM_UNDRAWN();
-					break;
-
-				case TransitionType::DRAW_FROM_DISCARDED:
-					$actions[] = ActionType::DRAW_FROM_DISCARDED();
-					break;
-
-				case TransitionType::MELD:
-					$actions[] = ActionType::MELD_CARDS();
-					break;
-
-				case TransitionType::EXTEND_MELD:
-					$actions[] = ActionType::EXTEND_MELD();
-					break;
-			}
-		}
-
-		return array_unique($actions);
-	}
-
-	public function createMessageBuilder(string $identifier, TopicType $topic, ?StatusType $status = null): GameEventMessage
-	{
-		return $this->builder->createMessageBuilder($topic, $identifier, $status);
-	}
-
-	/**
-	 * @param GameEventMessage $message
-	 *
-	 * @throws EmptyCardPoolException
-	 * @throws InvalidActionException
-	 */
-	public function notifyMessage(GameEventMessage $message): void
-	{
-		($this->publisher)($message->create());
+		($this->publisher)($this->message_builder->compile($message));
 	}
 }

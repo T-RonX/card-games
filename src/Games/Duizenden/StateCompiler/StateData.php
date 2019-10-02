@@ -1,40 +1,19 @@
 <?php
 
-namespace App\Games\Duizenden\Networking\Message;
+namespace App\Games\Duizenden\StateCompiler;
 
 use App\CardPool\CardPoolInterface;
-use App\CardPool\Exception\EmptyCardPoolException;
 use App\Games\Duizenden\Initializer\DiscardedCardPool;
 use App\Games\Duizenden\Player\Player;
 use App\Games\Duizenden\Player\PlayerInterface;
-use Symfony\Component\Mercure\Update;
 
-class GameEventMessage
+class StateData
 {
 	/**
-	 * @var MessageBuilder
+	 * @var StateCompilerInterface
 	 */
-	private $builder;
+	private $compiler;
 
-	/**
-	 * @var TopicType
-	 */
-	private $topic_type;
-
-	/**
-	 * @var StatusType
-	 */
-	private $status;
-
-	/**
-	 * @var string
-	 */
-	private $identifier;
-
-	/**
-	 * @var string[]
-	 */
-	private $log_messages = [];
 
 	/**
 	 * @var PlayerInterface
@@ -86,19 +65,15 @@ class GameEventMessage
 	 */
 	private $game_id;
 
-	public function __construct(MessageBuilder $builder, TopicType $topic, string $identifier, StatusType $status)
+	public function __construct(StateCompilerInterface $compiler)
 	{
-		$this->topic_type = $topic;
-		$this->identifier = $identifier;
-		$this->builder = $builder;
-		$this->status = $status;
+		$this->compiler = $compiler;
 	}
-
 
 	/**
 	 * @param ActionType[] $actions
 	 *
-	 * @return GameEventMessage
+	 * @return self
 	 */
 	public function setAllowedActions(array $actions): self
 	{
@@ -121,48 +96,11 @@ class GameEventMessage
 	}
 
 	/**
-	 * @return Update
-	 *
-	 * @throws EmptyCardPoolException
-	 * @throws InvalidActionException
+	 * @return array
 	 */
-	public function create(): Update
+	public function create(): array
 	{
-		return $this->builder->compile($this);
-	}
-
-	public function setStatus(StatusType $status): self
-	{
-		$this->status = $status;
-
-		return $this;
-	}
-
-	public function getStatus(): StatusType
-	{
-		return $this->status;
-	}
-
-	public function addLogMessages(string $message): self
-	{
-		$this->log_messages[] = $message;
-
-		return $this;
-	}
-
-	public function getLogMessages(): array
-	{
-		return $this->log_messages;
-	}
-
-	public function getTopicType(): TopicType
-	{
-		return $this->topic_type;
-	}
-
-	public function getIdentifier(): string
-	{
-		return $this->identifier;
+		return $this->compiler->compile($this);
 	}
 
 	public function setSourcePlayer(PlayerInterface $player): self
@@ -170,6 +108,11 @@ class GameEventMessage
 		$this->source_player = $player;
 
 		return $this;
+	}
+
+	public function hasSource(): bool
+	{
+		return null !== $this->source_player &&  null !== $this->source_action;
 	}
 
 	public function getSourcePlayer(): PlayerInterface

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Games\Duizenden\Networking\Message\Action;
+namespace App\Games\Duizenden\StateCompiler\Action;
 
-use App\Games\Duizenden\Networking\Message\AbstractAction;
-use App\Games\Duizenden\Networking\Message\ActionType;
+use App\Games\Duizenden\StateCompiler\AbstractAction;
+use App\Games\Duizenden\StateCompiler\ActionType;
 
 class DiscardEndRoundAction extends AbstractAction
 {

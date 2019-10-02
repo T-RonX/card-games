@@ -2,6 +2,7 @@
 
 namespace App\Controller\Duizenden;
 
+use App\CardPool\Exception\EmptyCardPoolException;
 use App\Cards\Standard\Exception\InvalidCardIdException;
 use App\Entity\Player;
 use App\Enum\Exception\EnumConstantsCouldNotBeResolvedException;
@@ -11,11 +12,18 @@ use App\Games\Duizenden\Configurator;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\GameDeleter;
 use App\Games\Duizenden\Initializer\Exception\InvalidDealerPlayerException;
+use App\Games\Duizenden\Networking\Message\MessageBuilder;
+use App\Games\Duizenden\Notifier\GameNotifier;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\EmptyPlayerSetException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerFactory;
 use App\Games\Duizenden\Player\PlayerInterface;
+use App\Games\Duizenden\Score\Exception\UnmappedCardException;
+use App\Games\Duizenden\StateBuilder\StateBuilder;
+use App\Games\Duizenden\StateCompiler\InvalidActionException;
+use App\Games\Duizenden\StateCompiler\StatusType;
+use App\Games\Duizenden\StateCompiler\TopicType;
 use App\Lobby\Entity\Invitation;
 use App\Lobby\Inviter;
 use App\Lobby\LobbyNotifier;
@@ -57,18 +65,25 @@ class GameController extends AbstractController
 	private $lobby_notifier;
 
 	/**
+	 * @var StateBuilder
+	 */
+	private $state_builder;
+
+	/**
 	 * @param PlayerRepository $player_repository
 	 * @param PlayerFactory $player_factory
 	 * @param GameDeleter $game_deleter
 	 * @param Inviter $inviter
 	 * @param LobbyNotifier $notifier
+	 * @param StateBuilder $state_builder
 	 */
 	public function __construct(
 		PlayerRepository $player_repository,
 		PlayerFactory $player_factory,
 		GameDeleter $game_deleter,
 		Inviter $inviter,
-		LobbyNotifier $notifier
+		LobbyNotifier $notifier,
+		StateBuilder $state_builder
 	)
 	{
 		$this->player_repository = $player_repository;
@@ -76,6 +91,7 @@ class GameController extends AbstractController
 		$this->game_deleter = $game_deleter;
 		$this->inviter = $inviter;
 		$this->lobby_notifier = $notifier;
+		$this->state_builder = $state_builder;
 	}
 
 	/**
@@ -190,6 +206,7 @@ class GameController extends AbstractController
 	 * @throws InvalidCardIdException
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
 	 */
 	public function playGame(string $uuid): Response
 	{
@@ -197,8 +214,11 @@ class GameController extends AbstractController
 		$game = $this->loadGame($uuid);
 		$this->denyAccessUnlessGranted(GameVoter::ENTER_GAME, $game);
 
+		$state = $this->state_builder->createCompiledStateData($game);
+
 		return $this->render('Duizenden\game.html.twig', [
-			'game' => $game
+			'game' => $game,
+			'state_' => $state
 		]);
 	}
 

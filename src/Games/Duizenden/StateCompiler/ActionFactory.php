@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Games\Duizenden\Networking\Message;
+namespace App\Games\Duizenden\StateCompiler;
 
-use App\Games\Duizenden\Networking\Message\Action\DealAction;
-use App\Games\Duizenden\Networking\Message\Action\DiscardEndGameAction;
-use App\Games\Duizenden\Networking\Message\Action\DiscardEndRoundAction;
-use App\Games\Duizenden\Networking\Message\Action\DiscardEndTurnAction;
-use App\Games\Duizenden\Networking\Message\Action\DrawFromDiscardedAction;
-use App\Games\Duizenden\Networking\Message\Action\DrawFromUndrawnAction;
-use App\Games\Duizenden\Networking\Message\Action\DrawFromUndrawnAndMeldAction;
-use App\Games\Duizenden\Networking\Message\Action\ExtendMeldAction;
-use App\Games\Duizenden\Networking\Message\Action\MeldCardsAction;
-use App\Games\Duizenden\Networking\Message\Action\ReorderCardsAction;
+use App\Games\Duizenden\StateCompiler\Action\DealAction;
+use App\Games\Duizenden\StateCompiler\Action\DiscardEndGameAction;
+use App\Games\Duizenden\StateCompiler\Action\DiscardEndRoundAction;
+use App\Games\Duizenden\StateCompiler\Action\DiscardEndTurnAction;
+use App\Games\Duizenden\StateCompiler\Action\DrawFromDiscardedAction;
+use App\Games\Duizenden\StateCompiler\Action\DrawFromUndrawnAction;
+use App\Games\Duizenden\StateCompiler\Action\DrawFromUndrawnAndMeldAction;
+use App\Games\Duizenden\StateCompiler\Action\ExtendMeldAction;
+use App\Games\Duizenden\StateCompiler\Action\MeldCardsAction;
+use App\Games\Duizenden\StateCompiler\Action\ReorderCardsAction;
 
 class ActionFactory
 {
