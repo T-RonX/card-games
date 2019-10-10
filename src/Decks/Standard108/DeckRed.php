@@ -27,9 +27,10 @@ use App\Cards\Standard\Suit\JokerBlack;
 use App\Cards\Standard\Suit\JokerRed;
 use App\Cards\Standard\Suit\Spades;
 use App\Deck\Card\CardInterface;
+use App\Deck\Card\Color\ColorInterface;
 use App\Deck\DeckInterface;
 
-class Deck implements DeckInterface
+class DeckRed implements DeckInterface
 {
 	/**
 	 * @var CardInterface[]
@@ -139,9 +140,17 @@ class Deck implements DeckInterface
 	/**
 	 * @inheritDoc
 	 */
-	function getCards(): array
+	public function getCards(): array
 	{
 		return $this->cards;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getBackImage(): ColorInterface
+	{
+		return new Red();
 	}
 
 	/**

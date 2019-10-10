@@ -125,8 +125,8 @@ class Initializer
 	 */
 	private function createInitialPack(?ShufflerInterface $shuffler = null): CardPool
 	{
-		$deck1 = $this->deck_factory->create(DeckType::STANDARD108());
-		$deck2 = $this->deck_factory->create(DeckType::STANDARD108());
+		$deck1 = $this->deck_factory->create(DeckType::STANDARD108_BLUE());
+		$deck2 = $this->deck_factory->create(DeckType::STANDARD108_RED());
 
 		$pack = new CardPool();
 		$pack->addCards($deck1->getCards());

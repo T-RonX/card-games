@@ -5,10 +5,14 @@ services:
     arguments:
       -
 
-      standard108: '@App\Decks\Standard108\Deck'
+      standard108_blue: '@App\Decks\Standard108\DeckBlue'
+      standard108_red: '@App\Decks\Standard108\DeckRed'
 
   App\Deck\DeckFactory:
       arguments: [ '@app.deck.locator' ]
 
-  App\Decks\Standard108\Deck:
+  App\Decks\Standard108\DeckBlue:
+    shared: false
+
+  App\Decks\Standard108\DeckRed:
     shared: false
