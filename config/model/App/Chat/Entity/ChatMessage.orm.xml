@@ -5,7 +5,7 @@
       <generator strategy="AUTO"/>
     </id>
     <field name="created_at" type="datetime" nullable="false"/>
-    <field name="message" type="string" nullable="false"/>
+    <field name="message" type="string" length="2000" nullable="false"/>
     <many-to-one field="Player" target-entity="App\Entity\Player">
       <join-columns>
         <join-column name="player_id" referenced-column-name="id" nullable="false"/>

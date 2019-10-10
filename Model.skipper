@@ -160,7 +160,7 @@
       <field name="chat_room_id" type="integer" required="true" uuid="2d5ce707-98d5-4ba8-8937-ddd5658975a9"/>
       <field name="player_id" type="integer" required="true" uuid="5267d673-f38f-4d05-8fdb-8b0c58ce28cf"/>
       <field name="created_at" type="datetime" required="true" uuid="99e4ced7-9f97-4e08-80c7-497c0c431d82"/>
-      <field name="message" type="string" required="true" uuid="aad34c7b-aa88-438b-947d-e707b0cbdfe8"/>
+      <field name="message" type="string" size="2000" required="true" uuid="aad34c7b-aa88-438b-947d-e707b0cbdfe8"/>
       <orm-attributes>
         <attribute name="table">chat_message</attribute>
       </orm-attributes>
