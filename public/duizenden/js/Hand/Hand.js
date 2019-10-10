@@ -2,11 +2,15 @@ class Hand {
     constructor(z_fighter, selector, hand_cards, path_draw_from_discarded, path_draw_from_undrawn, card_width, card_height, card_separation) {
         this.z_fighter = z_fighter;
         this.selector = selector;
-        this.hand_container = new HandContainer(hand_cards, selector);
+        this.hand_container = new HandContainer(hand_cards, selector, this.createCardElement);
        // this.cards = $(selector);
-        this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, true, card_height * 1.8, 0, z_fighter);
+        this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, true, card_height * 1.8, 0, false, 0, z_fighter, false);
         this.hover_animator = new HandHoverAnimator(this.hand_container, card_width, card_height, Math.ceil(card_height * .175));
         this.dropable_hand = new DroppableHand(this, path_draw_from_discarded, path_draw_from_undrawn);
+    }
+
+    createCardElement(identifier, index){
+        return $(`<div data-card-order="${index}" data-card-id="${identifier}" class="card hand ${identifier} draggable"></div>`);
     }
 
     initialize() {

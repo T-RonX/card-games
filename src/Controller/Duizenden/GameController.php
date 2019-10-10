@@ -218,7 +218,7 @@ class GameController extends AbstractController
 
 		return $this->render('Duizenden\game.html.twig', [
 			'game' => $game,
-			'state_' => $state
+			'state_data' => $state
 		]);
 	}
 

@@ -1,7 +1,8 @@
 class HandContainer {
-    constructor(cards, selector) {
+    constructor(cards, selector, create_element) {
         this.cards = cards;
         this.container = $(selector);
+        this.create_element = create_element;
         this.card_elems = [];
         this.createCards();
     }
@@ -23,7 +24,7 @@ class HandContainer {
     }
 
     createCard(identifier, index) {
-        return $(`<div data-card-order="${index}" data-card-id="${identifier}" class="card hand ${identifier} draggable"></div>`);
+        return this.create_element(identifier, index);
     }
 
     clear() {
