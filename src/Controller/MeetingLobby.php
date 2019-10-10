@@ -86,6 +86,7 @@ class MeetingLobby extends AbstractController
 
 		return $this->render('Lobby\lobby.html.twig', [
 			'lobby_id' => Lobby::ID,
+			'player_id' => $player->getId(),
 			'name' => $player->getName(),
 			'messages' => $lobby->getMessages(),
 			'form' => $form_select_players->createView(),

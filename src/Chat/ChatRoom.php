@@ -55,6 +55,7 @@ class ChatRoom
 	 */
 	public function addMessage(string $message, Player $player): void
 	{
+		$message = $this->cleanMessage($message);
 		$message = $this->createMessage($message, $player);
 
 		$this->saveMessage($message);
@@ -110,9 +111,23 @@ class ChatRoom
 	{
 		return [
 			'name' => $this->getPlayerNameFromMessage($message),
-			'message' => $message->getMessage(),
-			'date' => $message->getCreatedAt()->format('d-m-Y H:i:s')
+			'id' => $this->getPlayerIdFromMessage($message),
+			'message' => $this->cleanMessage($message->getMessage()),
+			'date' => $message->getCreatedAt()->format('H:i')
 		];
+	}
+
+	private function cleanMessage(string $message): string
+	{
+		$message = strtr($message, [
+			"\r\n" => "\n",
+			"\n\r" => "\n",
+			"\r" => "\n"
+		]);
+
+		$message = preg_replace("/\n\n\n+/", "\n\n", $message);
+
+		return mb_strcut(trim($message), 0, 1000);
 	}
 
 	/**
@@ -123,6 +138,16 @@ class ChatRoom
 	private function getPlayerNameFromMessage(ChatMessage $message): string
 	{
 		return null == $message->getPlayer() ? 'Anonymous' : $message->getPlayer()->getName();
+	}
+
+	/**
+	 * @param ChatMessage $message
+	 *
+	 * @return string
+	 */
+	private function getPlayerIdFromMessage(ChatMessage $message): string
+	{
+		return null == $message->getPlayer() ? '' : $message->getPlayer()->getId();
 	}
 
 	/**

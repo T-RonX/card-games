@@ -2,7 +2,7 @@
 
 {% block body %}
     <div style="margin-bottom: 6px;">Hi {{ name }}, welcome in the lobby.</div>
-    <div id="users" style="">
+    <div id="users" style="margin-bottom: 10px;">
         {{ form_errors(form) }}
         {{ form_start(form, {'method': 'POST', 'action': path('lobby.invite')}) }}
         <table>
@@ -15,17 +15,120 @@
         </table>
         {{ form_end(form) }}
     </div>
-    <textarea id="chat" style="width: 400px; height: 200px; background: #C9C9C9">{% apply spaceless %}
-    {% for message in messages %}{% apply spaceless %}
-        {{ message.name }}: {{ message.message}}
-    {% endapply %}{{ "\n" }}{% endfor %}
-{% endapply %}</textarea>
-    <br/>
-    <form onsubmit="sendMessage(); return false;">
-    <input id="message" style="width: 412px; background: #C9C9C9"/><input id="send" type="button" onclick="sendMessage()" value="send" style="width: 100px"/>
-    </form>
+    <style type="text/css">
+        .chat_window {
+            height: calc(100vh - 160px);
+            width: 100vw;
+            margin: 0 auto;
+            font-size: calc(1em + .4vw);
+        }
+        @media only screen and (min-width: 1024px) {
+            .chat_window {
+                width: 60vw;
+            }
+        }
+        .chat_window .margin {
+            height: inherit;
+            overflow-y: scroll;
+            background-color: rgba(213, 211, 207, 1);
+        }
+        .chat_window .line {
+            clear: both;
+            padding: .5em 1em;
+        }
+        .chat_window .line:last-child {
+            margin-bottom: 3.5em;
+        }
+        .chat_window .message {
+            max-width: 80%;
+            color: #D5D3CF;
+            padding: .2em .6em;
+            border-radius: .06em;
+            font-family: Segoe UI, Helvetica Neue, Helvetica, Lucida Grande, Arial, Ubuntu, Cantarell, Fira Sans, sans-serif;
+        }
+        .chat_window .line.in .message{
+            float: left;
+            background-color: #524640;
+            border-top-left-radius: 0;
+        }
+        .chat_window .line.out .message{
+            float: right;
+            background-color: #009771;
+            border-top-right-radius: 0;
+        }
+        .chat_window .line .bubble{
+            width: 1em;
+            height: 1em;
+        }
+        .chat_window .line.in .bubble{
+            float: left;
+            width: 0;
+            border-top: 1em solid #524640;
+            border-left: 1em solid transparent;
+            border-top-left-radius: .06em;
+        }
+        .chat_window .line.out .bubble{
+            float: right;
+            width: 0;
+            border-top: 1em solid #009771;
+            border-right: 1em solid transparent;
+            border-top-right-radius: .06em;
+        }
+        .chat_window .type {
+            height: auto;
+            background-color: #B2A7A1;
+            color: #413E3F;
+            padding: .4em 1em;
+            cursor: text;
+            float: left;
+            width: calc(80% - 2em);
+            outline: none;
+        }
+        .chat_window .type:empty:before {
+            content: attr(aria-placeholder);
+        }
+        .chat_window .send {
+            height: auto;
+            float: left;
+            width: 20%;
+            background-color: #524640;
+            color: #D5D3CF;
+            font-weight: bold;
+            padding: .4em 0;
+            text-align: center;
+            cursor: pointer;
+        }
+        .chat_window .line .message .time {
+            float: right;
+            font-size: .6em;
+            clear: both;
+        }
+        .chat_window .line .message .name {
+            font-weight: bold;
+            font-size: .8em;
+            color: #ECEDF0;
+        }
+    </style>
 
-    <br/>
+    <div class="chat_window">
+        <div class="margin">
+{% for message in messages %}
+    <div class="line {{ message.id == player_id ? 'out' : 'in' }}">
+        <div class="bubble"></div>
+        <div class="message">
+            <div class="name">{{ message.name }}</div>
+            <div>{{ message.message|nl2br }}</div>
+            <div class="time">{{ message.date|date('H:i') }}</div>
+        </div>
+    </div>
+{% endfor %}
+        </div>
+        <div class="new_message">
+            <div class="type" aria-placeholder="Type a message" data-tab="1" dir="ltr" spellcheck="true" contenteditable="true"></div>
+            <div class="send" onclick="sendMessage()">Send</div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -37,15 +140,27 @@
 
     $(document).ready(() => {
         const lobby_connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:lobby:{{ lobby_id }}'));
-        const lobby_message_handler = new MessageHandler($('#chat'));
+        const lobby_message_handler = new MessageHandler($('.margin'), '{{ player_id }}');
         lobby = new Lobby(lobby_connection, '{{ path('lobby.say', {message: '000'}) }}', lobby_message_handler);
         lobby.connect();
+
+        $('.type').on('keypress', function (e) {
+            if (e.which === 13 && !e.shiftKey) {
+                sendMessage();
+                return false;
+            }
+        });
     });
 
     function sendMessage() {
-        const message_input = $('#message');
-        lobby.send(message_input.val());
-        message_input.val('');
+        const message_input = $('.type');
+        let message = message_input.html().replace(/<br\s?\/?>/gi, "\n");
+        message = jQuery('<div />').html(message).text().trim();
+
+        if (message !== '') {
+            lobby.send(message);
+            message_input.text('');
+        }
     }
     </script>
 {% endblock %}

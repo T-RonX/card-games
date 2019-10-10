@@ -3,6 +3,10 @@
 
 {% block stylesheets %}
 <style>
+    body {
+        margin: 0;
+    }
+
     .draggable:hover {
         cursor: grab;
     }
@@ -68,6 +72,12 @@
         background-size: 1469px; /* .226 */
     }
 
+    .card.opponent {
+        width: 76px; /* height * 0,63 */
+        height: 120px;
+        background-size: 988px; /* 13 * 76px */
+    }
+
     .card.hand.s2 { background-position: 0 0; }
     .card.hand.s3 { background-position: -139px 0; }
     .card.hand.s4 { background-position: -278px 0; }
@@ -122,7 +132,65 @@
     .card.hand.ca { background-position: -1668px -660px; }
     .card.hand.y0 { background-position: 0 -880px; }
     .card.hand.x0 { background-position: -139px -880px; }
-    .card.table.back { background-position: -278px -880px; }
+    .card.table.bb { background-position: -278px -880px; }
+    .card.table.br { background-position: -417px -880px; }
+
+    .card.opponent.s2 { background-position: 0 0; }
+    .card.opponent.s3 { background-position: -76px 0; }
+    .card.opponent.s4 { background-position: -152px 0; }
+    .card.opponent.s5 { background-position: -228px 0; }
+    .card.opponent.s6 { background-position: -304px 0; }
+    .card.opponent.s7 { background-position: -380px 0; }
+    .card.opponent.s8 { background-position: -456px 0; }
+    .card.opponent.s9 { background-position: -532px 0; }
+    .card.opponent.s10 { background-position: -608px 0; }
+    .card.opponent.sj { background-position: -684px 0; }
+    .card.opponent.sq { background-position: -760px 0; }
+    .card.opponent.sk { background-position: -836px 0; }
+    .card.opponent.sa { background-position: -912px 0; }
+    .card.opponent.h2 { background-position: 0 -120px; }
+    .card.opponent.h3 { background-position: -76px -120px; }
+    .card.opponent.h4 { background-position: -152px -120px; }
+    .card.opponent.h5 { background-position: -228px -120px; }
+    .card.opponent.h6 { background-position: -304px -120px; }
+    .card.opponent.h7 { background-position: -380px -120px; }
+    .card.opponent.h8 { background-position: -456px -120px; }
+    .card.opponent.h9 { background-position: -532px -120px; }
+    .card.opponent.h10 { background-position: -608px -120px; }
+    .card.opponent.hj { background-position: -684px -120px; }
+    .card.opponent.hq { background-position: -760px -120px; }
+    .card.opponent.hk { background-position: -836px -120px; }
+    .card.opponent.ha { background-position: -912px -120px; }
+    .card.opponent.d2 { background-position: 0 -240px; }
+    .card.opponent.d3 { background-position: -76px -240px; }
+    .card.opponent.d4 { background-position: -152px -240px; }
+    .card.opponent.d5 { background-position: -228px -240px; }
+    .card.opponent.d6 { background-position: -304px -240px; }
+    .card.opponent.d7 { background-position: -380px -240px; }
+    .card.opponent.d8 { background-position: -456px -240px; }
+    .card.opponent.d9 { background-position: -532px -240px; }
+    .card.opponent.d10 { background-position: -608px -240px; }
+    .card.opponent.dj { background-position: -684px -240px; }
+    .card.opponent.dq { background-position: -760px -240px; }
+    .card.opponent.dk { background-position: -836px -240px; }
+    .card.opponent.da { background-position: -912px -240px; }
+    .card.opponent.c2 { background-position: 0 -360px; }
+    .card.opponent.c3 { background-position: -76px -360px; }
+    .card.opponent.c4 { background-position: -152px -360px; }
+    .card.opponent.c5 { background-position: -228px -360px; }
+    .card.opponent.c6 { background-position: -304px -360px; }
+    .card.opponent.c7 { background-position: -380px -360px; }
+    .card.opponent.c8 { background-position: -456px -360px; }
+    .card.opponent.c9 { background-position: -532px -360px; }
+    .card.opponent.c10 { background-position: -608px -360px; }
+    .card.opponent.cj { background-position: -684px -360px; }
+    .card.opponent.cq { background-position: -760px -360px; }
+    .card.opponent.ck { background-position: -836px -360px; }
+    .card.opponent.ca { background-position: -912px -360px; }
+    .card.opponent.y0 { background-position: 0 -360px; }
+    .card.opponent.x0 { background-position: -76px -480px; }
+    .card.opponent.bb { background-position: -152px -480px; }
+    .card.opponent.br { background-position: -228px -480px; }
 
     .card.table.s2 { background-position: 0 0; }
     .card.table.s3 { background-position: -113px 0; }
@@ -178,7 +246,9 @@
     .card.table.ca { background-position: -1356px -537px; }
     .card.table.y0 { background-position: 0 -716px; }
     .card.table.x0 { background-position: -113px -716px; }
-    .card.table.back { background-position: -226px -716px; }
+    .card.table.bb { background-position: -226px -716px; }
+    .card.table.br { background-position: -339px -716px; }
+
 
     .card_hand_dropper {
         display: none;
@@ -201,7 +271,7 @@
 
 
     .meld_container {
-        display: none;
+        display: inline-block;
         position: relative;
         margin: 10px 15px 10px 10px;
     }
@@ -221,13 +291,16 @@
 {% endblock %}
 {% set discarded_pool_is_first_card = game.state.discardedPool.firstCard %}
 {% set player = game.state.players.playerById(app.user.uuid) %}
+{% set current_player_id = game.state.players.currentPlayer.id %}
 
 {% block body %}
     {% set game_score = game.scoreCalculator.calculateGameScore(game.id) %}
-    {% set current_player_id = game.state.players.currentPlayer.id %}
     {% set current_player = game.state.players.currentPlayer %}
 
-    
+    <div>
+        <div id="opponent_panes"></div>
+        <div class="player_melds" style="border: 1px red dotted; box-sizing: border-box; position: relative; bottom: 0; width: 100%; height: 50%;" data-player-id="{{ current_player_id }}"></div>
+    </div>
 <div>
     <div style="float: left; height: 260px; width: 312px; border: 3px #034823 solid; border-right: none;">
         <div  style="float: left; width: 150px; height: 250px;">
@@ -308,7 +381,7 @@
    </div>
 
     <div style="position: fixed; top: 0; right: 0; width: 300px; padding-bottom: 20px;">
-        <div id="log" style="font-family: 'Lucida Console'; font-size: 13px; width: inherit; height: 400px; background-color: rgba(255,0,0,.25); overflow-y: scroll; overflow-x: hidden; border-bottom-left-radius: 10px; padding: 0 0 3px 5px;"></div>
+        <div id="log" style="display:none;font-family: 'Lucida Console'; font-size: 13px; width: inherit; height: 400px; background-color: rgba(255,0,0,.25); overflow-y: scroll; overflow-x: hidden; border-bottom-left-radius: 10px; padding: 0 0 3px 5px;"></div>
         <div id="log_slider" onclick="logSlide()" style="position: absolute; width: inherit; height: 20px; bottom: 0; left: 0; background-color: rgba(255,0,0,.7); text-align: center; font-weight: bold; font-size: 14px; cursor: pointer; border-bottom-left-radius: 10px;">hide</div>
     </div>
 </div>
@@ -324,7 +397,7 @@
         }
     </script>
 
-<div id="hand_container" style="display: none; position: fixed; bottom: 0; left: 50%; margin: 0 auto; transform: translate(-50%);">
+<div id="hand_container" style="display: none; position: fixed; bottom: 0; left: 50%; margin: 0 auto;">
 {#    {% for card in player.hand %}#}
 {#        {{ self.drawCardHand(card, loop.index) }}#}
 {#    {% endfor %}#}
@@ -336,7 +409,7 @@
 {% endmacro %}
 
 {% macro drawCardTable(card, draggable = false, turned = false, id = false) %}
-    <div {{ id ? 'id=' ~ id ~ ' ' }}data-card-id="{{ card.identifier|lower }}" class="card table {{  not turned ? card.identifier|lower : 'back' }}{{ draggable ? ' draggable' }}"></div>
+    <div {{ id ? 'id=' ~ id ~ ' ' }}data-card-id="{{ card.identifier|lower }}" class="card table {{  not turned ? card.identifier|lower : 'bb' }}{{ draggable ? ' draggable' }}"></div>
 {% endmacro %}
 
 {% block javascripts %}
@@ -348,6 +421,7 @@
     <script src="{{ asset('duizenden/js/Card/CardDragger.js') }}"></script>
     <script src="{{ asset('duizenden/js/Hand/DroppableHand.js') }}"></script>
     <script src="{{ asset('duizenden/js/Hand/Hand.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Hand/OpponentHand.js') }}"></script>
     <script src="{{ asset('duizenden/js/Hand/HandCardDragger.js') }}"></script>
     <script src="{{ asset('duizenden/js/Hand/HandContainer.js') }}"></script>
     <script src="{{ asset('duizenden/js/Hand/HandHoverAnimator.js') }}"></script>
@@ -357,6 +431,7 @@
     <script src="{{ asset('duizenden/js/Meld/Meld.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/DiffCalculator.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/ResetUndrawnCard.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/Action/ResetDrawnCard.js') }}"></script>
 <script>
     $(document).ready(() => {
         //let elem = document.querySelector('.card.hand');
@@ -378,12 +453,18 @@
         {% set cards_hand = cards_hand|merge([card.identifier|lower]) %}
         {% endfor %}
 
+        {% set cards_players = [] %}
+        {% for player in game.state.players.freshLoopIterator|filter(player => player.id != current_player_id) %}
+        {% set cards_players = cards_players|merge([{'player_id': player.id, 'hand': game.state.pLayers.playerById(player.id).hand.cards|length}]) %}
+        {% endfor %}
+
         $(document).ready(() => {
             game = Game.create(
                 connection,
                 event_handler,
                 '#hand_container',
                 {{ cards_hand|json_encode()|raw }},
+                {{ state_data.players|filter(player => player.id != current_player_id)|resetKeys|json_encode|raw }},
                 '.card',
                 '{{ path('duizenden.draw_from_discarded', {meld_cards: '000'}) }}',
                 '{{ path('duizenden.draw_from_undrawn') }}',
@@ -391,14 +472,14 @@
                 220,// parseInt(style.height),
                 113,// parseInt(style_meld.width),
                 180,// parseInt(style_meld.height),
-                .3,
+                .29,
                 .26,
                 '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}',
             );
 
             game.initialize();
-
             ResetUndrawnCard.resetCard();
+            ResetDrawnCard.resetCard();
         });
     });
 
@@ -448,7 +529,7 @@ var dragCheck = false;
 let z = 1;
 let drag_source = 'none';
 
-//$(".card.hand.draggable").draggable({});
+$("#discarded_pool .draggable").draggable({});
 
 
 $("#discarded_pool").droppable({
