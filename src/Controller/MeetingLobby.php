@@ -81,7 +81,8 @@ class MeetingLobby extends AbstractController
 		$lobby->updatePlayerActivity($player);
 
 		$form_select_players = $this->createForm(InvitePlayersType::class, null, [
-			'players' => $lobby->getPlayers()
+			'players' => $lobby->getPlayers(),
+			'current_player_id' => $player->getUuid()
 		]);
 
 		return $this->render('Lobby\lobby.html.twig', [
@@ -102,11 +103,12 @@ class MeetingLobby extends AbstractController
 	 */
 	public function invite(Request $request): Response
 	{
-		$lobby = $this->getLobby();
 		$player = $this->getUser();
+		$lobby = $this->getLobby();
 
 		$form = $this->createForm(InvitePlayersType::class, null, [
-			'players' => $lobby->getPlayers()
+			'players' => $lobby->getPlayers(),
+			'current_player_id' => $player->getUuid()
 		]);
 
 		if ($form->handleRequest($request) && $form->isSubmitted() && $form->isValid())

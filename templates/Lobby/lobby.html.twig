@@ -1,19 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form _self %}
+
 {% block body %}
     <div style="margin-bottom: 6px;">Hi {{ name }}, welcome in the lobby.</div>
     <div id="users" style="margin-bottom: 10px;">
-        {{ form_errors(form) }}
-        {{ form_start(form, {'method': 'POST', 'action': path('lobby.invite')}) }}
-        <table>
-        {{ form_row(form._token) }}
-        {{ form_row(form.players) }}
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Invite"></td>
-            </tr>
-        </table>
-        {{ form_end(form) }}
+
     </div>
     <style type="text/css">
         .chat_window {
@@ -22,14 +14,9 @@
             margin: 0 auto;
             font-size: calc(1em + .4vw);
         }
-        @media only screen and (min-width: 1024px) {
-            .chat_window {
-                width: 60vw;
-            }
-        }
         .chat_window .margin {
             height: inherit;
-            overflow-y: scroll;
+            overflow-y: auto;
             background-color: rgba(213, 211, 207, 1);
         }
         .chat_window .line {
@@ -75,7 +62,6 @@
             border-top-right-radius: .06em;
         }
         .chat_window .type {
-            height: auto;
             background-color: #B2A7A1;
             color: #413E3F;
             padding: .4em 1em;
@@ -88,7 +74,6 @@
             content: attr(aria-placeholder);
         }
         .chat_window .send {
-            height: auto;
             float: left;
             width: 20%;
             background-color: #524640;
@@ -108,9 +93,61 @@
             font-size: .8em;
             color: #ECEDF0;
         }
+        #players {
+            width: calc(30vw);
+            float: left;
+            background-color: #B2A7A1;
+            height: calc(100%);
+            position: relative;
+            font-size: .9em;
+            overflow-y: auto;
+            border-bottom: #D5D3CF .14em solid;
+            box-sizing: border-box;
+            white-space: nowrap;
+        }
+        #players .player{
+            margin-bottom: .3em;
+            padding: .2em 0 0 .3em;
+        }
+        #players label{
+            margin-left: .3em;
+            color: #413E3F;
+        }
+        #invite {
+            margin-top: 1em;
+            background-color: #524640;
+            color: #D5D3CF;
+            font-weight: bold;
+            padding: .4em 0;
+            text-align: center;
+            width: 100%;
+            cursor: pointer;
+        }
+        #players form, #players input {
+            padding: 0;
+            margin: 0;
+        }
+        @media only screen and (min-width: 1024px) {
+            .chat_window {
+                width: 60vw;
+            }
+            #players {
+                width: calc(15vw);
+            }
+        }
     </style>
-
+<div id="wrap">
     <div class="chat_window">
+        <div id="players">
+            {{ form_errors(form) }}
+            {{ form_start(form, {'method': 'POST', 'action': path('lobby.invite')}) }}
+            {{ form_row(form._token) }}
+            {{ form_widget(form.players) }}
+            {{ form_end(form) }}
+            <div id="invite">
+                Invite
+            </div>
+        </div>
         <div class="margin">
 {% for message in messages %}
     <div class="line {{ message.id == player_id ? 'out' : 'in' }}">
@@ -128,7 +165,7 @@
             <div class="send" onclick="sendMessage()">Send</div>
         </div>
     </div>
-
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -150,6 +187,13 @@
                 return false;
             }
         });
+
+        $('#invite').on('click', function (e) {
+            const form = $('form[name="lobby_select_players"]');
+            if (form.find('input:checked').length > 0) {
+                form.submit();
+            }
+        });
     });
 
     function sendMessage() {
@@ -164,3 +208,13 @@
     }
     </script>
 {% endblock %}
+
+
+{%- block choice_widget_expanded -%}
+    {%- for child in form -%}
+        <div class="player">
+            {{- form_widget(child) -}}
+            {{- form_label(child, child.vars.is_current_player ? child.vars.label ~ ' (You)' : null, {translation_domain: choice_translation_domain}) -}}
+        </div>
+    {%- endfor -%}
+{%- endblock choice_widget_expanded -%}

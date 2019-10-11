@@ -2,11 +2,12 @@
 
 namespace App\Form\Lobby;
 
-use App\Entity\Player;
 use App\Form\PlayerFieldTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class InvitePlayersType extends AbstractType
@@ -14,10 +15,17 @@ class InvitePlayersType extends AbstractType
 	use PlayerFieldTrait;
 
 	/**
+	 * @var string
+	 */
+	private $current_player_id;
+
+	/**
 	 * @inheritdoc
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
+		$this->current_player_id = $options['current_player_id'];
+
 		$builder
 			->add('players', ChoiceType::class, [
 				'choices' => $options['players'],
@@ -38,7 +46,18 @@ class InvitePlayersType extends AbstractType
 
 		$resolver->setDefaults([
 			'players' => [],
+			'current_player_id' => null
 		]);
+	}
+
+	public function finishView(FormView $view, FormInterface $form, array $options)
+	{
+		parent::finishView($view, $form, $options);
+
+		foreach ($view['players']->children as $child)
+		{
+			$child->vars['is_current_player'] = $child->vars['value'] === $this->current_player_id;
+		}
 	}
 
 	/**
