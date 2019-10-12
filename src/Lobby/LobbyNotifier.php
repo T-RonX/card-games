@@ -4,7 +4,6 @@ namespace App\Lobby;
 
 use App\Entity\Player;
 use App\Lobby\Entity\Invitation;
-use App\Lobby\Entity\Invitee;
 use App\Mercure\SubscriberIdGenerator;
 use Symfony\Component\Mercure\Publisher;
 use Symfony\Component\Mercure\Update;
@@ -115,7 +114,7 @@ class LobbyNotifier
 		];
 	}
 
-	public function publishInvitationGameStarted(?Invitation $invitation)
+	public function publishInvitationGameStarted(?Invitation $invitation): void
 	{
 		foreach ($invitation->getAllPlayers(true) as $invitee)
 		{
@@ -151,5 +150,4 @@ class LobbyNotifier
 			]
 		];
 	}
-
 }

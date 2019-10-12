@@ -85,6 +85,8 @@ class MeetingLobby extends AbstractController
 			'current_player_id' => $player->getUuid()
 		]);
 
+		$this->lobby->playerEntered($player);
+
 		return $this->render('Lobby\lobby.html.twig', [
 			'lobby_id' => Lobby::ID,
 			'player_id' => $player->getId(),

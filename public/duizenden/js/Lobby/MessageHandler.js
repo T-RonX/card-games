@@ -7,8 +7,28 @@ class MessageHandler
     }
 
     handle(e) {
-        const data = JSON.parse(e.data);
-        console.log(data);
+        const received = JSON.parse(e.data);
+
+        switch (received.type) {
+            case 'message_in':
+                this.messageIn(received.data);
+                break;
+                
+            case 'player_joined':
+                this.playerJoined(received.data);
+                break;
+        }
+    }
+
+    playerJoined(data) {
+        if (0 === $(`form[name='lobby_select_players'] #players input[value="${data.id}"]`).length) {
+            $("form[name='lobby_select_players']").prepend(
+                `<div class="player"><input type="checkbox" id="lobby_select_players_players_${data.id}" name="lobby_select_players[players][]" value="${data.id}"><label for="lobby_select_players_players_${data.id}">${data.name}</label></div>`
+            );
+        }
+    }
+
+    messageIn(data) {
         this.chatarea.append(this.line(data));
         this.chatarea.scrollTop(this.chatarea[0].scrollHeight);
     }

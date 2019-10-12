@@ -66,6 +66,11 @@ class Lobby
 		$this->chat_room->updatePlayerActivity($player);
 	}
 
+	public function playerEntered(Player $player): void
+	{
+		$this->chat_room->playerEntered($player);
+	}
+
 	/**
 	 * @return Player[]
 	 */

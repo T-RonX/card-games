@@ -47,6 +47,45 @@ class ChatRoom
 		$this->publisher = $publisher;
 	}
 
+	public function playerEntered(Player $player)
+	{
+		$this->publishPlayerEntered($player);
+	}
+
+	private function publishPlayerEntered(Player $player)
+	{
+		($this->publisher)($this->createPlayerEnteredLobbyUpdate($player));
+	}
+
+	/**
+	 * @param Player $player
+	 *
+	 * @return Update
+	 */
+	private function createPlayerEnteredLobbyUpdate(Player $player): Update
+	{
+		$data = [
+			'type' => 'player_joined',
+			'data' => $this->createPlayerEnteredLobbyMessageData($player),
+		];
+
+		return new Update(sprintf('urn:lobby:%s', Lobby::ID), json_encode($data));
+
+	}
+
+	/**
+	 * @param Player $player
+	 *
+	 * @return string[]
+	 */
+	private function createPlayerEnteredLobbyMessageData(Player $player): array
+	{
+		return [
+			'name' => $player->getName(),
+			'id' => $player->getUuid()
+		];
+	}
+
 	/**
 	 * @param string $message
 	 * @param Player|null $player
@@ -97,9 +136,18 @@ class ChatRoom
 	 */
 	private function publishMessage(ChatMessage $message): void
 	{
-		$update = new Update(sprintf('urn:lobby:%s', Lobby::ID), json_encode($this->createMessageData($message)));
 
-		($this->publisher)($update);
+		($this->publisher)($this->createMessageUpdate($message));
+	}
+
+	private function createMessageUpdate(ChatMessage $message): Update
+	{
+		$data = [
+			'type' => 'message_in',
+			'data' => $this->createMessageData($message),
+		];
+
+		return new Update(sprintf('urn:lobby:%s', Lobby::ID), json_encode($data));
 	}
 
 	/**
