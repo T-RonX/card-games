@@ -83,7 +83,7 @@ class OrderHelper
 			if ($cards[count($cards) - 1]->getRank() instanceof Ace)
 			{
 				$ace = array_pop($cards);
-				array_unshift($cards, new Card($ace->getIdentifier(), $ace->getSuit(), new Rank_1()));
+				array_unshift($cards, new Card($ace->getBackColor(), $ace->getSuit(), new Rank_1()));
 			}
 		}
 
@@ -276,7 +276,7 @@ class OrderHelper
 		{
 			$ace_replaced = true;
 			$ace = array_pop($cards);
-			array_unshift($cards, new Card($ace->getIdentifier(), $ace->getSuit(), new Rank_1()));
+			array_unshift($cards, new Card($ace->getBackColor(), $ace->getSuit(), new Rank_1()));
 		}
 
 		$prev_value = $cards[$card_count - 1]->getRank()->getValue() + 1;
