@@ -23,26 +23,26 @@ class GamePlayer
 		$this->CurrentPlayerGames = new  ArrayCollection();
 	}
 
-	public function getHand()
+	public function getHand(): array
     {
-        return $this->hand;
+        return json_decode($this->hand);
     }
 
-    public function setHand($hand): self
+    public function setHand(array $hand): self
     {
-        $this->hand = $hand;
+        $this->hand = json_encode($hand);
 
         return $this;
     }
 
-    public function getMelds()
+    public function getMelds(): array
     {
-        return $this->melds;
+        return json_decode($this->melds);
     }
 
     public function setMelds($melds): self
     {
-        $this->melds = $melds;
+        $this->melds = json_encode($melds);
 
         return $this;
     }

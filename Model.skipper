@@ -5,8 +5,8 @@
       <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="54abd3e8-7a59-47bf-b10a-64ae013b2cc1"/>
       <field name="game_id" type="integer" uuid="072e43ee-ee0e-4e8b-a430-3e5e3ee1088a"/>
       <field name="game_player_meta_id" type="integer" required="true" uuid="e761ad13-7b5d-473a-8664-a160ca67b74c"/>
-      <field name="hand" type="json_array" required="true" uuid="53e7c054-9d1d-43fa-98b0-33f0b6fd6a8e"/>
-      <field name="melds" type="json_array" required="true" uuid="4011f1e7-de2f-4d8a-b19f-bb9c3aa9439a"/>
+      <field name="hand" type="string" size="3000" required="true" uuid="53e7c054-9d1d-43fa-98b0-33f0b6fd6a8e"/>
+      <field name="melds" type="string" size="3000" required="true" uuid="4011f1e7-de2f-4d8a-b19f-bb9c3aa9439a"/>
       <orm-attributes>
         <attribute name="table">game_player</attribute>
         <attribute name="repository-class">App\Games\Duizenden\Repository\GamePlayerRepository</attribute>
@@ -43,8 +43,8 @@
       <field name="workflow_marking" type="string" required="true" uuid="324aff94-ec82-4da8-9bb4-ed84d27675c7"/>
       <field name="created_at" type="datetime_immutable" required="true" uuid="34e062b6-9164-41d7-884a-fe72c38dccb7"/>
       <field name="current_player_id" type="integer" uuid="3b3f62d2-0393-4a63-b928-5b1f9f1f3dc5"/>
-      <field name="undrawn_pool" type="json_array" required="true" uuid="2cc9778a-a84e-4e72-a6af-2cc69e7a0889"/>
-      <field name="discarded_pool" type="json_array" required="true" uuid="02b453c8-5229-4d18-a0f8-5724d69836a7"/>
+      <field name="undrawn_pool" type="string" size="3000" required="true" uuid="2cc9778a-a84e-4e72-a6af-2cc69e7a0889"/>
+      <field name="discarded_pool" type="string" size="3000" required="true" uuid="02b453c8-5229-4d18-a0f8-5724d69836a7"/>
       <field name="is_first_card" type="boolean" required="true" uuid="0f31c9c4-8116-4338-a6b8-c76892d16f41"/>
       <field name="round" type="integer" uuid="a28232fe-aa12-44f2-9b09-0df08e31c3d0"/>
       <index name="game_id_sequence" unique="true">

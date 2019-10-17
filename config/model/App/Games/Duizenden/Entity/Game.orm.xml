@@ -7,8 +7,8 @@
     <field name="sequence" type="integer" nullable="false"/>
     <field name="workflow_marking" type="string" nullable="false"/>
     <field name="created_at" type="datetime_immutable" nullable="false"/>
-    <field name="undrawn_pool" type="json_array" nullable="false"/>
-    <field name="discarded_pool" type="json_array" nullable="false"/>
+    <field name="undrawn_pool" type="string" length="3000" nullable="false"/>
+    <field name="discarded_pool" type="string" length="3000" nullable="false"/>
     <field name="is_first_card" type="boolean" nullable="false"/>
     <field name="round" type="integer" nullable="true"/>
     <unique-constraints>

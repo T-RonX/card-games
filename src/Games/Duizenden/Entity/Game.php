@@ -75,26 +75,26 @@ class Game
         return $this;
     }
 
-    public function getUndrawnPool()
+    public function getUndrawnPool(): array
     {
-        return $this->undrawn_pool;
+        return json_decode($this->undrawn_pool);
     }
 
-    public function setUndrawnPool($undrawn_pool): self
+    public function setUndrawnPool(array $undrawn_pool): self
     {
-        $this->undrawn_pool = $undrawn_pool;
+        $this->undrawn_pool = json_encode($undrawn_pool);
 
         return $this;
     }
 
-    public function getDiscardedPool()
+    public function getDiscardedPool(): array
     {
-        return $this->discarded_pool;
+        return json_decode($this->discarded_pool);
     }
 
-    public function setDiscardedPool($discarded_pool): self
+    public function setDiscardedPool(array $discarded_pool): self
     {
-        $this->discarded_pool = $discarded_pool;
+        $this->discarded_pool = json_encode($discarded_pool);
 
         return $this;
     }
