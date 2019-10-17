@@ -126,9 +126,8 @@ class Game {
         // }
 
         for (const [i, opponent] of this.opponent_cards.entries()) {
-            const cards = Array(opponent.hand.count).fill('bb');
             const pane = $(`<div class="opponent_hand" style="border: 1px red dotted; box-sizing: border-box; position: relative; float: left; width: ${opponent_pane_width}%; height: ${b}px;" data-player-id="${opponent.id}"></div>`);
-            const hand = new OpponentHand(this.z_fighter, cards, pane, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
+            const hand = new OpponentHand(this.z_fighter, opponent.hand.cards.reverse(), pane, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
 
             hand.initialize();
             pane_container.prepend(pane);

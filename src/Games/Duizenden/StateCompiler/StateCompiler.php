@@ -52,14 +52,11 @@ class StateCompiler implements StateCompilerInterface
 			'count' => $pool->getCardCount()
 		];
 
-		if ($show_all_cards)
-		{
-			$data['cards'] = [];
+		$data['cards'] = [];
 
-			foreach ($pool->getCards() as $card)
-			{
-				$data['cards'][] = strtolower($card->getIdentifier());
-			}
+		foreach ($pool->getCards() as $card)
+		{
+			$data['cards'][] = strtolower($show_all_cards ? $card->getIdentifier() : $card->getBackColor()->getNameShort());
 		}
 
 		return $data;

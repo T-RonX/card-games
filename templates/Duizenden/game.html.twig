@@ -132,8 +132,8 @@
     .card.hand.ca { background-position: -1668px -660px; }
     .card.hand.y0 { background-position: 0 -880px; }
     .card.hand.x0 { background-position: -139px -880px; }
-    .card.table.bb { background-position: -278px -880px; }
-    .card.table.br { background-position: -417px -880px; }
+    .card.table.blue { background-position: -278px -880px; }
+    .card.table.red { background-position: -417px -880px; }
 
     .card.opponent.s2 { background-position: 0 0; }
     .card.opponent.s3 { background-position: -76px 0; }
@@ -189,8 +189,8 @@
     .card.opponent.ca { background-position: -912px -360px; }
     .card.opponent.y0 { background-position: 0 -360px; }
     .card.opponent.x0 { background-position: -76px -480px; }
-    .card.opponent.bb { background-position: -152px -480px; }
-    .card.opponent.br { background-position: -228px -480px; }
+    .card.opponent.blue { background-position: -152px -480px; }
+    .card.opponent.red { background-position: -228px -480px; }
 
     .card.table.s2 { background-position: 0 0; }
     .card.table.s3 { background-position: -113px 0; }
@@ -246,8 +246,8 @@
     .card.table.ca { background-position: -1356px -537px; }
     .card.table.y0 { background-position: 0 -716px; }
     .card.table.x0 { background-position: -113px -716px; }
-    .card.table.bb { background-position: -226px -716px; }
-    .card.table.br { background-position: -339px -716px; }
+    .card.table.blue { background-position: -226px -716px; }
+    .card.table.red { background-position: -339px -716px; }
 
 
     .card_hand_dropper {
@@ -405,11 +405,11 @@
 {% endblock %}
 
 {% macro drawCardHand(card, index) %}
-    <div data-card-order="{{ index }}" data-card-id="{{ card.identifier|lower }}" class="card hand {{ card.identifier|lower }} draggable"></div>
+    <div data-card-order="{{ index }}" data-card-id="{{ card.identifier|lower }}" class="card hand {{ card.identifierValue|lower }} draggable"></div>
 {% endmacro %}
 
 {% macro drawCardTable(card, draggable = false, turned = false, id = false) %}
-    <div {{ id ? 'id=' ~ id ~ ' ' }}data-card-id="{{ card.identifier|lower }}" class="card table {{  not turned ? card.identifier|lower : 'bb' }}{{ draggable ? ' draggable' }}"></div>
+    <div {{ id ? 'id=' ~ id ~ ' ' }}data-card-id="{{ card.identifier|lower }}" class="card table {{  not turned ? card.identifierValue|lower : card.backColor.name }}{{ draggable ? ' draggable' }}"></div>
 {% endmacro %}
 
 {% block javascripts %}
@@ -418,6 +418,7 @@
     <script src="{{ asset('duizenden/js/Game/GameEventMessageHandler.js') }}"></script>
     <script src="{{ asset('duizenden/js/Helper/MathHelper.js') }}"></script>
     <script src="{{ asset('duizenden/js/Helper/ZFighter.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Helper/CardHelper.js') }}"></script>
     <script src="{{ asset('duizenden/js/Card/CardDragger.js') }}"></script>
     <script src="{{ asset('duizenden/js/Hand/DroppableHand.js') }}"></script>
     <script src="{{ asset('duizenden/js/Hand/Hand.js') }}"></script>
@@ -464,7 +465,7 @@
                 event_handler,
                 '#hand_container',
                 {{ cards_hand|json_encode()|raw }},
-                {{ state_data.players|filter(player => player.id != current_player_id)|resetKeys|json_encode|raw }},
+                {{ state_data.players|filter(p => p.id != player.id)|resetKeys|json_encode|raw }},
                 '.card',
                 '{{ path('duizenden.draw_from_discarded', {meld_cards: '000'}) }}',
                 '{{ path('duizenden.draw_from_undrawn') }}',

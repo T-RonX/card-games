@@ -105,11 +105,11 @@ class ChatRoom
 	 * @param string $message
 	 * @param Player|null $player
 	 *
-	 * @return ChatMessage|string
+	 * @return ChatMessage
 	 *
 	 * @throws Exception
 	 */
-	private function createMessage(string $message, Player $player)
+	private function createMessage(string $message, Player $player): ChatMessage
 	{
 		$message = (new ChatMessage())
 			->setChatRoom($this->chat_room_entity)

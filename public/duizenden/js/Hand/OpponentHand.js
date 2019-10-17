@@ -4,8 +4,8 @@ class OpponentHand {
         this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, true, cards_offset_y, cards_offset_x + (card_width / 2), true, angle, z_fighter, false);
     }
 
-    createCardElement(identifier, index) {
-        return $(`<div class="card opponent ${identifier}"></div>`);
+    createCardElement(color, index) {
+        return $(`<div class="card opponent ${CardHelper.createColorFromColorId(color)}"></div>`);
     }
 
     initialize() {

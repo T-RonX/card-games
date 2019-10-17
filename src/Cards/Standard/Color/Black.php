@@ -6,6 +6,8 @@ use App\Deck\Card\Color\ColorInterface;
 
 class Black implements ColorInterface
 {
+	const CODE = 'K';
+
 	/**
 	 * @inheritDoc
 	 */
@@ -20,5 +22,10 @@ class Black implements ColorInterface
 	function getName(): string
 	{
 		return 'black';
+	}
+
+	function getNameShort(): string
+	{
+		return self::CODE;
 	}
 }

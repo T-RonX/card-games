@@ -13,4 +13,6 @@ interface ColorInterface
 	 * @return string
 	 */
 	function getName(): string;
+
+	function getNameShort(): string;
 }

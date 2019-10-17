@@ -3,6 +3,7 @@
 namespace App\Cards\Standard;
 
 use App\Cards\Standard\Color\Black;
+use App\Cards\Standard\Color\Blue;
 use App\Cards\Standard\Color\Red;
 use App\Cards\Standard\Exception\InvalidCardIdException;
 use App\Cards\Standard\Rank\Ace;
@@ -26,6 +27,7 @@ use App\Cards\Standard\Suit\Harts;
 use App\Cards\Standard\Suit\JokerBlack;
 use App\Cards\Standard\Suit\JokerRed;
 use App\Cards\Standard\Suit\Spades;
+use App\Deck\Card\Color\ColorInterface;
 use App\Deck\Card\Rank\RankInterface;
 use App\Deck\Card\Suit\SuitInterface;
 
@@ -40,15 +42,47 @@ class CardHelper
 	 */
 	public static function createCardFromId(string $id)
 	{
-		if (!preg_match('/^([SHDCXY]{1})([0-9]{1,2}|[JQKA]{1})$/i', $id, $matches))
+		$matches = [];
+
+		if (!self::matchIdentifier($id, $matches))
 		{
 			throw new InvalidCardIdException(sprintf("Can not create card, id '%s' is not valid.", $id));
 		}
 
-		$suit = self::createSuitByCode($matches[1]);
-		$rank = self::createRankByValue($matches[2]);
+		$back = self::createBackByCode($matches[1]);
+		$suit = self::createSuitByCode($matches[2]);
+		$rank = self::createRankByValue($matches[3]);
 
-		return new Card($id, $suit, $rank);
+		return new Card($back, $suit, $rank);
+	}
+
+	public static function matchIdentifier(string $identifier, array &$matches)
+	{
+		return preg_match('/^([a-z\d]{1})([SHDCXY]{1})([0-9]{1,2}|[JQKA]{1})$/i', $identifier, $matches);
+	}
+
+	/**
+	 * @param string $code
+	 *
+	 * @return ColorInterface
+	 *
+	 * @throws InvalidCardIdException
+	 */
+	private static function createBackByCode(string $code): ColorInterface
+	{
+		switch (strtoupper($code))
+		{
+			case Red::CODE:
+				return self::createRedColor();
+
+			case Blue::CODE:
+				return self::createBlueColor();
+
+			case Black::CODE:
+				return self::createBlackColor();
+		}
+
+		throw new InvalidCardIdException(sprintf("Back color with code '%s' is not recognised.", $code));
 	}
 
 	/**
@@ -470,6 +504,21 @@ class CardHelper
 		if (null === $color)
 		{
 			$color = new Red();
+		}
+
+		return $color;
+	}
+
+	/**
+	 * @return Blue
+	 */
+	private static function createBlueColor(): Blue
+	{
+		static $color = null;
+
+		if (null === $color)
+		{
+			$color = new Blue();
 		}
 
 		return $color;

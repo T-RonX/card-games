@@ -2,6 +2,7 @@
 
 namespace App\Deck\Card;
 
+use App\Deck\Card\Color\ColorInterface;
 use App\Deck\Card\Rank\RankInterface;
 use App\Deck\Card\Suit\SuitInterface;
 
@@ -21,6 +22,8 @@ interface CardInterface
 	 * @return RankInterface
 	 */
 	function getRank(): RankInterface;
+
+	function getBackColor(): ColorInterface;
 
 	/**
 	 * @param CardInterface $card

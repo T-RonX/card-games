@@ -4,8 +4,8 @@
     <id name="id" type="integer">
       <generator strategy="AUTO"/>
     </id>
-    <field name="hand" type="string" length="3000" nullable="false"/>
-    <field name="melds" type="string" length="3000" nullable="false"/>
+    <field name="hand" type="string" length="1300" nullable="false"/>
+    <field name="melds" type="string" length="1300" nullable="false"/>
     <many-to-one field="Game" target-entity="App\Games\Duizenden\Entity\Game" inversed-by="GamePlayers">
       <join-columns>
         <join-column name="game_id" referenced-column-name="id" on-delete="CASCADE"/>

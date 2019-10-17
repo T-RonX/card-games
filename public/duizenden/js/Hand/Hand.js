@@ -10,7 +10,7 @@ class Hand {
     }
 
     createCardElement(identifier, index){
-        return $(`<div data-card-order="${index}" data-card-id="${identifier}" class="card hand ${identifier} draggable"></div>`);
+        return $(`<div data-card-order="${index}" data-card-id="${identifier}" class="card hand ${CardHelper.getValueFromId(identifier)} draggable"></div>`);
     }
 
     initialize() {

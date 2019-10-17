@@ -6,6 +6,8 @@ use App\Deck\Card\Color\ColorInterface;
 
 class Blue implements ColorInterface
 {
+	const CODE = 'B';
+
 	/**
 	 * @inheritDoc
 	 */
@@ -20,5 +22,10 @@ class Blue implements ColorInterface
 	function getName(): string
 	{
 		return 'blue';
+	}
+
+	function getNameShort(): string
+	{
+		return self::CODE;
 	}
 }

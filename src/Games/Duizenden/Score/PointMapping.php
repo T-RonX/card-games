@@ -2,6 +2,7 @@
 
 namespace App\Games\Duizenden\Score;
 
+use App\Cards\Standard\CardHelper;
 use App\Cards\Standard\Rank\Ace;
 use App\Cards\Standard\Rank\Jack;
 use App\Cards\Standard\Rank\King;
@@ -101,12 +102,14 @@ class PointMapping
 	 */
 	public static function getPointsByCardId(string $id): int
 	{
+		$matches = [];
+
 		if (
-			preg_match('/^([SHDCXY]{1})([0-9]{1,2}|[JQKA]{1})$/i', $id, $matches) &&
-			isset(self::$name_map[strtoupper($matches[2])][strtoupper($matches[1])])
+			CardHelper::matchIdentifier($id, $matches) &&
+			isset(self::$name_map[strtoupper($matches[3])][strtoupper($matches[2])])
 		)
 		{
-			return self::$name_map[strtoupper($matches[2])][strtoupper($matches[1])];
+			return self::$name_map[strtoupper($matches[3])][strtoupper($matches[2])];
 		}
 
 		throw new UnmappedCardException(sprintf("Card with '%s' was not found in point name mapping.", $id));
