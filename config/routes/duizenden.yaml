@@ -22,6 +22,11 @@ duizenden.delete:
   methods: ['GET']
   controller: App\Controller\Duizenden\GameController::deleteGame
 
+duizenden.undo_last_action:
+  path: /undo-last-action/{uuid}
+  methods: ['GET']
+  controller: App\Controller\Duizenden\GameController::undoLastAction
+
 ### Game actions ###
 
 duizenden.deal:

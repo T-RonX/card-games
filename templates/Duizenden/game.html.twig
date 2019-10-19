@@ -297,6 +297,7 @@
     {% set game_score = game.scoreCalculator.calculateGameScore(game.id) %}
     {% set current_player = game.state.players.currentPlayer %}
 
+    <a style="float: right" href="#" onclick="undoLastAction(); return false;">&#x293A; Undo</a>
     <div>
         <div id="opponent_panes"></div>
         <div class="player_melds" style="border: 1px red dotted; box-sizing: border-box; position: relative; bottom: 0; width: 100%; height: 50%;" data-player-id="{{ current_player_id }}"></div>
@@ -544,7 +545,12 @@ $("#discarded_pool").droppable({
   }
 });
 
-
+function undoLastAction() {
+    var url = '{{ path('duizenden.undo_last_action', { uuid: game.id}) }}';
+    $.get(url, null, function (data) {
+        location.reload();
+    });
+}
 </script>
 
 {% endblock %}

@@ -11,6 +11,7 @@ use App\Form\Duizenden\CreateGameType;
 use App\Games\Duizenden\Configurator;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\GameDeleter;
+use App\Games\Duizenden\GameManipulator;
 use App\Games\Duizenden\Initializer\Exception\InvalidDealerPlayerException;
 use App\Games\Duizenden\Networking\Message\MessageBuilder;
 use App\Games\Duizenden\Notifier\GameNotifier;
@@ -31,6 +32,7 @@ use App\Repository\PlayerRepository;
 use App\Security\Voter\Duizenden\GameVoter;
 use App\Security\Voter\InvitationVoter;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,9 +72,15 @@ class GameController extends AbstractController
 	private $state_builder;
 
 	/**
+	 * @var GameManipulator
+	 */
+	private $game_manipulator;
+
+	/**
 	 * @param PlayerRepository $player_repository
 	 * @param PlayerFactory $player_factory
 	 * @param GameDeleter $game_deleter
+	 * @param GameManipulator $game_manipulator
 	 * @param Inviter $inviter
 	 * @param LobbyNotifier $notifier
 	 * @param StateBuilder $state_builder
@@ -81,6 +89,7 @@ class GameController extends AbstractController
 		PlayerRepository $player_repository,
 		PlayerFactory $player_factory,
 		GameDeleter $game_deleter,
+		GameManipulator $game_manipulator,
 		Inviter $inviter,
 		LobbyNotifier $notifier,
 		StateBuilder $state_builder
@@ -92,6 +101,7 @@ class GameController extends AbstractController
 		$this->inviter = $inviter;
 		$this->lobby_notifier = $notifier;
 		$this->state_builder = $state_builder;
+		$this->game_manipulator = $game_manipulator;
 	}
 
 	/**
@@ -248,5 +258,20 @@ class GameController extends AbstractController
 		}
 
 		return $this->player_repository->createQueryBuilder('p', 'p.uuid')->getQuery()->execute() ?? [];
+	}
+
+	/**
+	 * @param string $uuid
+	 *
+	 * @return Response
+	 *
+	 * @throws NonUniqueResultException
+	 * @throws ORMException
+	 */
+	public function undoLastAction(string $uuid)
+	{
+		$this->game_manipulator->undoLastAction($uuid);
+
+		return new Response();
 	}
 }
