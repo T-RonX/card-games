@@ -15,6 +15,7 @@ use App\Enum\Enum;
  * @method static ActionType DISCARD_END_ROUND()
  * @method static ActionType DISCARD_END_GAME()
  * @method static ActionType REORDER_CARDS()
+ * @method static ActionType UNDO_LAST_ACTION()
  */
 class ActionType extends Enum
 {
@@ -28,4 +29,5 @@ class ActionType extends Enum
 	public const DISCARD_END_ROUND = 'discard_end_round';
 	public const DISCARD_END_GAME = 'discard_end_game';
 	public const REORDER_CARDS = 'reorder_cards';
+	public const UNDO_LAST_ACTION = 'undo_last_action';
 }

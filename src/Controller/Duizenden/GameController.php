@@ -2,7 +2,6 @@
 
 namespace App\Controller\Duizenden;
 
-use App\CardPool\Exception\EmptyCardPoolException;
 use App\Cards\Standard\Exception\InvalidCardIdException;
 use App\Entity\Player;
 use App\Enum\Exception\EnumConstantsCouldNotBeResolvedException;
@@ -13,7 +12,6 @@ use App\Games\Duizenden\Game;
 use App\Games\Duizenden\GameDeleter;
 use App\Games\Duizenden\GameManipulator;
 use App\Games\Duizenden\Initializer\Exception\InvalidDealerPlayerException;
-use App\Games\Duizenden\Networking\Message\MessageBuilder;
 use App\Games\Duizenden\Notifier\GameNotifier;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\EmptyPlayerSetException;
@@ -22,7 +20,7 @@ use App\Games\Duizenden\Player\PlayerFactory;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Games\Duizenden\StateBuilder\StateBuilder;
-use App\Games\Duizenden\StateCompiler\InvalidActionException;
+use App\Games\Duizenden\StateCompiler\ActionType;
 use App\Games\Duizenden\StateCompiler\StatusType;
 use App\Games\Duizenden\StateCompiler\TopicType;
 use App\Lobby\Entity\Invitation;
@@ -77,6 +75,11 @@ class GameController extends AbstractController
 	private $game_manipulator;
 
 	/**
+	 * @var GameNotifier
+	 */
+	private $game_notifier;
+
+	/**
 	 * @param PlayerRepository $player_repository
 	 * @param PlayerFactory $player_factory
 	 * @param GameDeleter $game_deleter
@@ -92,7 +95,8 @@ class GameController extends AbstractController
 		GameManipulator $game_manipulator,
 		Inviter $inviter,
 		LobbyNotifier $notifier,
-		StateBuilder $state_builder
+		StateBuilder $state_builder,
+		GameNotifier $game_notifier
 	)
 	{
 		$this->player_repository = $player_repository;
@@ -102,6 +106,7 @@ class GameController extends AbstractController
 		$this->lobby_notifier = $notifier;
 		$this->state_builder = $state_builder;
 		$this->game_manipulator = $game_manipulator;
+		$this->game_notifier = $game_notifier;
 	}
 
 	/**
@@ -265,13 +270,25 @@ class GameController extends AbstractController
 	 *
 	 * @return Response
 	 *
+	 * @throws EnumConstantsCouldNotBeResolvedException
+	 * @throws EnumNotDefinedException
+	 * @throws GameNotFoundException
+	 * @throws InvalidCardIdException
 	 * @throws NonUniqueResultException
 	 * @throws ORMException
+	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
 	 */
 	public function undoLastAction(string $uuid)
 	{
-		$this->game_manipulator->undoLastAction($uuid);
+		$game = $this->loadGame($uuid);
 
+		$this->game_manipulator->undoLastAction($uuid);
+		$message = $this->game_notifier->createGameMessageBuilder($game->getId(), $game, TopicType::GAME_EVENT());
+		$message->setSourceAction(ActionType::UNDO_LAST_ACTION());
+		$message->setSourcePlayer($game->getGamePlayerById($this->getUser()->getUuid()));
+
+		$this->game_notifier->notifyMessage($message);
 		return new Response();
 	}
 }

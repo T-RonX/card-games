@@ -547,9 +547,7 @@ $("#discarded_pool").droppable({
 
 function undoLastAction() {
     var url = '{{ path('duizenden.undo_last_action', { uuid: game.id}) }}';
-    $.get(url, null, function (data) {
-        location.reload();
-    });
+    $.get(url);
 }
 </script>
 

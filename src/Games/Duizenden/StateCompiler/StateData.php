@@ -112,7 +112,7 @@ class StateData
 
 	public function hasSource(): bool
 	{
-		return null !== $this->source_player &&  null !== $this->source_action;
+		return null !== $this->source_player && null !== $this->source_action;
 	}
 
 	public function getSourcePlayer(): PlayerInterface

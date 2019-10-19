@@ -56,6 +56,9 @@ class GameEventMessageHandler {
             case 'discard_end_game':
                 this.discardEndGame();
                 break;
+            case 'undo_last_action':
+                location.reload();
+                break;
             default:
                 location.reload();
         }

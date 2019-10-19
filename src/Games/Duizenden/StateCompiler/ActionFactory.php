@@ -12,6 +12,7 @@ use App\Games\Duizenden\StateCompiler\Action\DrawFromUndrawnAndMeldAction;
 use App\Games\Duizenden\StateCompiler\Action\ExtendMeldAction;
 use App\Games\Duizenden\StateCompiler\Action\MeldCardsAction;
 use App\Games\Duizenden\StateCompiler\Action\ReorderCardsAction;
+use App\Games\Duizenden\StateCompiler\Action\UndoLastActionAction;
 
 class ActionFactory
 {
@@ -55,6 +56,9 @@ class ActionFactory
 
 			case ActionType::REORDER_CARDS:
 				return new ReorderCardsAction();
+
+			case ActionType::UNDO_LAST_ACTION:
+				return new UndoLastActionAction();
 
 			default:
 				throw new InvalidActionException(sprintf("Action type '%s' is not valid in this context.", $type->getValue()));
