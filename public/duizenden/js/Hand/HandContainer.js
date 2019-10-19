@@ -69,4 +69,12 @@ class HandContainer {
             this.cards.splice(source > target ? target + 1 : target, 0, moving_card);
         }
     }
+
+    removeCard(id) {
+        const i = this.cards.indexOf(id);
+
+        if (i > -1) {
+          this.cards.splice(i, 1);
+        }
+    }
 }

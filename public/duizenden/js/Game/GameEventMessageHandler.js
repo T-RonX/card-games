@@ -65,35 +65,58 @@ class GameEventMessageHandler {
     }
 
     deal(state) {
-        const cards = this.getLocalPlayer(state).hand.cards;
-        this.game.initializeHand(cards);
+        this.game.initializeHand(this.getLocalPlayer(state).hand.cards);
         this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
         this.game.initializeOpponentHands();
 
-        DiscardedCard.createCard(state.getDiscardedPoolTopCard(), this.canDrawnFromDiscardedPool(state));
-        DiscardedCard.resetCard();
+        DiscardedCard.resetCard(state.getDiscardedPoolTopCard(), this.canDrawnFromDiscardedPool(state));
 
         UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
         DealButton.hide();
         UndrawnCard.updateColor(state.getUndrawnPoolColor());
+
+        AllowedActions.update(state.getAllowedActions());
     }
 
     reorderCards(state) {
-        if (state.getSourcePlayerId(this.player_id)) {
+        if (!state.isSourcePlayerId(this.player_id)) {
+            this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
+            this.game.initializeOpponentHands();
         }
     }
 
     drawFromUndrawn(state) {
-        if (state.getSourcePlayerId(this.player_id)) {
+        if (state.isCurrentPlayer(this.player_id)) {
             const player_cards = this.getLocalPlayer(state).hand.cards;
             const cards = this.game.getHand().getHandContainer().getCards(true);
             const cards_added = DiffCalculator.cardDiff(player_cards, cards);
             this.game.getHand().addCards(cards_added);
             UndrawnCard.resetCard();
+        } else {
+            this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
+            this.game.initializeOpponentHands();
         }
+
+        AllowedActions.update(state.getAllowedActions());
     }
 
-    drawFromDiscarded() {
+    drawFromDiscarded(state) {
+        const card = state.getDiscardedPoolTopCard();
+
+        if (null == card) {
+            DiscardedCard.removeCard();
+        } else {
+            DiscardedCard.resetCard(card, this.canDrawnFromDiscardedPool(state));
+        }
+
+        if (state.isCurrentPlayer(this.player_id)) {
+            this.game.initializeHand(this.getLocalPlayer(state).hand.cards);
+        } else {
+            this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
+            this.game.initializeOpponentHands();
+        }
+
+        AllowedActions.update(state.getAllowedActions());
     }
 
     drawFromDiscardedAndMeld() {
@@ -105,7 +128,16 @@ class GameEventMessageHandler {
     extendMeld() {
     }
 
-    discardEndTurn() {
+    discardEndTurn(state) {
+        if (!state.isSourcePlayerId(this.player_id)) {
+            this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
+            this.game.initializeOpponentHands();
+
+            DiscardedCard.resetCard(state.getDiscardedPoolTopCard(), this.canDrawnFromDiscardedPool(state));
+        }
+
+        UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
+        AllowedActions.update(state.getAllowedActions());
     }
 
     discardEndRound() {

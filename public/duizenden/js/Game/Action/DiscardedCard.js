@@ -1,19 +1,29 @@
 class DiscardedCard
 {
-    static createCard(card, draggable) {
+    static createCard(card_id, draggable) {
         $('#discarded_pool').append(
-            `<div id="card_discarded_pool" data-card-id="${card}" class="card table ${CardHelper.getValueFromId(card)} ${draggable ? 'draggable' : ''}"></div>`
+            `<div id="card_discarded_pool" data-card-id="${card_id}" class="card table ${CardHelper.getValueFromId(card_id)} ${draggable ? 'draggable' : ''}"></div>`
         );
     }
 
-    static resetCard() {
-        const card = $("#card_discarded_pool");
+    static removeCard() {
+        $('#card_discarded_pool').remove();
+    }
+
+    static resetCard(card_id, draggable) {
+        let card = $("#card_discarded_pool");
+
+        if (!card.length) {
+           this.createCard(card_id, draggable);
+           card = $("#card_discarded_pool");
+        }
+
         card.data({
             'originalLeft': card.css('left'),
             'origionalTop': card.css('top')
         });
 
-        if (card.hasClass('draggable')) {
+        if (draggable) {
             card.draggable({
                 drag: function (event, ui) {
                     dragCheck = true;

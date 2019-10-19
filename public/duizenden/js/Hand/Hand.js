@@ -79,4 +79,9 @@ class Hand {
         this.hand_container.reorder(from - 1, to - 1);
         this.redrawCards();
     }
+
+    removeCard(id) {
+        this.hand_container.removeCard(id);
+        this.redrawCards();
+    }
 }
