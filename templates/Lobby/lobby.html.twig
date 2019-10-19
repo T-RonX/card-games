@@ -140,7 +140,7 @@
     <div class="chat_window">
         <div id="players">
             {{ form_errors(form) }}
-            {{ form_start(form, {'method': 'POST', 'action': path('lobby.invite')}) }}
+            {{ form_start(form, {method: 'POST', action: path('lobby.invite'), attr: { id: 'lobby_select_players' }}) }}
             {{ form_row(form._token) }}
             {{ form_widget(form.players) }}
             {{ form_end(form) }}
