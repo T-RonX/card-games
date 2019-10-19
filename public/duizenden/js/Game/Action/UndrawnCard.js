@@ -1,5 +1,14 @@
-class ResetUndrawnCard
+class UndrawnCard
 {
+    static updateColor(color_id) {
+        const card = $("#card_undrawn_pool");
+        const color = CardHelper.createColorFromColorId(color_id);
+
+        if (!card.hasClass(color)) {
+            card.removeClass().addClass(`card table ${color}`);
+        }
+    }
+
     static resetCard() {
         const card = $("#card_undrawn_pool");
         card.data({

@@ -7,7 +7,10 @@ use App\CardPool\Exception\EmptyCardPoolException;
 use App\Common\Meld\Meld;
 use App\Common\Meld\Melds;
 use App\Games\Duizenden\Initializer\DiscardedCardPool;
+use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
+use App\Games\Duizenden\Score\Exception\UnmappedCardException;
+use App\Games\Duizenden\Score\ScoreCalculator;
 
 class StateCompiler implements StateCompilerInterface
 {
@@ -16,9 +19,18 @@ class StateCompiler implements StateCompilerInterface
 	 */
 	private $action_factory;
 
-	public function __construct(ActionFactory $action_factory)
+	/**
+	 * @var ScoreCalculator
+	 */
+	private $score_calculator;
+
+	public function __construct(
+		ActionFactory $action_factory,
+		ScoreCalculator $score_calculator
+	)
 	{
 		$this->action_factory = $action_factory;
+		$this->score_calculator = $score_calculator;
 	}
 
 	/**
@@ -28,6 +40,8 @@ class StateCompiler implements StateCompilerInterface
 	 *
 	 * @throws EmptyCardPoolException
 	 * @throws InvalidActionException
+	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
 	 */
 	public function compile(StateData $state_data): array
 	{
@@ -42,11 +56,11 @@ class StateCompiler implements StateCompilerInterface
 
 	/**
 	 * @param CardPoolInterface $pool
-	 * @param bool $show_all_cards
+	 * @param bool $show_identifiers
 	 *
 	 * @return string[]
 	 */
-	private function createCardPoolData(CardPoolInterface $pool, bool $show_all_cards): array
+	private function createCardPoolData(CardPoolInterface $pool, bool $show_identifiers): array
 	{
 		$data = [
 			'count' => $pool->getCardCount()
@@ -56,7 +70,7 @@ class StateCompiler implements StateCompilerInterface
 
 		foreach ($pool->getCards() as $card)
 		{
-			$data['cards'][] = strtolower($show_all_cards ? $card->getIdentifier() : $card->getBackColor()->getNameShort());
+			$data['cards'][] = strtolower($show_identifiers ? $card->getIdentifier() : $card->getBackColor()->getNameShort());
 		}
 
 		return $data;
@@ -84,6 +98,9 @@ class StateCompiler implements StateCompilerInterface
 	 * @param StateData $state_data
 	 *
 	 * @return string[]
+	 *
+	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
 	 */
 	private function createPlayersData(StateData $state_data): array
 	{
@@ -102,6 +119,9 @@ class StateCompiler implements StateCompilerInterface
 	 * @param StateData $state_data
 	 *
 	 * @return string[]
+	 *
+	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
 	 */
 	private function createPlayerData(PlayerInterface $player, StateData $state_data): array
 	{
@@ -110,6 +130,29 @@ class StateCompiler implements StateCompilerInterface
 			'name' => $player->getName(),
 			'hand' => $this->createCardPoolData($player->getHand(), $state_data->hasPlayerFullCardPool($player->getId())),
 			'melds' => $this->createMeldsData($player->getMelds()),
+			'score' => $this->createScoreData($player, $state_data)
+		];
+	}
+
+	/**
+	 * @param PlayerInterface $player
+	 * @param StateData $state_data
+	 *
+	 * @return int[]
+	 *
+	 * @throws UnmappedCardException
+	 * @throws PlayerNotFoundException
+	 */
+	private function createScoreData(PlayerInterface $player, StateData $state_data): array
+	{
+		$game_score = $this->score_calculator->calculateGameScore($state_data->getGameId());
+		$round_score = $game_score->getLastRound();
+		$player_score = $round_score ? $game_score->getLastRound()->getByPlayerId($player->getId()) : null;
+
+		return [
+			'meld' => $player_score ? $player_score->getMeldPoints() : 0,
+			'round' => $player_score ? $player_score->getScore() : 0,
+			'total' => $game_score->getTotalPlayerScore($player->getId()),
 		];
 	}
 

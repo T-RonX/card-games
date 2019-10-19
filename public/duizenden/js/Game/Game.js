@@ -13,6 +13,10 @@ class Game {
         this.melds = [];
     }
 
+    setOpponentCards(cards) {
+        this.opponent_cards = cards;
+    }
+
     static create(
         connection,
         event_handler,
@@ -53,7 +57,7 @@ class Game {
         //     meld.initialize();
         // }
 
-        ResetUndrawnCard.resetCard();
+        UndrawnCard.resetCard();
         this.initializeHand();
         this.initializeOpponentHands();
     }
@@ -126,7 +130,13 @@ class Game {
         // }
 
         for (const [i, opponent] of this.opponent_cards.entries()) {
-            const pane = $(`<div class="opponent_hand" style="border: 1px red dotted; box-sizing: border-box; position: relative; float: left; width: ${opponent_pane_width}%; height: ${b}px;" data-player-id="${opponent.id}"></div>`);
+
+            let pane = $(`#opponent_pane_${opponent.id}`);
+
+            if (!pane.length) {
+                pane = $(`<div id="opponent_pane_${opponent.id}" class="opponent_hand" style="border: 1px red dotted; box-sizing: border-box; position: relative; float: left; width: ${opponent_pane_width}%; height: ${b}px;" data-player-id="${opponent.id}"></div>`);
+            }
+
             const hand = new OpponentHand(this.z_fighter, opponent.hand.cards.reverse(), pane, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
 
             hand.initialize();
@@ -154,7 +164,7 @@ class Game {
             }
         }
 
-        pane_container.append($('<br style="clear: left;"/>'));
+       // pane_container.append($('<br style="clear: left;"/>'));
 
     }
 }

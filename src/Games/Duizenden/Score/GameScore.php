@@ -46,4 +46,9 @@ class GameScore
 
 		return $score;
 	}
+
+	public function getLastRound(): ?RoundScore
+	{
+		return $this->round_scores ? end($this->round_scores) : null;
+	}
 }

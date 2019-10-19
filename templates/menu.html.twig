@@ -4,6 +4,6 @@
     <a href="{{ path('lobby.show') }}">lobby</a>
     <a href="{{ path('lobby.invitations') }}">invitations</a>
 {% if app.user %}
-    <a href="{{ path('logout') }}">terminate<span style="font-size: 10px;"> ({{ app.user.name }})</span></a>
+    <a title="{{ app.user.uuid }}" href="{{ path('logout') }}">terminate<span style="font-size: 10px;"> ({{ app.user.name }})</span></a>
 {% endif %}
 </nav>

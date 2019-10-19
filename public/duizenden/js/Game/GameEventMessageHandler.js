@@ -11,76 +11,85 @@ class GameEventMessageHandler {
 
     handle(e) {
         const message = JSON.parse(e.data);
+        console.log(message);
 
-        if (message.game_id !== this.game_id) {
+        const state = new State(message);
+
+        if (!state.isGameId(this.game_id)) {
             return;
         }
 
-        if (message.status !== 'ok') {
-            alert(message.status);
+        if (!state.isStatus('ok')) {
+            alert(state.getStatus());
         }
 
-        this.state = message.game_state;
-        this.source = message.source;
+        this.writeLogMessage(state.getSourceActionId(), state.getPlayer(state.getSourcePlayerId()));
 
-        this.writeLogMessage(message.source.action.id, this.getPlayer(this.source.player.id));
-
-        switch (message.source.action.id) {
+        switch (state.getSourceActionId()) {
             case 'deal':
-                this.deal();
+                this.deal(state);
                 break;
             case 'reorder_cards':
-                this.reorderCards();
+                this.reorderCards(state);
                 break;
             case 'draw_from_undrawn':
-                this.drawFromUndrawn();
+                this.drawFromUndrawn(state);
                 break;
             case 'draw_from_discarded':
-                this.drawFromDiscarded();
+                this.drawFromDiscarded(state);
                 break;
             case 'draw_from_discarded_and_meld':
-                this.drawFromDiscardedAndMeld();
+                this.drawFromDiscardedAndMeld(state);
                 break;
             case 'meld_cards':
-                this.meldCards();
+                this.meldCards(state);
                 break;
             case 'extend_meld':
-                this.extendMeld();
+                this.extendMeld(state);
                 break;
             case 'discard_end_turn':
-                this.discardEndTurn();
+                this.discardEndTurn(state);
                 break;
             case 'discard_end_round':
-                this.discardEndRound();
+                this.discardEndRound(state);
                 break;
             case 'discard_end_game':
-                this.discardEndGame();
+                this.discardEndGame(state);
                 break;
             case 'undo_last_action':
                 location.reload();
                 break;
             default:
-                location.reload();
+                alert(`Unknown action '${state.getSourceActionId()}'.`);
         }
     }
 
-    deal() {
-        const cards = this.getCurrentPlayer().hand.cards;
+    deal(state) {
+        const cards = this.getLocalPlayer(state).hand.cards;
         this.game.initializeHand(cards);
+        this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
+        this.game.initializeOpponentHands();
+
+        DiscardedCard.createCard(state.getDiscardedPoolTopCard(), this.canDrawnFromDiscardedPool(state));
+        DiscardedCard.resetCard();
+
+        UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
+        DealButton.hide();
+        UndrawnCard.updateColor(state.getUndrawnPoolColor());
     }
 
-    reorderCards() {
-        if (this.playerIsCausing()) {
+    reorderCards(state) {
+        if (state.getSourcePlayerId(this.player_id)) {
         }
     }
 
-    drawFromUndrawn() {
-        if (this.playerIsCausing()) {
-            const player_cards = this.getCurrentPlayer().hand.cards;
+    drawFromUndrawn(state) {
+        if (state.getSourcePlayerId(this.player_id)) {
+            const player_cards = this.getLocalPlayer(state).hand.cards;
             const cards = this.game.getHand().getHandContainer().getCards(true);
             const cards_added = DiffCalculator.cardDiff(player_cards, cards);
             this.game.getHand().addCards(cards_added);
-            ResetUndrawnCard.resetCard();
+            UndrawnCard.resetCard();
         }
     }
 
@@ -124,23 +133,20 @@ class GameEventMessageHandler {
         return s;
     }
 
-    playerIsCausing(player_id = null) {
-        if (null === player_id) {
-            player_id = this.getCurrentPlayer().id;
-        }
-
-        return player_id === this.source.player.id;
+    getLocalPlayer(state) {
+        return state.getPlayer(this.player_id);
     }
 
-    getCurrentPlayer() {
-        return this.getPlayer(this.player_id);
-    }
+    canDrawnFromDiscardedPool(state) {
+        if (state.isCurrentPlayer(this.player_id)) {
+            const is_draw_allowed = state.isActionAllowed('draw_from_discarded');
+            const has_melds = state.hadPlayerMelds(this.player_id);
+            const discarded_pool_is_first_card = state.isDiscardedPoolFirstCard();
+            const has_minimum_score = state.getPlayerMeldScore(this.player_id) >= 30;
 
-    getPlayer(id) {
-        for (const player of this.state.players) {
-            if (player.id === id) {
-                return player;
-            }
+            return is_draw_allowed && ((!(has_melds && discarded_pool_is_first_card)) || has_minimum_score);
         }
+
+        return false;
     }
 }
