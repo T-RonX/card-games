@@ -1,16 +1,16 @@
 class Game {
-    constructor(z_fighter, event_handler, hand, opponent_cards, card_width_meld, card_height_meld, card_separation_meld, path_extend_meld) {
+    constructor(player_id, z_fighter, event_handler, hand, melds, opponent_cards, card_width_meld, card_height_meld, card_separation_meld, path_extend_meld) {
         this.event_handler = event_handler;
         this.z_fighter = z_fighter;
         this.hand = hand;
+        this.melds = melds;
         this.opponent_cards = opponent_cards;
         this.opponent_hands = [];
-
         this.card_width_meld = card_width_meld;
         this.card_height_meld = card_height_meld;
         this.card_separation_meld = card_separation_meld;
         this.path_extend_meld = path_extend_meld;
-        this.melds = [];
+        this.player_id = player_id;
     }
 
     setOpponentCards(cards) {
@@ -18,11 +18,13 @@ class Game {
     }
 
     static create(
+        player_id,
         connection,
         event_handler,
         hand_container_selector,
         hand_cards,
         opponent_cards,
+        melds,
         meld_container_card_selector,
         path_draw_from_discarded,
         path_draw_from_undrawn,
@@ -37,27 +39,18 @@ class Game {
         const z_fighter = new ZFighter(100);
         const hand = new Hand(z_fighter, hand_container_selector, hand_cards, path_draw_from_discarded, path_draw_from_undrawn, card_width, card_height, card_separation);
 
-        // const melds_containers = $("[data-meld-id]");
-        // let melds = [];
-        //
-        // melds_containers.each((i, element) => {
-        //     const container = $(element);
-        //     let cards = container.data('meld-cards');
-        //
-        // });
-
-        let game = new Game(z_fighter, event_handler, hand, opponent_cards, card_width_meld, card_height_meld, card_separation_meld, path_extend_meld);
+        let game = new Game(player_id, z_fighter, event_handler, hand, melds, opponent_cards, card_width_meld, card_height_meld, card_separation_meld, path_extend_meld);
         event_handler.setGame(game);
 
         return game;
     }
 
     initialize() {
-        // for (const meld of this.meld_containers) {
-        //     meld.initialize();
-        // }
+
 
         UndrawnCard.resetCard();
+        Melds.createMelds(this.player_id, this.z_fighter, this.melds, $('#melds'), 113, 179, .2, this.path_extend_meld);
+
         this.initializeHand();
         this.initializeOpponentHands();
     }
@@ -128,19 +121,17 @@ class Game {
         // for (const data of new_coords) {
         //     body.append($(`<div style="position: absolute; top: ${data.coord.y}px; left: ${data.coord.x}px; width: 2px; height: 2px; background: yellow; border-radius: 50%"></div>`));
         // }
-
         for (const [i, opponent] of this.opponent_cards.entries()) {
 
             let pane = $(`#opponent_pane_${opponent.id}`);
 
             if (!pane.length) {
-                pane = $(`<div id="opponent_pane_${opponent.id}" class="opponent_hand" style="border: 1px red dotted; box-sizing: border-box; position: relative; float: left; width: ${opponent_pane_width}%; height: ${b}px;" data-player-id="${opponent.id}"></div>`);
+                pane = $(`<div id="opponent_pane_${opponent.id}" class="opponent_hand" style="box-sizing: border-box; position: relative; float: left; width: ${opponent_pane_width}%; height: ${b}px;" data-player-id="${opponent.id}"></div>`);
             }
 
             const hand = new OpponentHand(this.z_fighter, opponent.hand.cards.reverse(), pane, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
 
             hand.initialize();
-            pane_container.prepend(pane);
 
             //alert(new_coords[i].coord.y);
             //this.opponent_hands.push({player_id: opponent.player_id, hand: hand});
@@ -155,16 +146,20 @@ class Game {
                     this.card_width_meld,
                     this.card_height_meld,
                     this.card_separation_meld,
-                    this.path_extend_meld
+                    this.path_extend_meld,
+                    180
                 );
 
                meld.initialize();
                pane.append(meld_container);
-               meld_container.show();
+               // meld_container.show();
+               // pane.show();
             }
+
+            pane_container.append(pane);
         }
 
-       // pane_container.append($('<br style="clear: left;"/>'));
+        // pane_container.append($('<br style="clear: left;"/>'));
 
     }
 }

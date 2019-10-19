@@ -129,4 +129,17 @@ class State {
     getPlayerMeldScore(id) {
         return this.getPlayerScore(id).meld
     }
+
+    canDrawnFromDiscardedPool() {
+        if (this.isCurrentPlayer(this.player_id)) {
+            const is_draw_allowed = this.isActionAllowed('draw_from_discarded');
+            const has_melds = this.hadPlayerMelds(this.player_id);
+            const discarded_pool_is_first_card = this.isDiscardedPoolFirstCard();
+            const has_minimum_score = this.getPlayerMeldScore(this.player_id) >= 30;
+
+            return is_draw_allowed && ((!(has_melds && discarded_pool_is_first_card)) || has_minimum_score);
+        }
+
+        return false;
+    }
 }

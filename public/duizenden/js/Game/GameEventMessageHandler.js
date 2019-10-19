@@ -69,7 +69,7 @@ class GameEventMessageHandler {
         this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
         this.game.initializeOpponentHands();
 
-        DiscardedCard.resetCard(state.getDiscardedPoolTopCard(), this.canDrawnFromDiscardedPool(state));
+        DiscardedCard.resetCard(state.getDiscardedPoolTopCard(), state.canDrawnFromDiscardedPool());
 
         UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
         DealButton.hide();
@@ -106,7 +106,7 @@ class GameEventMessageHandler {
         if (null == card) {
             DiscardedCard.removeCard();
         } else {
-            DiscardedCard.resetCard(card, this.canDrawnFromDiscardedPool(state));
+            DiscardedCard.resetCard(card, state.canDrawnFromDiscardedPool());
         }
 
         if (state.isCurrentPlayer(this.player_id)) {
@@ -133,7 +133,7 @@ class GameEventMessageHandler {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
 
-            DiscardedCard.resetCard(state.getDiscardedPoolTopCard(), this.canDrawnFromDiscardedPool(state));
+            DiscardedCard.resetCard(state.getDiscardedPoolTopCard(), state.canDrawnFromDiscardedPool());
         }
 
         UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
@@ -167,18 +167,5 @@ class GameEventMessageHandler {
 
     getLocalPlayer(state) {
         return state.getPlayer(this.player_id);
-    }
-
-    canDrawnFromDiscardedPool(state) {
-        if (state.isCurrentPlayer(this.player_id)) {
-            const is_draw_allowed = state.isActionAllowed('draw_from_discarded');
-            const has_melds = state.hadPlayerMelds(this.player_id);
-            const discarded_pool_is_first_card = state.isDiscardedPoolFirstCard();
-            const has_minimum_score = state.getPlayerMeldScore(this.player_id) >= 30;
-
-            return is_draw_allowed && ((!(has_melds && discarded_pool_is_first_card)) || has_minimum_score);
-        }
-
-        return false;
     }
 }

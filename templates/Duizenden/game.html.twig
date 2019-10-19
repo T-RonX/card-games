@@ -288,12 +288,16 @@
         padding: 6px;
     }
 
+    .player_name {
+        margin-left: .5em;
+    }
     .player_name.active {
         color: #ffcc00;
         font-weight: bold;
     }
 </style>
 {% endblock %}
+
 {% set discarded_pool_is_first_card = game.state.discardedPool.firstCard %}
 {% set player = game.state.players.playerById(app.user.uuid) %}
 {% set current_player_id = game.state.players.currentPlayer.id %}
@@ -303,8 +307,23 @@
     {% set game_score = game.scoreCalculator.calculateGameScore(game.id) %}
     {% set current_player = game.state.players.currentPlayer %}
 
-    <a style="float: right" href="#" onclick="undoLastAction(); return false;">&#x293A; Undo</a>
+    <a style="float: right" href="#" onclick="undoLastAction(); return false;">&#x293A; Undo </a>
+
+{% for player in game.state.players %}
+    <span data-player-id="{{ player.id }}" class="player_name{{ player.id == current_player_id ? ' active' }}">{{ player.name }} ({{ player.melds|length }})</span>
+{% endfor %}
+
     <div id="opponent_panes"></div>
+    <div id="melds" style="position: relative; clear: both">
+{#{% for meld in player.melds %}#}
+{#    {% set meld_container_unique = player.id ~ '_' ~ loop.index %}#}
+{#    {% set meld_cards = [] %}#}
+{#    {% for card in meld.cards %}#}
+{#        {% set meld_cards = meld_cards|merge([card.identifier|lower]) %}#}
+{#    {% endfor %}#}
+{#    <div class="meld_container" data-meld-unique="{{ meld_container_unique }}" data-meld-id="{{ loop.index }}" data-meld-cards="{{ meld_cards|json_encode() }}"></div>#}
+{#{% endfor %}#}
+    </div>
 <div>
     <div style="float: left; height: 260px; width: 312px; border: 3px #034823 solid; border-right: none;">
         <div  style="float: left; width: 150px; height: 250px;">
@@ -365,13 +384,13 @@
         </div>
     </div>
 
-    <div style="border-left: 3px #034823 solid; clear: right; display: inline-block">
-        <div class="pad">
-            {% for player in game.state.players %}
-            <div style="display: flex; height: 230px">
-                <div style="width: 90px; height: 230px; vertical-align: middle; line-height: 230px">
-                    <span data-player-id="{{ player.id }}" class="player_name{{ player.id == current_player_id ? ' active' }}">{{ player.name }} ({{ player.melds|length }})</span>
-                </div>
+{#    <div style="border-left: 3px #034823 solid; clear: right; display: inline-block">#}
+{#        <div class="pad">#}
+{#            {% for player in game.state.players %}#}
+{#            <div style="display: flex; height: 230px">#}
+{#                <div style="width: 90px; height: 230px; vertical-align: middle; line-height: 230px">#}
+{#                    <span data-player-id="{{ player.id }}" class="player_name{{ player.id == current_player_id ? ' active' }}">{{ player.name }} ({{ player.melds|length }})</span>#}
+{#                </div>#}
                 {% for meld in player.melds %}
                     {% set meld_container_unique = player.id ~ '_' ~ loop.index %}
                     {% set meld_cards = [] %}
@@ -380,10 +399,10 @@
                     {% endfor %}
                     <div class="meld_container" data-meld-unique="{{ meld_container_unique }}" data-meld-id="{{ loop.index }}" data-meld-cards="{{ meld_cards|json_encode() }}"></div>
                 {% endfor %}
-            </div>
-            {% endfor %}
-        </div>
-   </div>
+{#            </div>#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#   </div>#}
 
     <div style="position: fixed; top: 0; right: 0; width: 300px; padding-bottom: 20px;">
         <div id="log" style="display:none;font-family: 'Lucida Console'; font-size: 13px; width: inherit; height: 400px; background-color: rgba(255,0,0,.25); overflow-y: scroll; overflow-x: hidden; border-bottom-left-radius: 10px; padding: 0 0 3px 5px;"></div>
@@ -442,12 +461,12 @@
     <script src="{{ asset('duizenden/js/Game/Action/UpdateCurrentPlayer.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/DealButton.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/AllowedActions.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/Action/Meld.js') }}"></script>
 <script>
     let game;
     $(document).ready(() => {
         //let elem = document.querySelector('.card.hand');
         //let elem_style = document.querySelector('.card.table');
-
 
         const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
         const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}');
@@ -465,17 +484,24 @@
         {% endfor %}
 
         {% set cards_players = [] %}
-        {% for player in game.state.players.freshLoopIterator|filter(player => player.id != current_player_id) %}
-        {% set cards_players = cards_players|merge([{'player_id': player.id, 'hand': game.state.pLayers.playerById(player.id).hand.cards|length}]) %}
+        {% for p in game.state.players.freshLoopIterator|filter(p => p.id != current_player_id) %}
+        {% set cards_players = cards_players|merge([{'player_id': p.id, 'hand': game.state.players.playerById(p.id).hand.cards|length}]) %}
+        {% endfor %}
+
+        {% set melds = [] %}
+        {% for p in state_data.players|filter(p => p.id == player.id) %}
+        {% set melds = p.melds %}
         {% endfor %}
 
         $(document).ready(() => {
             game = Game.create(
+                '{{ player.id }}',
                 connection,
                 event_handler,
                 '#hand_container',
                 {{ cards_hand|json_encode()|raw }},
                 {{ state_data.players|filter(p => p.id != player.id)|resetKeys|json_encode|raw }},
+                {{ melds|json_encode()|raw }},
                 '.card',
                 '{{ path('duizenden.draw_from_discarded', {meld_cards: '000'}) }}',
                 '{{ path('duizenden.draw_from_undrawn') }}',
