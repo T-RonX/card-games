@@ -461,7 +461,7 @@
     <script src="{{ asset('duizenden/js/Game/Action/UpdateCurrentPlayer.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/DealButton.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/AllowedActions.js') }}"></script>
-    <script src="{{ asset('duizenden/js/Game/Action/Meld.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/Action/Melds.js') }}"></script>
 <script>
     let game;
     $(document).ready(() => {
@@ -509,7 +509,7 @@
                 220,// parseInt(style.height),
                 113,// parseInt(style_meld.width),
                 180,// parseInt(style_meld.height),
-                .29,
+                .28,
                 .26,
                 '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}',
             );
@@ -592,3 +592,5 @@ function undoLastAction() {
 </script>
 
 {% endblock %}
+
+{% block title %}{{ parent() }}{{ player.id == current_player_id ? ' - Your turn' }}{% endblock %}

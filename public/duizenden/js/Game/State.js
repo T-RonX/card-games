@@ -36,6 +36,10 @@ class State {
         return this.getSourcePlayer().id;
     }
 
+    getSourcePlayerMelds() {
+        return this.getPlayerMelds(this.getSourcePlayerId());
+    }
+
     isSourcePlayerId(id) {
         return id === this.getSourcePlayerId();
     }
@@ -137,9 +141,13 @@ class State {
             const discarded_pool_is_first_card = this.isDiscardedPoolFirstCard();
             const has_minimum_score = this.getPlayerMeldScore(this.player_id) >= 30;
 
-            return is_draw_allowed && ((!(has_melds && discarded_pool_is_first_card)) || has_minimum_score);
+            return is_draw_allowed && ((!has_melds && discarded_pool_is_first_card) || has_minimum_score);
         }
 
         return false;
+    }
+
+    getExtras() {
+        return this.data.extras;
     }
 }

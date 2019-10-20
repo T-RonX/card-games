@@ -24,13 +24,12 @@ trait NotifyPlayersTrait
 	 * @param Game $game
 	 * @param PlayerInterface $source_player
 	 * @param ActionType $source_action
+	 * @param array|null $extras
 	 *
-	 * @throws EmptyCardPoolException
-	 * @throws InvalidActionException
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	private function notifyPlayers(Game $game, PlayerInterface $source_player, ActionType $source_action): void
+	private function notifyPlayers(Game $game, PlayerInterface $source_player, ActionType $source_action, ?array $extras = null): void
 	{
 		$message = $this->createNotifyPlayerMessage($game->getId(), $game, $source_player, $source_action, TopicType::GAME_EVENT());
 
@@ -43,18 +42,23 @@ trait NotifyPlayersTrait
 	 * @param PlayerInterface $source_player
 	 * @param ActionType $source_action
 	 * @param TopicType $topic_type
+	 * @param array|null $extras
 	 *
 	 * @return GameEventData
 	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
-	 * @throws InvalidActionException
 	 */
-	private function createNotifyPlayerMessage(string $identifier, Game $game, PlayerInterface $source_player, ActionType $source_action, TopicType $topic_type): GameEventData
+	private function createNotifyPlayerMessage(string $identifier, Game $game, PlayerInterface $source_player, ActionType $source_action, TopicType $topic_type, ?array $extras = null): GameEventData
 	{
 		$message = $this->game_notifier->createGameMessageBuilder($identifier, $game, $topic_type);
 		$message->setSourcePlayer($source_player);
 		$message->setSourceAction($source_action);
+
+		if (null !== $extras)
+		{
+			$message->setExtras($extras);
+		}
 
 		return $message;
 	}

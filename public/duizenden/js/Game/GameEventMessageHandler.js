@@ -13,7 +13,7 @@ class GameEventMessageHandler {
         const message = JSON.parse(e.data);
         console.log(message);
 
-        const state = new State(message);
+        const state = new State(message, this.player_id);
 
         if (!state.isGameId(this.game_id)) {
             return;
@@ -122,7 +122,12 @@ class GameEventMessageHandler {
     drawFromDiscardedAndMeld() {
     }
 
-    meldCards() {
+    meldCards(state) {
+        if (!state.isSourcePlayerId(this.player_id)) {
+            Melds.createMelds(state.getSourcePlayerId(), new ZFighter(1), state.getSourcePlayerMelds(), $(`#opponent_pane_${state.getSourcePlayerId()}`), 113, 179, .2, null);
+        } else {
+            Melds.createMelds(state.getSourcePlayerId(), new ZFighter(1), state.getSourcePlayerMelds(), $('#melds'), 113, 179, .2, null);
+        }
     }
 
     extendMeld() {

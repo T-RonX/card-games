@@ -3,6 +3,8 @@
 namespace App\Games\Duizenden\Networking\Message;
 
 use App\CardPool\Exception\EmptyCardPoolException;
+use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
+use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Games\Duizenden\StateCompiler\InvalidActionException;
 use App\Games\Duizenden\StateCompiler\StateCompiler;
 use App\Games\Duizenden\StateCompiler\StateCompilerInterface;
@@ -28,6 +30,8 @@ class GameEventMessageCompiler implements StateCompilerInterface
 	 *
 	 * @throws EmptyCardPoolException
 	 * @throws InvalidActionException
+	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
 	 */
 	public function compile(StateData $state_data): array
 	{
@@ -48,6 +52,7 @@ class GameEventMessageCompiler implements StateCompilerInterface
 			$data['source'] = [
 				'player' => $this->state_compiler->createPlayerIdData($state_data->getSourcePlayer()),
 				'action' => $this->state_compiler->createActionData($state_data->getSourceAction()),
+				'extra' => $this->state_compiler->createExtrasData($state_data->getExtras()),
 			];
 		}
 

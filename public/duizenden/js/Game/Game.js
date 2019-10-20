@@ -46,8 +46,6 @@ class Game {
     }
 
     initialize() {
-
-
         UndrawnCard.resetCard();
         Melds.createMelds(this.player_id, this.z_fighter, this.melds, $('#melds'), 113, 179, .2, this.path_extend_meld);
 

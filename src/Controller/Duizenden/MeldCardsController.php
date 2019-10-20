@@ -67,9 +67,7 @@ class MeldCardsController extends AbstractController
 	 * @throws MeldException
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
-	 * @throws EmptyCardPoolException
 	 * @throws UnmappedCardException
-	 * @throws InvalidActionException
 	 */
 	public function meld(CardPool $cards): Response
 	{
@@ -90,7 +88,6 @@ class MeldCardsController extends AbstractController
 	 * @return Response
 	 *
 	 * @throws CardNotFoundException
-	 * @throws EmptyCardPoolException
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
 	 * @throws GameNotFoundException
@@ -101,7 +98,6 @@ class MeldCardsController extends AbstractController
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
-	 * @throws InvalidActionException
 	 */
 	public function extendMeld(Card $card, int $meld_id): Response
 	{
@@ -110,7 +106,7 @@ class MeldCardsController extends AbstractController
 
 		$this->extend_meld->extend($game, $meld_id, $card);
 
-		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::EXTEND_MELD());
+		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::EXTEND_MELD(), ['meld_id' => $meld_id]);
 
 		return $this->json([]);
 	}
