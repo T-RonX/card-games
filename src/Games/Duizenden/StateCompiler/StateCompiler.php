@@ -234,4 +234,9 @@ class StateCompiler implements StateCompilerInterface
 			'description' => $action->getDescription()
 		];
 	}
+
+	public function createExtrasData(?array $extra): array
+	{
+		return $extra ?: [];
+	}
 }

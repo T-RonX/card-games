@@ -65,6 +65,11 @@ class StateData
 	 */
 	private $game_id;
 
+	/**
+	 * @var array|null
+	 */
+	private $extra;
+
 	public function __construct(StateCompilerInterface $compiler)
 	{
 		$this->compiler = $compiler;
@@ -215,5 +220,17 @@ class StateData
 		$this->game_id = $game_id;
 
 		return $this;
+	}
+
+	public function setExtras(?array $extra): self
+	{
+		$this->extra = $extra;
+
+		return $this;
+	}
+
+	public function getExtras(): ?array
+	{
+		return $this->extra;
 	}
 }
