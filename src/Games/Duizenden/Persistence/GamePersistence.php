@@ -155,7 +155,7 @@ class GamePersistence
 		($new_game_entity = clone $game_entity)
 			->setWorkflowMarking($workflow_marking)
 			->setSequence($new_game_entity->getSequence() + 1)
-			->setUndrawnPool($this->serializeCardPool($state->getUndrawnPool()))
+			->setUndrawnPool($this->createPersistableCardPool($state->getUndrawnPool()))
 			->setRound(1);
 
 		$dealing_game_player_meta = null;
@@ -212,8 +212,8 @@ class GamePersistence
 			->setSequence($new_game_entity->getSequence() + 1)
 			->setWorkflowMarking($workflow_marking)
 			->setCreatedAt(new DateTimeImmutable())
-			->setUndrawnPool($this->serializeCardPool($state->getUndrawnPool()))
-			->setDiscardedPool($this->serializeCardPool($state->getDiscardedPool()))
+			->setUndrawnPool($this->createPersistableCardPool($state->getUndrawnPool()))
+			->setDiscardedPool($this->createPersistableCardPool($state->getDiscardedPool()))
 			->setIsFirstCard($state->getDiscardedPool()->isFirstCard());
 
 		if ($context['up_round'] ?? false)
@@ -229,7 +229,7 @@ class GamePersistence
 
 			($new_game_player_entity = clone $game_player_entity)
 				->setGame($new_game_entity)
-				->setHand($this->serializeCardPool($player->getHand()))
+				->setHand($this->createPersistableCardPool($player->getHand()))
 				->setMelds($this->serializeMelds($player->getMelds()));
 
 			if ($state->getPlayers()->getCurrentPlayer()->getId() === $new_game_player_entity->getGamePlayerMeta()->getPlayer()->getUuid())
@@ -265,17 +265,9 @@ class GamePersistence
 	 *
 	 * @return string[]
 	 */
-	private function serializeCardPool(CardPool $pool): array
+	private function createPersistableCardPool(CardPool $pool): array
 	{
-		$return = [];
-		$cards = $pool->getCards();
-
-		foreach ($cards as $card)
-		{
-			$return[] = $card->getIdentifier();
-		}
-
-		return $return;
+		return $pool->getIdentifiers();
 	}
 
 	/**
@@ -289,7 +281,7 @@ class GamePersistence
 
 		foreach ($melds as $meld)
 		{
-			$return[] = $this->serializeCardPool($meld->getCards());
+			$return[] = $this->createPersistableCardPool($meld->getCards());
 		}
 
 		return $return;

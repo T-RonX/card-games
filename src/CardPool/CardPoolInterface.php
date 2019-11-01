@@ -61,6 +61,11 @@ interface CardPoolInterface extends Iterator
 	public function drawCard(CardInterface $card): CardInterface;
 
 	/**
+	 * @return string[]
+	 */
+	public function getIdentifiers(): array;
+
+	/**
 	 * @param ShufflerInterface $shuffler
 	 */
 	function shuffle(ShufflerInterface $shuffler): void;

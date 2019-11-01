@@ -168,6 +168,22 @@ class CardPool implements CardPoolInterface, Countable
 	}
 
 	/**
+	 * @return string[]
+	 */
+	public function getIdentifiers(): array
+	{
+		$return = [];
+		$cards = $this->cards;
+
+		foreach ($cards as $card)
+		{
+			$return[] = $card->getIdentifier();
+		}
+
+		return $return;
+	}
+
+	/**
 	 * @inheritDoc
 	*/
 	public function current()
