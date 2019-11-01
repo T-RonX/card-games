@@ -40,4 +40,12 @@ class UndrawnCard
             }
         });
     }
+
+    static disableDraggable() {
+        $("#card_undrawn_pool").draggable('disable');
+    }
+
+    static enableDraggable() {
+        $("#card_undrawn_pool").draggable('enable');
+    }
 }

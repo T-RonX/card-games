@@ -515,14 +515,17 @@
 
             game.initialize();
             UndrawnCard.resetCard();
+            {% if not (current_player_id == player.id and workflow_can(game, 'draw_from_undrawn')) %}
+            UndrawnCard.disableDraggable();
+            {% endif %}
             {% set top_card = game.state.discardedPool|last %}
             {% if top_card %}
-            DiscardedCard.resetCard({{ ("'" ~ top_card.identifier ~ "'")|raw }}, {{ can_draw_from_discarded ? 'true' : 'false' }});
+            DiscardedCard.resetCard({{ ("'" ~ top_card.identifier ~ "'")|raw }}, {{ current_player_id == player.id and can_draw_from_discarded ? 'true' : 'false' }});
             {% endif %}
-
             {% if current_player_id == player.id and workflow_can(game, 'meld') %}
             MeldButton.show();
             {% endif %}
+
         });
     });
 

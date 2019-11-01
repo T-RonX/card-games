@@ -80,6 +80,8 @@ class GameEventMessageHandler {
 
         AllowedActions.update(state.getAllowedActions());
         this.manageMeldButton(state);
+        this.manageDraggableUndrawnCard(state);
+        this.manageDraggableDiscardedCard(state);
     }
 
     reorderCards(state) {
@@ -103,6 +105,8 @@ class GameEventMessageHandler {
 
         AllowedActions.update(state.getAllowedActions());
         this.manageMeldButton(state);
+        this.manageDraggableUndrawnCard(state);
+        this.manageDraggableDiscardedCard(state);
     }
 
     drawFromDiscarded(state) {
@@ -123,10 +127,14 @@ class GameEventMessageHandler {
 
         AllowedActions.update(state.getAllowedActions());
         this.manageMeldButton(state);
+        this.manageDraggableUndrawnCard(state);
+        this.manageDraggableDiscardedCard(state);
     }
 
     drawFromDiscardedAndMeld(state) {
         this.manageMeldButton(state);
+        this.manageDraggableUndrawnCard(state);
+        this.manageDraggableDiscardedCard(state);
     }
 
     meldCards(state) {
@@ -160,14 +168,20 @@ class GameEventMessageHandler {
         AllowedActions.update(state.getAllowedActions());
 
         this.manageMeldButton(state);
+        this.manageDraggableUndrawnCard(state);
+        this.manageDraggableDiscardedCard(state);
     }
 
     discardEndRound(state) {
         this.manageMeldButton(state);
+        this.manageDraggableUndrawnCard(state);
+        this.manageDraggableDiscardedCard(state);
     }
 
-    discardEndGame() {
+    discardEndGame(state) {
         this.manageMeldButton(state);
+        this.manageDraggableUndrawnCard(state);
+        this.manageDraggableDiscardedCard(state);
     }
 
     manageMeldButton(state) {
@@ -175,6 +189,22 @@ class GameEventMessageHandler {
             MeldButton.show();
         } else {
             MeldButton.hide();
+        }
+    }
+
+    manageDraggableUndrawnCard(state) {
+        if (state.isActionAllowed('draw_from_undrawn') && state.isLocalPlayerCurrentPlayer()) {
+            UndrawnCard.enableDraggable();
+        } else {
+            UndrawnCard.disableDraggable();
+        }
+    }
+
+    manageDraggableDiscardedCard(state) {
+        if (state.isActionAllowed('draw_from_discarded') && state.isLocalPlayerCurrentPlayer()) {
+            DiscardedCard.enableDraggable();
+        } else {
+            DiscardedCard.disableDraggable();
         }
     }
 

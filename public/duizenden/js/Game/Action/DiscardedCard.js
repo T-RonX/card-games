@@ -47,4 +47,12 @@ class DiscardedCard
             });
         }
     }
+
+    static disableDraggable() {
+        $("#card_discarded_pool").draggable('disable');
+    }
+
+    static enableDraggable() {
+        $("#card_discarded_pool").draggable('enable');
+    }
 }
