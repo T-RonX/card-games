@@ -11,16 +11,14 @@ class DiscardedCard
     }
 
     static resetCard(card_id, draggable) {
-        let card = $("#card_discarded_pool");
+        $("#card_discarded_pool").remove();
 
-        if (!card.length) {
-           this.createCard(card_id, draggable);
-           card = $("#card_discarded_pool");
-        }
-
+        this.createCard(card_id, draggable);
+        const card = $("#card_discarded_pool");
+        
         card.data({
             'originalLeft': card.css('left'),
-            'origionalTop': card.css('top')
+            'originalTop': card.css('top')
         });
 
         if (draggable) {
@@ -40,7 +38,7 @@ class DiscardedCard
                     $(this).css('z-index', z - 1);
                     $(this).css({
                         'left': $(this).data('originalLeft'),
-                        'top': $(this).data('origionalTop')
+                        'top': $(this).data('originalTop')
                     });
                     dragCheck = false;
 
