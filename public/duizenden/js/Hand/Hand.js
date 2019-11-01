@@ -84,4 +84,11 @@ class Hand {
         this.hand_container.removeCard(id);
         this.redrawCards();
     }
+
+    removeCards(ids) {
+        for (const id of ids) {
+            this.hand_container.removeCard(id);
+        }
+        this.redrawCards();
+    }
 }
