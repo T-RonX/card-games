@@ -44,8 +44,10 @@ class HandContainer {
     }
 
     addCards(cards) {
-        for (const card of Array.isArray(cards) ? cards : [cards]) {
-            this.cards.concat();
+        cards = Array.isArray(cards) ? cards : [cards];
+        this.cards = this.cards.concat(cards);
+
+        for (const card of cards) {
             const card_elem = this.createCard(card, this.cards.length);
             this.card_elems.push(card_elem);
             this.container.append(card_elem);
