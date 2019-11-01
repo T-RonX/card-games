@@ -81,11 +81,10 @@ class DiscardCard extends StateChangeAction
 			$this->score_calculator->calculatePlayerMeldsScore($state->getPlayers()->getCurrentPlayer()) < $state->getFirstMeldMinimumPoints())
 		{
 			$this->revert_meld->revert($game->getId(), $state->getPlayers()->getCurrentPlayer());
-			$result = null;
+			$result = DiscardCardResultType::INVALID_FIRST_MELD();
 		}
 		else
 		{
-
 			$this->discardCard($state, $card);
 			$result = $this->getResultAfterDiscardCard($game);
 		}

@@ -62,16 +62,21 @@ class DiscardCardController extends AbstractController
 
 		switch ($result)
 		{
-			case DiscardCardResultType::END_TURN():
-				$action = ActionType::DISCARD_END_TURN();
-				break;
-
 			case DiscardCardResultType::END_ROUND():
 				$action = ActionType::DISCARD_END_ROUND();
 				break;
 
 			case DiscardCardResultType::END_GAME():
 				$action = ActionType::DISCARD_END_GAME();
+				break;
+
+			case DiscardCardResultType::INVALID_FIRST_MELD():
+				$action = ActionType::INVALID_FIRST_MELD();
+				break;
+
+			default:
+				$action = ActionType::DISCARD_END_TURN();
+				break;
 		}
 
 		$this->notifyPlayers($game, $current_player, $action);

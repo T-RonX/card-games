@@ -59,6 +59,9 @@ class GameEventMessageHandler {
             case 'undo_last_action':
                 location.reload();
                 break;
+            case 'invalid_first_meld':
+                this.invalidFirstMeld(state);
+                break;
             default:
                 alert(`Unknown action '${state.getSourceActionId()}'.`);
         }
@@ -157,6 +160,10 @@ class GameEventMessageHandler {
     }
 
     discardEndGame() {
+    }
+
+    invalidFirstMeld(state) {
+        Melds.removeMelds(state.getSourcePlayerId());
     }
 
     writeLogMessage(message, player = null, add_time = true) {
