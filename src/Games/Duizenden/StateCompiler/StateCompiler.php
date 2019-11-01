@@ -146,12 +146,9 @@ class StateCompiler implements StateCompilerInterface
 	private function createScoreData(PlayerInterface $player, StateData $state_data): array
 	{
 		$game_score = $this->score_calculator->calculateGameScore($state_data->getGameId());
-		$round_score = $game_score->getLastRound();
-		$player_score = $round_score ? $game_score->getLastRound()->getByPlayerId($player->getId()) : null;
 
 		return [
-			'meld' => $player_score ? $player_score->getMeldPoints() : 0,
-			'round' => $player_score ? $player_score->getScore() : 0,
+			'meld' => $this->score_calculator->calculatePlayerMeldsScore($player),
 			'total' => $game_score->getTotalPlayerScore($player->getId()),
 		];
 	}
