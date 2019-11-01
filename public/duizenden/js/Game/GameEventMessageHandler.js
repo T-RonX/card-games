@@ -79,6 +79,7 @@ class GameEventMessageHandler {
         UndrawnCard.updateColor(state.getUndrawnPoolColor());
 
         AllowedActions.update(state.getAllowedActions());
+        this.manageMeldButton(state);
     }
 
     reorderCards(state) {
@@ -101,6 +102,7 @@ class GameEventMessageHandler {
         }
 
         AllowedActions.update(state.getAllowedActions());
+        this.manageMeldButton(state);
     }
 
     drawFromDiscarded(state) {
@@ -120,9 +122,11 @@ class GameEventMessageHandler {
         }
 
         AllowedActions.update(state.getAllowedActions());
+        this.manageMeldButton(state);
     }
 
-    drawFromDiscardedAndMeld() {
+    drawFromDiscardedAndMeld(state) {
+        this.manageMeldButton(state);
     }
 
     meldCards(state) {
@@ -154,12 +158,24 @@ class GameEventMessageHandler {
 
         UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
         AllowedActions.update(state.getAllowedActions());
+
+        this.manageMeldButton(state);
     }
 
-    discardEndRound() {
+    discardEndRound(state) {
+        this.manageMeldButton(state);
     }
 
     discardEndGame() {
+        this.manageMeldButton(state);
+    }
+
+    manageMeldButton(state) {
+        if (state.isActionAllowed('meld_cards') && state.isLocalPlayerCurrentPlayer()) {
+            MeldButton.show();
+        } else {
+            MeldButton.hide();
+        }
     }
 
     invalidFirstMeld(state) {

@@ -355,9 +355,7 @@
                 </div>
 
                 <div style="margin-bottom: 10px">
-                {% if workflow_can(game, 'meld') %}
-                    <br/><input type="button" value="Meld cards" onclick="meld()" />
-                {% endif %}
+                <br/><input id="meld_button" style="display: none" type="button" value="Meld cards" onclick="meld()" />
                 </div>
 
                 <div style="margin-bottom: 10px">
@@ -460,6 +458,7 @@
     <script src="{{ asset('duizenden/js/Game/State.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/UpdateCurrentPlayer.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/DealButton.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/Action/MeldButton.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/AllowedActions.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/Melds.js') }}"></script>
 <script>
@@ -519,6 +518,10 @@
             {% set top_card = game.state.discardedPool|last %}
             {% if top_card %}
             DiscardedCard.resetCard({{ ("'" ~ top_card.identifier ~ "'")|raw }}, {{ can_draw_from_discarded ? 'true' : 'false' }});
+            {% endif %}
+
+            {% if current_player_id == player.id and workflow_can(game, 'meld') %}
+            MeldButton.show();
             {% endif %}
         });
     });

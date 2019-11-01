@@ -152,6 +152,10 @@ class State {
         }
     }
 
+    isLocalPlayerCurrentPlayer() {
+        return this.player_id === this.getCurrentPlayerId();
+    }
+
     canDrawnFromDiscardedPool() {
         if (this.isCurrentPlayer(this.player_id)) {
             const is_draw_allowed = this.isActionAllowed('draw_from_discarded');
