@@ -132,6 +132,8 @@ class GameEventMessageHandler {
     }
 
     drawFromDiscardedAndMeld(state) {
+        this.meldCards(state);
+
         this.manageMeldButton(state);
         this.manageDraggableUndrawnCard(state);
         this.manageDraggableDiscardedCard(state);

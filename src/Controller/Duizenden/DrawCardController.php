@@ -77,7 +77,7 @@ class DrawCardController extends AbstractController
 
 		$card = $this->draw_from_undrawn_pool->draw($game);
 
-		$this->notifyPlayers($game, ActionType::DRAW_FROM_UNDRAWN());
+		$this->notifyPlayersIndividually($game, ActionType::DRAW_FROM_UNDRAWN());
 
 		return $this->json([]);
 	}
@@ -100,7 +100,6 @@ class DrawCardController extends AbstractController
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
-	 * @throws InvalidActionException
 	 */
 	public function drawFromDiscarded(CardPool $meld_cards = null): Response
 	{
@@ -110,15 +109,18 @@ class DrawCardController extends AbstractController
 		if (null !== $meld_cards && $meld_cards->hasCards())
 		{
 			$this->draw_from_discarded_pool->drawAndMeld($game, $meld_cards->getCards());
-			$action = ActionType::DRAW_FROM_DISCARDED_AND_MELD();
+			$melds = $game->getState()->getPlayers()->getCurrentPlayer()->getMelds();
+			$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::DRAW_FROM_DISCARDED_AND_MELD(), [
+				'meld_id' => $melds->count() - 1,
+				'cards_melted' => $melds->last()->getCards()->getIdentifiers(),
+			]);
 		}
 		else
 		{
 			$this->draw_from_discarded_pool->draw($game);
 			$action = ActionType::DRAW_FROM_DISCARDED();
+			$this->notifyPlayersIndividually($game, $action);
 		}
-
-		$this->notifyPlayers($game, $action);
 
 		return $this->json([]);
 	}
@@ -127,12 +129,10 @@ class DrawCardController extends AbstractController
 	 * @param Game $game
 	 * @param ActionType $action
 	 *
-	 * @throws EmptyCardPoolException
-	 * @throws InvalidActionException
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	private function notifyPlayers(Game $game, ActionType $action)
+	private function notifyPlayersIndividually(Game $game, ActionType $action)
 	{
 		$current_player = $game->getState()->getPlayers()->getCurrentPlayer();
 

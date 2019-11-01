@@ -121,4 +121,9 @@ class Melds implements Iterator, Countable
 	{
 		return count($this->melds);
 	}
+
+	public function last(): Meld
+	{
+		return end($this->melds);
+	}
 }
