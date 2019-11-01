@@ -11,6 +11,7 @@ class DroppableMeld {
                 if (drag_source === 'hand_container') {
                     let target = $(event.target);
                     let url = this.path_extend_meld.replace('111', ui.draggable.data('card-id')).replace('000', target.data('meld-id') - 1);
+                    ui.draggable.remove();
                     $.post(url, null, function (data) {
                         //location.reload();
                     });

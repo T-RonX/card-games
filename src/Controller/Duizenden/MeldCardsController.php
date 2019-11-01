@@ -106,7 +106,10 @@ class MeldCardsController extends AbstractController
 
 		$this->extend_meld->extend($game, $meld_id, $card);
 
-		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::EXTEND_MELD(), ['meld_id' => $meld_id]);
+		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::EXTEND_MELD(), [
+			'meld_id' => $meld_id,
+			'card_melted' => $card->getIdentifier(),
+		]);
 
 		return $this->json([]);
 	}

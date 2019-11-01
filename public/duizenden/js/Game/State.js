@@ -118,6 +118,10 @@ class State {
         return this.getPlayer(id).melds;
     }
 
+    getPlayerMeld(id, meld_id) {
+        return this.getPlayer(id).melds[meld_id];
+    }
+
     hadPlayerMelds(id) {
         return this.getPlayerMelds(id).length > 0;
     }
@@ -133,6 +137,20 @@ class State {
     getPlayerMeldScore(id) {
         return this.getPlayerScore(id).meld
     }
+    
+    hasExtras() {
+        return 'extra' in this.getSource();
+    }
+
+    getExtras() {
+        return this.hasExtras() ? this.getSource().extra : null;
+    }
+
+    getExtra(id) {
+        if (this.hasExtras() && id in this.getExtras()) {
+            return this.getExtras()[id];
+        }
+    }
 
     canDrawnFromDiscardedPool() {
         if (this.isCurrentPlayer(this.player_id)) {
@@ -145,9 +163,5 @@ class State {
         }
 
         return false;
-    }
-
-    getExtras() {
-        return this.data.extras;
     }
 }

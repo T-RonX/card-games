@@ -123,14 +123,22 @@ class GameEventMessageHandler {
     }
 
     meldCards(state) {
-        if (!state.isSourcePlayerId(this.player_id)) {
-            Melds.createMelds(state.getSourcePlayerId(), new ZFighter(1), state.getSourcePlayerMelds(), $(`#opponent_pane_${state.getSourcePlayerId()}`), 113, 179, .2, null);
+        if (state.isSourcePlayerId(this.player_id)) {
+            Melds.createMelds(state.getSourcePlayerId(), new ZFighter(1), state.getSourcePlayerMelds(), $('#melds'), 113, 179, .2, '/duizenden/extend-meld/000/111', 0);
         } else {
-            Melds.createMelds(state.getSourcePlayerId(), new ZFighter(1), state.getSourcePlayerMelds(), $('#melds'), 113, 179, .2, null);
+            Melds.createMelds(state.getSourcePlayerId(), new ZFighter(1), state.getSourcePlayerMelds(), $(`#opponent_pane_${state.getSourcePlayerId()}`), 113, 179, .2, null, 180);
         }
     }
 
-    extendMeld() {
+    extendMeld(state) {
+        const meld = state.getPlayerMeld(state.getSourcePlayerId(), state.getExtra('meld_id'));
+        if (state.isSourcePlayerId(this.player_id)) {
+            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld, $('#melds'), 113, 179, .2, '/duizenden/extend-meld/000/111', 0);
+            this.game.getHand().removeCard(state.getExtra('card_melted'));
+//            this.game.initializeHand();
+        } else {
+            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld, $(`#opponent_pane_${state.getSourcePlayerId()}`), 113, 179, .2, null, 180);
+        }
     }
 
     discardEndTurn(state) {

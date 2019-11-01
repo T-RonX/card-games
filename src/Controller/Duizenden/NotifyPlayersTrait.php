@@ -31,7 +31,7 @@ trait NotifyPlayersTrait
 	 */
 	private function notifyPlayers(Game $game, PlayerInterface $source_player, ActionType $source_action, ?array $extras = null): void
 	{
-		$message = $this->createNotifyPlayerMessage($game->getId(), $game, $source_player, $source_action, TopicType::GAME_EVENT());
+		$message = $this->createNotifyPlayerMessage($game->getId(), $game, $source_player, $source_action, TopicType::GAME_EVENT(), $extras);
 
 		$this->game_notifier->notifyMessage($message);
 	}
