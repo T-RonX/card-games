@@ -371,9 +371,7 @@
                 </div>
 
                 <div style="margin-bottom: 10px">
-                {% if is_granted('deal', game) %}
-                    <br/><a href="#" id="deal">DEAL CARDS</a>
-                {% endif %}
+                    <br/><a href="#" id="deal" style="display: none;">DEAL CARDS</a>
 
                 {% if workflow_can(game, 'restart_game') %}
                     <br/><a href="{{ path('duizenden.new') }}" id="restart">RESTART</a>
@@ -527,7 +525,9 @@
             {% if current_player_id == player.id and workflow_can(game, 'meld') %}
             MeldButton.show();
             {% endif %}
-
+            {% if is_granted('deal', game) %}
+            DealButton.show();
+            {% endif %}
         });
     });
 

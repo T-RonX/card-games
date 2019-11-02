@@ -49,10 +49,18 @@ class DiscardedCard
     }
 
     static disableDraggable() {
-        $("#card_discarded_pool").draggable('disable');
+        const card = $('#card_discarded_pool');
+
+        if (card.data('uiDraggable')) {
+            card.draggable('disable');
+        }
     }
 
     static enableDraggable() {
-        $("#card_discarded_pool").draggable('enable');
+        const card = $('#card_discarded_pool');
+
+        if (card.data('uiDraggable')) {
+            card.draggable('enable');
+        }
     }
 }

@@ -10,9 +10,13 @@ use App\Enum\Exception\EnumNotDefinedException;
 use App\Games\Duizenden\Actions\DiscardCard\DiscardCard;
 use App\Games\Duizenden\DiscardCardResultType;
 use App\Games\Duizenden\Exception\DiscardCardException;
-use App\Games\Duizenden\StateCompiler\ActionType;
+use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
+use App\Games\Duizenden\Player\PlayerInterface;
+use App\Games\Duizenden\Score\Exception\UnmappedCardException;
+use App\Games\Duizenden\StateCompiler\ActionType;
+use App\Games\Duizenden\StateCompiler\TopicType;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
@@ -63,25 +67,42 @@ class DiscardCardController extends AbstractController
 		switch ($result)
 		{
 			case DiscardCardResultType::END_ROUND():
-				$action = ActionType::DISCARD_END_ROUND();
+				$this->notifyPlayersAllHandCardsTurned($game, $current_player, ActionType::DISCARD_END_ROUND());
 				break;
 
 			case DiscardCardResultType::END_GAME():
-				$action = ActionType::DISCARD_END_GAME();
+				$this->notifyPlayersAllHandCardsTurned($game, $current_player, ActionType::DISCARD_END_GAME());
 				break;
 
 			case DiscardCardResultType::INVALID_FIRST_MELD():
-				$action = ActionType::INVALID_FIRST_MELD();
+				$this->notifyPlayers($game, $current_player, ActionType::INVALID_FIRST_MELD());
 				break;
 
 			default:
-				$action = ActionType::DISCARD_END_TURN();
+				$this->notifyPlayersAllHandCardsTurned($game, $current_player, ActionType::DISCARD_END_TURN());
 				break;
 		}
-
-		$this->notifyPlayers($game, $current_player, $action);
 
 		return $this->json([]);
 	}
 
+	/**
+	 * @param Game $game
+	 * @param PlayerInterface $source_player
+	 * @param ActionType $source_action
+	 *
+	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
+	 */
+	private function notifyPlayersAllHandCardsTurned(Game $game, PlayerInterface $source_player, ActionType $source_action): void
+	{
+		$message = $this->createNotifyPlayerMessage($game->getId(), $game, $source_player, $source_action, TopicType::GAME_EVENT());
+
+		foreach ($game->getState()->getPlayers()->getFreshLoopIterator() as $player)
+		{
+			$message->addPlayersFullCardPool($player->getId());
+		}
+
+		$this->game_notifier->notifyMessage($message);
+	}
 }

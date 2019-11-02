@@ -74,16 +74,14 @@ class GameEventMessageHandler {
         this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
         this.game.initializeOpponentHands();
 
-        DiscardedCard.resetCard(state.getDiscardedPoolTopCard(), state.canDrawnFromDiscardedPool());
-
         UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
-        DealButton.hide();
         UndrawnCard.updateColor(state.getUndrawnPoolColor());
-
         AllowedActions.update(state.getAllowedActions());
+
+        this.manageDealButton(state);
         this.manageMeldButton(state);
         this.manageDraggableUndrawnCard(state);
-        this.manageDraggableDiscardedCard(state);
+        this.manageDiscardedCard(state);
     }
 
     reorderCards(state) {
@@ -112,14 +110,6 @@ class GameEventMessageHandler {
     }
 
     drawFromDiscarded(state) {
-        const card = state.getDiscardedPoolTopCard();
-
-        if (null == card) {
-            DiscardedCard.removeCard();
-        } else {
-            DiscardedCard.resetCard(card, state.canDrawnFromDiscardedPool());
-        }
-
         if (state.isCurrentPlayer(this.player_id)) {
             this.game.initializeHand(this.getLocalPlayer(state).hand.cards);
         } else {
@@ -130,7 +120,7 @@ class GameEventMessageHandler {
         AllowedActions.update(state.getAllowedActions());
         this.manageMeldButton(state);
         this.manageDraggableUndrawnCard(state);
-        this.manageDraggableDiscardedCard(state);
+        this.manageDiscardedCard(state);
     }
 
     drawFromDiscardedAndMeld(state) {
@@ -161,8 +151,9 @@ class GameEventMessageHandler {
         if (!state.isSourcePlayerId(this.player_id)) {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
-
-            DiscardedCard.resetCard(state.getDiscardedPoolTopCard(), state.canDrawnFromDiscardedPool());
+            this.manageDiscardedCard(state);
+        } else {
+            this.manageDraggableDiscardedCard(state);
         }
 
         UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
@@ -170,19 +161,39 @@ class GameEventMessageHandler {
 
         this.manageMeldButton(state);
         this.manageDraggableUndrawnCard(state);
-        this.manageDraggableDiscardedCard(state);
     }
 
     discardEndRound(state) {
+        this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
+        this.game.initializeOpponentHands();
+
+        this.manageDealButton(state);
         this.manageMeldButton(state);
         this.manageDraggableUndrawnCard(state);
-        this.manageDraggableDiscardedCard(state);
+        this.manageDiscardedCard(state);
+
+        const same_player = state.getCurrentPlayerId() === state.getSourcePlayerId();
+        const finisher = state.isLocalPlayerCurrentPlayer() ? 'You' : state.getSourcePlayer().name;
+        const next_dealer = same_player ? ` and ${state.isLocalPlayerCurrentPlayer() ? 'are' : 'is'}` : `. ${state.isLocalPlayerCurrentPlayer() ?  'You are' : state.getCurrentPlayer().name} is`;
+        let message = `${finisher} finished the round${next_dealer} the next dealer.`;
+
+        this.writeLogMessage(message);
+        alert(message);
     }
 
     discardEndGame(state) {
+        this.manageDealButton(state);
         this.manageMeldButton(state);
         this.manageDraggableUndrawnCard(state);
-        this.manageDraggableDiscardedCard(state);
+        this.manageDiscardedCard(state);
+    }
+
+    manageDealButton(state) {
+        if (state.isActionAllowed('deal') && state.isLocalPlayerCurrentPlayer()) {
+            DealButton.show();
+        } else {
+            DealButton.hide();
+        }
     }
 
     manageMeldButton(state) {
@@ -199,6 +210,18 @@ class GameEventMessageHandler {
         } else {
             UndrawnCard.disableDraggable();
         }
+    }
+
+    manageDiscardedCard(state) {
+        const card = state.getDiscardedPoolTopCard();
+
+        if (null == card) {
+            DiscardedCard.removeCard();
+        } else {
+            DiscardedCard.resetCard(card, state.canDrawnFromDiscardedPool());
+        }
+
+        this.manageDraggableDiscardedCard(state);
     }
 
     manageDraggableDiscardedCard(state) {

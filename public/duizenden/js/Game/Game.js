@@ -13,8 +13,8 @@ class Game {
         this.player_id = player_id;
     }
 
-    setOpponentCards(cards) {
-        this.opponent_cards = cards;
+    setOpponentCards(opponent) {
+        this.opponent_cards = opponent;
     }
 
     static create(
@@ -129,13 +129,16 @@ class Game {
                 melds_container = $(`<div id="opponent_melds_${opponent.id}" class="opponent_melds"></div>`);
             }
 
-            const hand = new OpponentHand(this.z_fighter, opponent.hand.cards.reverse(), pane, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
+            const cards = CardHelper.cardIdsHaveValues(opponent.hand.cards) ? opponent.hand.cards : opponent.hand.cards.reverse();
+            const hand = new OpponentHand(this.z_fighter, cards, pane, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
             hand.initialize();
 
             pane.append(melds_container);
             opponent_panes.append(pane);
         }
     }
+
+
 
     initializeOpponentMelds() {
         for (const [i, opponent] of this.opponent_cards.entries()) {

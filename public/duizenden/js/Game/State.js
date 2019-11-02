@@ -25,7 +25,7 @@ class State {
     }
 
     getSourcePlayer() {
-        return this.getSource().player;
+        return this.getPlayer(this.getSourcePlayerId());
     }
 
     getSourceAction() {
@@ -33,7 +33,7 @@ class State {
     }
 
     getSourcePlayerId() {
-        return this.getSourcePlayer().id;
+        return this.getSource().player.id;
     }
 
     getSourcePlayerMelds() {
