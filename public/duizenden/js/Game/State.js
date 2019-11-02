@@ -48,8 +48,12 @@ class State {
         return this.getSourceAction().id;
     }
 
+    getGameState() {
+        return this.data.game_state;
+    }
+
     getUndrawnPool() {
-        return this.data.game_state.undrawn_pool.cards;
+        return this.getGameState().undrawn_pool.cards;
     }
 
     getUndrawnPoolColor() {
@@ -57,7 +61,7 @@ class State {
     }
 
     getPlayers() {
-        return this.data.game_state.players;
+        return this.getGameState().players;
     }
 
     getPlayersExcept(id) {
@@ -73,11 +77,11 @@ class State {
     }
 
     getDiscardedPool() {
-        return this.data.game_state.discarded_pool;
+        return this.getGameState().discarded_pool;
     }
 
     getAllowedActions() {
-        return this.data.game_state.allowed_actions;
+        return this.getGameState().allowed_actions;
     }
 
     getPlayer(id) {
@@ -89,7 +93,7 @@ class State {
     }
 
     getCurrentPlayerId() {
-        return this.data.game_state.current_player.id;
+        return this.getGameState().current_player.id;
     }
 
     getCurrentPlayer() {
@@ -156,12 +160,24 @@ class State {
         return this.player_id === this.getCurrentPlayerId();
     }
 
+    getConfig() {
+        return this.getGameState().config;
+    }
+
+    getTargetScore() {
+        return this.getConfig().target_score;
+    }
+
+    getFirstMeldMinimumPoints() {
+        return this.getConfig().first_meld_minimum_points;
+    }
+
     canDrawnFromDiscardedPool() {
         if (this.isCurrentPlayer(this.player_id)) {
             const is_draw_allowed = this.isActionAllowed('draw_from_discarded');
             const has_melds = this.hadPlayerMelds(this.player_id);
             const discarded_pool_is_first_card = this.isDiscardedPoolFirstCard();
-            const has_minimum_score = this.getPlayerMeldScore(this.player_id) >= 30;
+            const has_minimum_score = this.getPlayerMeldScore(this.player_id) >= this.getFirstMeldMinimumPoints();
 
             return is_draw_allowed && ((!has_melds && discarded_pool_is_first_card) || has_minimum_score);
         }

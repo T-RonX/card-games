@@ -46,11 +46,20 @@ class StateCompiler implements StateCompilerInterface
 	public function compile(StateData $state_data): array
 	{
 		return [
+			'config' => $this->createConfigData($state_data),
 			'current_player' => $this->createPlayerIdData($state_data->getCurrentPlayer()),
 			'allowed_actions' => $this->createActionsData($state_data->getAllowedActions()),
 			'undrawn_pool' => $this->createCardPoolData($state_data->getUndrawnPool(), false),
 			'discarded_pool' => $this->createDiscardedCardPoolData($state_data->getDiscardedPool()),
 			'players' => $this->createPlayersData($state_data),
+		];
+	}
+
+	private function createConfigData(StateData $state_data)
+	{
+		return [
+			'target_score' => $state_data->getTargetScore(),
+			'first_meld_minimum_points' => $state_data->getFirstMeldMinimumPoints(),
 		];
 	}
 

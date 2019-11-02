@@ -72,12 +72,15 @@ class StateBuilder
 	{
 		$state = $game->getState();
 
-		$state_data->setGameId($game->getId());
-		$state_data->setCurrentPlayer($state->getPlayers()->getCurrentPlayer());
-		$state_data->setAllowedActions($this->createAllowedActions($game));
-		$state_data->setUndrawnPool($state->getUndrawnPool());
-		$state_data->setDiscardedPool($state->getDiscardedPool());
-		$state_data->setPlayers($state->getPlayers()->getFreshLoopIterator());
+		$state_data->setGameId($game->getId())
+			->setTargetScore($game->getState()->getTargetScore())
+			->setFirstMeldMinimumPoints($game->getState()->getFirstMeldMinimumPoints())
+			->setCurrentPlayer($state->getPlayers()->getCurrentPlayer())
+			->setAllowedActions($this->createAllowedActions($game))
+			->setUndrawnPool($state->getUndrawnPool())
+			->setDiscardedPool($state->getDiscardedPool())
+			->setPlayers($state->getPlayers()->getFreshLoopIterator());
+
 		$this->addPlayerScores($state_data, $game);
 	}
 

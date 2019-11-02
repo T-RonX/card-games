@@ -66,6 +66,16 @@ class StateData
 	private $game_id;
 
 	/**
+	 * @var int
+	 */
+	private $target_score;
+
+	/**
+	 * @var int
+	 */
+	private $first_meld_minimum_points;
+
+	/**
 	 * @var array|null
 	 */
 	private $extra;
@@ -232,5 +242,45 @@ class StateData
 	public function getExtras(): ?array
 	{
 		return $this->extra;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTargetScore(): int
+	{
+		return $this->target_score;
+	}
+
+	/**
+	 * @param int $target_score
+	 *
+	 * @return self
+	 */
+	public function setTargetScore(int $target_score): self
+	{
+		$this->target_score = $target_score;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFirstMeldMinimumPoints(): int
+	{
+		return $this->first_meld_minimum_points;
+	}
+
+	/**
+	 * @param int $first_meld_minimum_points
+	 *
+	 * @return StateData
+	 */
+	public function setFirstMeldMinimumPoints(int $first_meld_minimum_points): self
+	{
+		$this->first_meld_minimum_points = $first_meld_minimum_points;
+
+		return $this;
 	}
 }
