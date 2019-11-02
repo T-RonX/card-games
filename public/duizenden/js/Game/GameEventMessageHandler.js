@@ -1,9 +1,10 @@
 class GameEventMessageHandler {
-    constructor(game_id, player_id, extend_meld_url) {
+    constructor(game_id, player_id, extend_meld_url, card_separation_melds) {
         this.game_id = game_id;
         this.player_id = player_id;
         this.game = null;
         this.extend_meld_url = extend_meld_url;
+        this.card_separation_melds = card_separation_melds;
     }
 
     setGame(game) {
@@ -139,20 +140,20 @@ class GameEventMessageHandler {
 
     meldCards(state) {
         if (state.isSourcePlayerId(this.player_id)) {
-            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $('#melds'), 113, 179, .2, this.extend_meld_url, 0, state.getExtra('meld_id') + 1);
+            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $('#melds'), 113, 179, this.card_separation_melds, this.extend_meld_url, 0, state.getExtra('meld_id') + 1);
             this.game.getHand().removeCards(state.getExtra('cards_melted'));
         } else {
-            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $(`#opponent_pane_${state.getSourcePlayerId()}`), 113, 179, .26, null, 180, state.getExtra('meld_id') + 1);
+            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $(`#opponent_pane_${state.getSourcePlayerId()}`), 113, 179, this.card_separation_melds, null, 180, state.getExtra('meld_id') + 1);
         }
     }
 
     extendMeld(state) {
         const meld = state.getPlayerMeld(state.getSourcePlayerId(), state.getExtra('meld_id'));
         if (state.isSourcePlayerId(this.player_id)) {
-            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, 113, 179, .2, this.extend_meld_url, 0);
+            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, 113, 179, this.card_separation_melds, this.extend_meld_url, 0);
             this.game.getHand().removeCard(state.getExtra('card_melted'));
         } else {
-            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, 113, 179, .26, null, 180);
+            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, 113, 179, this.card_separation_melds, null, 180);
         }
     }
 

@@ -464,11 +464,12 @@
 <script>
     let game;
     $(document).ready(() => {
+        const card_separation_melds = .19;
         //let elem = document.querySelector('.card.hand');
         //let elem_style = document.querySelector('.card.table');
         const extend_meld_url = '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}';
         const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
-        const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}', extend_meld_url);
+        const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}', extend_meld_url, card_separation_melds);
         const event_handler = new GameEvent(connection, message_handler);
         window.player_event_message_handler.setGameEventHandler(message_handler);
         event_handler.initialize();
@@ -509,7 +510,7 @@
                 113,// parseInt(style_meld.width),
                 180,// parseInt(style_meld.height),
                 .28,
-                .26,
+                card_separation_melds,
                 extend_meld_url,
             );
 
