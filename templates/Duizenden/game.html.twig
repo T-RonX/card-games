@@ -466,9 +466,9 @@
     $(document).ready(() => {
         //let elem = document.querySelector('.card.hand');
         //let elem_style = document.querySelector('.card.table');
-
+        const extend_meld_url = '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}';
         const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
-        const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}');
+        const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}', extend_meld_url);
         const event_handler = new GameEvent(connection, message_handler);
         window.player_event_message_handler.setGameEventHandler(message_handler);
         event_handler.initialize();
@@ -510,7 +510,7 @@
                 180,// parseInt(style_meld.height),
                 .28,
                 .26,
-                '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}',
+                extend_meld_url,
             );
 
             game.initialize();
