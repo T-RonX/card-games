@@ -87,6 +87,7 @@ class GameController extends AbstractController
 	 * @param Inviter $inviter
 	 * @param LobbyNotifier $notifier
 	 * @param StateBuilder $state_builder
+	 * @param GameNotifier $game_notifier
 	 */
 	public function __construct(
 		PlayerRepository $player_repository,
@@ -229,7 +230,8 @@ class GameController extends AbstractController
 		$game = $this->loadGame($uuid);
 		$this->denyAccessUnlessGranted(GameVoter::ENTER_GAME, $game);
 
-		$state = $this->state_builder->createCompiledStateData($game);
+		$state_date = $this->state_builder->createStateData($game);
+		$state = $state_date->create();
 
 		return $this->render('Duizenden\game.html.twig', [
 			'game' => $game,

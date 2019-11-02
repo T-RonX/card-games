@@ -53,7 +53,7 @@ class StateBuilder
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	private function createStateData(Game $game): StateData
+	public function createStateData(Game $game): StateData
 	{
 		$state_data = $this->createStateDataBuilder();
 		$this->fillStateData($state_data, $game);

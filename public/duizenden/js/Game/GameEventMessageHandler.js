@@ -70,6 +70,7 @@ class GameEventMessageHandler {
     }
 
     deal(state) {
+        Melds.removeMelds();
         this.game.initializeHand(this.getLocalPlayer(state).hand.cards);
         this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
         this.game.initializeOpponentHands();

@@ -23,7 +23,11 @@ class Melds {
         m.initialize();
     }
 
-    static removeMelds(player_id) {
-        $(`.meld_container[data-meld-unique^=${player_id}_]`).remove();
+    static removeMelds(player_id = null) {
+        if (null == player_id) {
+            $('.meld_container').empty();
+        } else {
+            $(`.meld_container[data-meld-unique^=${player_id}_]`).empty();
+        }
     }
 }
