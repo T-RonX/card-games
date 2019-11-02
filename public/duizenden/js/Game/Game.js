@@ -51,6 +51,7 @@ class Game {
 
         this.initializeHand();
         this.initializeOpponentHands();
+        this.initializeOpponentMelds();
     }
 
     initializeHand(cards = null) {
@@ -129,8 +130,16 @@ class Game {
             }
 
             const hand = new OpponentHand(this.z_fighter, opponent.hand.cards.reverse(), pane, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
-
             hand.initialize();
+
+            pane.append(melds_container);
+            opponent_panes.append(pane);
+        }
+    }
+
+    initializeOpponentMelds() {
+        for (const [i, opponent] of this.opponent_cards.entries()) {
+            let melds_container = $(`#opponent_melds_${opponent.id}`);
 
             //alert(new_coords[i].coord.y);
             //this.opponent_hands.push({player_id: opponent.player_id, hand: hand});
@@ -152,9 +161,6 @@ class Game {
                 meld.initialize();
                 melds_container.append(meld_container);
             }
-
-            pane.append(melds_container);
-            opponent_panes.append(pane);
         }
     }
 }
