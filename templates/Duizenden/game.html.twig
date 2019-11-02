@@ -395,7 +395,7 @@
                     {% for card in meld.cards %}
                         {% set meld_cards = meld_cards|merge([card.identifier|lower]) %}
                     {% endfor %}
-                    <div class="meld_container" data-meld-unique="{{ meld_container_unique }}" data-meld-id="{{ loop.index }}" data-meld-cards="{{ meld_cards|json_encode() }}"></div>
+                   {# <div class="meld_container" data-meld-unique="{{ meld_container_unique }}" data-meld-id="{{ loop.index }}" data-meld-cards="{{ meld_cards|json_encode() }}"></div> #}
                 {% endfor %}
 {#            </div>#}
 {#            {% endfor %}#}

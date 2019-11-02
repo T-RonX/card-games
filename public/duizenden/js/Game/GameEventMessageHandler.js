@@ -149,10 +149,10 @@ class GameEventMessageHandler {
     extendMeld(state) {
         const meld = state.getPlayerMeld(state.getSourcePlayerId(), state.getExtra('meld_id'));
         if (state.isSourcePlayerId(this.player_id)) {
-            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, $('#melds'), 113, 179, .2, this.extend_meld_url, 0);
+            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, 113, 179, .2, this.extend_meld_url, 0);
             this.game.getHand().removeCard(state.getExtra('card_melted'));
         } else {
-            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, $(`#opponent_pane_${state.getSourcePlayerId()}`), 113, 179, .26, null, 180);
+            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, 113, 179, .26, null, 180);
         }
     }
 
