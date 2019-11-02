@@ -79,7 +79,6 @@ class Game {
         const opponent_pane_height = Math.floor(window_height * .4);
         const cards_offset_x = -(Math.floor((window_width * (opponent_pane_width / 100)) / 2));
         const cards_offset_y = 0;
-        const pane_container = $('#opponent_panes');
 
         let i = 1;
 
@@ -88,7 +87,6 @@ class Game {
 
         const center_point = {x: a, y: b};
 
-        const body = $('body');
 
         let points_x = [];
 
@@ -114,6 +112,7 @@ class Game {
             }
         }
 
+        const opponent_panes = $('#opponent_panes');
         // body.append($(`<div style="position: absolute; top: ${center_point.y}px; left: ${center_point.x}px; width: 20px; height: 20px; background: red; border-radius: 50%"></div>`));
         //
         // for (const data of new_coords) {
@@ -122,9 +121,11 @@ class Game {
         for (const [i, opponent] of this.opponent_cards.entries()) {
 
             let pane = $(`#opponent_pane_${opponent.id}`);
+            let melds_container = $(`#opponent_melds_${opponent.id}`);
 
             if (!pane.length) {
                 pane = $(`<div id="opponent_pane_${opponent.id}" class="opponent_hand" style="box-sizing: border-box; position: relative; float: left; width: ${opponent_pane_width}%; height: ${b}px;" data-player-id="${opponent.id}"></div>`);
+                melds_container = $(`<div id="opponent_melds_${opponent.id}" class="opponent_melds"></div>`);
             }
 
             const hand = new OpponentHand(this.z_fighter, opponent.hand.cards.reverse(), pane, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
@@ -148,16 +149,12 @@ class Game {
                     180
                 );
 
-               meld.initialize();
-               pane.append(meld_container);
-               // meld_container.show();
-               // pane.show();
+                meld.initialize();
+                melds_container.append(meld_container);
             }
 
-            pane_container.append(pane);
+            pane.append(melds_container);
+            opponent_panes.append(pane);
         }
-
-        // pane_container.append($('<br style="clear: left;"/>'));
-
     }
 }

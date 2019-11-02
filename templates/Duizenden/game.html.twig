@@ -295,6 +295,17 @@
         color: #ffcc00;
         font-weight: bold;
     }
+
+    .opponent_melds {
+        margin-top: 130px;
+        text-align: center;
+    }
+
+    #melds {
+        display: inline-flex;
+        flex-direction: row;
+        flex-wrap: wrap-reverse;
+    }
 </style>
 {% endblock %}
 
@@ -312,18 +323,8 @@
 {% for player in game.state.players %}
     <span data-player-id="{{ player.id }}" class="player_name{{ player.id == current_player_id ? ' active' }}">{{ player.name }} ({{ player.melds|length }})</span>
 {% endfor %}
-
     <div id="opponent_panes"></div>
-    <div id="melds" style="position: relative; clear: both">
-{#{% for meld in player.melds %}#}
-{#    {% set meld_container_unique = player.id ~ '_' ~ loop.index %}#}
-{#    {% set meld_cards = [] %}#}
-{#    {% for card in meld.cards %}#}
-{#        {% set meld_cards = meld_cards|merge([card.identifier|lower]) %}#}
-{#    {% endfor %}#}
-{#    <div class="meld_container" data-meld-unique="{{ meld_container_unique }}" data-meld-id="{{ loop.index }}" data-meld-cards="{{ meld_cards|json_encode() }}"></div>#}
-{#{% endfor %}#}
-    </div>
+    <div id="melds"></div>
 <div>
     <div style="float: left; height: 260px; width: 312px; border: 3px #034823 solid; border-right: none;">
         <div  style="float: left; width: 150px; height: 250px;">
