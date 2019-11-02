@@ -23,6 +23,6 @@ class MarkingType extends Enum
 	private const CARD_DRAWN = 'card_drawn';
 	private const CARDS_MELTED = 'cards_melted';
 	private const TURN_END = 'turn_end';
-	private const ROUND_END = 'round_end';
-	private const GAME_END = 'game_end';
+	public const ROUND_END = 'round_end';
+	public const GAME_END = 'game_end';
 }

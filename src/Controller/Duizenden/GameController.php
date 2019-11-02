@@ -21,8 +21,9 @@ use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Games\Duizenden\StateBuilder\StateBuilder;
 use App\Games\Duizenden\StateCompiler\ActionType;
-use App\Games\Duizenden\StateCompiler\StatusType;
+use App\Games\Duizenden\StateCompiler\StateData;
 use App\Games\Duizenden\StateCompiler\TopicType;
+use App\Games\Duizenden\Workflow\MarkingType;
 use App\Lobby\Entity\Invitation;
 use App\Lobby\Inviter;
 use App\Lobby\LobbyNotifier;
@@ -230,13 +231,31 @@ class GameController extends AbstractController
 		$game = $this->loadGame($uuid);
 		$this->denyAccessUnlessGranted(GameVoter::ENTER_GAME, $game);
 
-		$state_date = $this->state_builder->createStateData($game);
-		$state = $state_date->create();
+		$state_data = $this->state_builder->createStateData($game);
+		$this->complementStateData($game, $state_data);
 
 		return $this->render('Duizenden\game.html.twig', [
 			'game' => $game,
-			'state_data' => $state
+			'state_data' => $state_data->create()
 		]);
+	}
+
+	/**
+	 * @param Game $game
+	 * @param StateData $state_data
+	 */
+	private function complementStateData(Game $game, StateData $state_data): void
+	{
+		if (
+			$game->getMarking()->has(MarkingType::ROUND_END) ||
+			$game->getMarking()->has(MarkingType::GAME_END)
+		)
+		{
+			foreach ($game->getState()->getPlayers()->getFreshLoopIterator() as $player)
+			{
+				$state_data->addPlayersFullCardPool($player->getId());
+			}
+		}
 	}
 
 	/**

@@ -35,19 +35,6 @@ class StateBuilder
 	/**
 	 * @param Game $game
 	 *
-	 * @return array
-	 *
-	 * @throws PlayerNotFoundException
-	 * @throws UnmappedCardException
-	 */
-	public function createCompiledStateData(Game $game): array
-	{
-		return $this->createStateData($game)->create();
-	}
-
-	/**
-	 * @param Game $game
-	 *
 	 * @return StateData
 	 *
 	 * @throws PlayerNotFoundException

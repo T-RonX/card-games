@@ -10,6 +10,7 @@ use App\Games\Duizenden\Player\Exception\EmptyPlayerSetException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\ScoreCalculator;
 use App\Games\Duizenden\Workflow\TransitionType;
+use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\StateMachine;
 
 class Game implements GameInterface
@@ -135,9 +136,14 @@ class Game implements GameInterface
 	/**
 	 * @return void
 	 */
-	function setCreatedMarking(): void
+	public function setCreatedMarking(): void
 	{
-		$this->state_machine->getMarkingStore()->setMarking($this, $this->state_machine->getMarking($this));
+		$this->state_machine->getMarkingStore()->setMarking($this, $this->getMarking());
+	}
+
+	public function getMarking(): Marking
+	{
+		return $this->state_machine->getMarking($this);
 	}
 
 	/**
