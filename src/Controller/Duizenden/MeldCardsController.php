@@ -6,6 +6,7 @@ use App\CardPool\CardPool;
 use App\CardPool\Exception\CardNotFoundException;
 use App\CardPool\Exception\EmptyCardPoolException;
 use App\Cards\Standard\Card;
+use App\Cards\Standard\CardHelper;
 use App\Cards\Standard\Exception\InvalidCardIdException;
 use App\Common\Meld\Exception\InvalidMeldException;
 use App\Enum\Exception\EnumConstantsCouldNotBeResolvedException;
@@ -75,10 +76,10 @@ class MeldCardsController extends AbstractController
 		$this->denyAccessUnlessGranted(GameVoter::MELD, $game);
 
 		$this->meld_cards->meld($game, $cards->getCards());
-
+		$melds = $game->getState()->getPlayers()->getCurrentPlayer()->getMelds();
 		$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::MELD_CARDS(), [
-			'meld_id' => $game->getState()->getPlayers()->getCurrentPlayer()->getMelds()->count() - 1,
-			'cards_melted' => $cards->getIdentifiers(),
+			'meld_id' => $melds->count() - 1,
+			'cards_melted' =>  $melds->last()->getCards()->getIdentifiers(),
 		]);
 
 		return $this->json([]);
