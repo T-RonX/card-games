@@ -40,6 +40,9 @@ class ScoreCalculator
 
 		foreach ($data as ['player_uuid' => $player_uuid, 'game_id' => $game_id, 'hand' => $hand, 'melds' => $melds])
 		{
+			$hand = json_decode($hand);
+			$melds = json_decode($melds);
+
 			if (!array_key_exists($game_id, $round_scores))
 			{
 				$round_scores[$game_id] = new RoundScore();
