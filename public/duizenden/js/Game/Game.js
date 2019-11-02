@@ -141,26 +141,16 @@ class Game {
         for (const [i, opponent] of this.opponent_cards.entries()) {
             let melds_container = $(`#opponent_melds_${opponent.id}`);
 
-            //alert(new_coords[i].coord.y);
-            //this.opponent_hands.push({player_id: opponent.player_id, hand: hand});
-            let c = 1;
-            for (const y of this.opponent_cards[i].melds) {
-                const meld_container = $(`<div class="meld_container" data-meld-unique="${opponent.id + '_' + c++}" data-meld-id="${c}"></div>`);
-
-                const meld = new Meld(
-                    this.z_fighter,
-                    y.cards.cards,
-                    meld_container,
-                    this.card_width_meld,
-                    this.card_height_meld,
-                    this.card_separation_meld,
-                    this.path_extend_meld,
-                    180
-                );
-
-                meld.initialize();
-                melds_container.append(meld_container);
-            }
+            Melds.createMelds(
+                opponent.id,
+                this.z_fighter,
+                this.opponent_cards[i].melds,
+                melds_container,
+                this.card_width_meld,
+                this.card_height_meld,
+                this.card_separation_meld,
+                this.path_extend_meld,
+                180);
         }
     }
 }

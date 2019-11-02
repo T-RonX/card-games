@@ -143,7 +143,7 @@ class GameEventMessageHandler {
             Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $('#melds'), 113, 179, this.card_separation_melds, this.extend_meld_url, 0, state.getExtra('meld_id') + 1);
             this.game.getHand().removeCards(state.getExtra('cards_melted'));
         } else {
-            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $(`#opponent_pane_${state.getSourcePlayerId()}`), 113, 179, this.card_separation_melds, null, 180, state.getExtra('meld_id') + 1);
+            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $(`#opponent_melds_${state.getSourcePlayerId()}`), 113, 179, this.card_separation_melds, null, 180, state.getExtra('meld_id') + 1);
         }
     }
 
