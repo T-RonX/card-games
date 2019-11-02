@@ -68,7 +68,6 @@ class DrawCardController extends AbstractController
 	 * @throws OutOfCardsException
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
-	 * @throws InvalidActionException
 	 */
 	public function drawFromUndrawn(): Response
 	{
@@ -109,18 +108,20 @@ class DrawCardController extends AbstractController
 		if (null !== $meld_cards && $meld_cards->hasCards())
 		{
 			$this->draw_from_discarded_pool->drawAndMeld($game, $meld_cards->getCards());
-			$melds = $game->getState()->getPlayers()->getCurrentPlayer()->getMelds();
-			$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::DRAW_FROM_DISCARDED_AND_MELD(), [
-				'meld_id' => $melds->count() - 1,
-				'cards_melted' => $melds->last()->getCards()->getIdentifiers(),
-			]);
+
+			$action = ActionType::DRAW_FROM_DISCARDED_AND_MELD();
+//			$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::DRAW_FROM_DISCARDED_AND_MELD(), [
+//				'meld_id' => $melds->count() - 1,
+//				'cards_melted' => $melds->last()->getCards()->getIdentifiers(),
+//			]);
 		}
 		else
 		{
 			$this->draw_from_discarded_pool->draw($game);
 			$action = ActionType::DRAW_FROM_DISCARDED();
-			$this->notifyPlayersIndividually($game, $action);
 		}
+
+		$this->notifyPlayersIndividually($game, $action);
 
 		return $this->json([]);
 	}
@@ -138,7 +139,22 @@ class DrawCardController extends AbstractController
 
 		foreach ($game->getState()->getPlayers()->getFreshLoopIterator() as $player)
 		{
-			$message = $this->createNotifyPlayerMessage($player->getId(), $game, $game->getState()->getPlayers()->getCurrentPlayer(), $action, TopicType::PLAYER_EVENT());
+			$message = $this->createNotifyPlayerMessage(
+				$player->getId(),
+				$game,
+				$game->getState()->getPlayers()->getCurrentPlayer(),
+				$action,
+				TopicType::PLAYER_EVENT()
+			);
+
+			if ($action->getValue() === ActionType::DRAW_FROM_DISCARDED_AND_MELD)
+			{
+				$melds = $game->getState()->getPlayers()->getCurrentPlayer()->getMelds();
+				$message->setExtras([
+					'meld_id' => $melds->count() - 1,
+					'cards_melted' => $melds->last()->getCards()->getIdentifiers(),
+				]);
+			}
 
 			if ($player->equals($current_player))
 			{
