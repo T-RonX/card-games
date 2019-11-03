@@ -10,6 +10,7 @@ use App\Games\Duizenden\Initializer\DiscardedCardPool;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
+use App\Games\Duizenden\Score\GameScore;
 use App\Games\Duizenden\Score\ScoreCalculator;
 
 class StateCompiler implements StateCompilerInterface
@@ -52,6 +53,7 @@ class StateCompiler implements StateCompilerInterface
 			'undrawn_pool' => $this->createCardPoolData($state_data->getUndrawnPool(), false),
 			'discarded_pool' => $this->createDiscardedCardPoolData($state_data->getDiscardedPool()),
 			'players' => $this->createPlayersData($state_data),
+			'score' => $this->createGameScoreData($state_data)
 		];
 	}
 
@@ -139,27 +141,73 @@ class StateCompiler implements StateCompilerInterface
 			'name' => $player->getName(),
 			'hand' => $this->createCardPoolData($player->getHand(), $state_data->hasPlayerFullCardPool($player->getId())),
 			'melds' => $this->createMeldsData($player->getMelds()),
-			'score' => $this->createScoreData($player, $state_data)
 		];
 	}
 
 	/**
-	 * @param PlayerInterface $player
 	 * @param StateData $state_data
 	 *
-	 * @return int[]
+	 * @return array
 	 *
 	 * @throws UnmappedCardException
-	 * @throws PlayerNotFoundException
 	 */
-	private function createScoreData(PlayerInterface $player, StateData $state_data): array
+	private function createGameScoreData(StateData $state_data)
+	{
+		return [
+			'past_rounds' => $this->createRoundScoreData($state_data),
+			'current_round' => $this->createCurrentRoundData($state_data),
+		];
+	}
+
+	/**
+	 * @param StateData $state_data
+	 *
+	 * @return array
+	 *
+	 * @throws UnmappedCardException
+	 */
+	private function createRoundScoreData(StateData $state_data): array
 	{
 		$game_score = $this->score_calculator->calculateGameScore($state_data->getGameId());
 
-		return [
-			'meld' => $this->score_calculator->calculatePlayerMeldsScore($player),
-			'total' => $game_score->getTotalPlayerScore($player->getId()),
-		];
+		$rounds = [];
+		$n = 0;
+
+		foreach ($game_score->getRoundScores() as $round_score)
+		{
+			foreach ($round_score->getPlayerScores() as $player_score)
+			{
+				$rounds[$n][$player_score->getPlayerId()] = [
+					'score' => $player_score->getMeldPoints(),
+					'hand' => $player_score->getHandPoints(),
+				];
+			}
+
+			++$n;
+		}
+
+		return $rounds;
+	}
+
+	/**
+	 * @param StateData $state_data
+	 *
+	 * @return array
+	 *
+	 * @throws UnmappedCardException
+	 */
+	private function createCurrentRoundData(StateData $state_data): array
+	{
+		$current = [];
+
+		foreach ($state_data->getPlayers() as $player)
+		{
+			$current[$player->getId()] = [
+				'meld' => $this->score_calculator->calculatePlayerMeldsScore($player),
+			];
+		}
+
+		return $current;
 	}
 
 	/**

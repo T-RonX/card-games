@@ -20,11 +20,19 @@ class GameScore
 	}
 
 	/**
-	 * @param array $round_scores
+	 * @param RoundScore[] $round_scores
 	 */
-	public function setRoundScore(array $round_scores): void
+	public function setRoundScores(array $round_scores): void
 	{
 		$this->round_scores = $round_scores;
+	}
+
+	/**
+	 * @return RoundScore[]
+	 */
+	public function getRoundScores(): array
+	{
+		return $this->round_scores;
 	}
 
 	/**

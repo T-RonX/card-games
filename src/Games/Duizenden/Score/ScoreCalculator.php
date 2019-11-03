@@ -58,7 +58,7 @@ class ScoreCalculator
 			$round_scores[$game_id]->addPlayerScore(new PlayerScore($player_uuid, $meld_points, $this->calculateCardIdArray($hand)));
 		}
 
-		$game_score->setRoundScore($round_scores);
+		$game_score->setRoundScores($round_scores);
 
 		return $game_score;
 	}

@@ -134,12 +134,20 @@ class State {
         return this.getDiscardedPool().is_first_card;
     }
 
-    getPlayerScore(id) {
-        return this.getPlayer(id).score;
+    getCurrentRoundPlayerScore(id) {
+        return this.getCurrentRoundScore()[id].meld;
     }
 
-    getPlayerMeldScore(id) {
-        return this.getPlayerScore(id).meld
+    getCurrentRoundScore() {
+        return this.getScore().current_round;
+    }
+
+    getPastRoundsScore() {
+        return this.getScore().past_rounds;
+    }
+
+    getScore() {
+        return this.getGameState().score;
     }
     
     hasExtras() {
@@ -177,7 +185,7 @@ class State {
             const is_draw_allowed = this.isActionAllowed('draw_from_discarded');
             const has_melds = this.hadPlayerMelds(this.player_id);
             const discarded_pool_is_first_card = this.isDiscardedPoolFirstCard();
-            const has_minimum_score = this.getPlayerMeldScore(this.player_id) >= this.getFirstMeldMinimumPoints();
+            const has_minimum_score = this.getCurrentRoundPlayerScore(this.player_id) >= this.getFirstMeldMinimumPoints();
 
             return is_draw_allowed && ((!has_melds && discarded_pool_is_first_card) || has_minimum_score);
         }

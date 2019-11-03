@@ -9,14 +9,22 @@ class RoundScore
 	/**
 	 * @var PlayerScore[]
 	 */
-	private $player_score = [];
+	private $player_scores = [];
 
 	/**
 	 * @param PlayerScore $player_score
 	 */
 	public function addPlayerScore(PlayerScore $player_score): void
 	{
-		$this->player_score[$player_score->getPlayerId()] = $player_score;
+		$this->player_scores[$player_score->getPlayerId()] = $player_score;
+	}
+
+	/**
+	 * @return PlayerScore[]
+	 */
+	public function getPlayerScores(): array
+	{
+		return $this->player_scores;
 	}
 
 	/**
@@ -28,11 +36,11 @@ class RoundScore
 	 */
 	public function getByPlayerId(string $id): PlayerScore
 	{
-		if (!array_key_exists($id, $this->player_score))
+		if (!array_key_exists($id, $this->player_scores))
 		{
 			throw new PlayerNotFoundException("Player with id '%s' was not present in the round score.");
 		}
 
-		return $this->player_score[$id];
+		return $this->player_scores[$id];
 	}
 }
