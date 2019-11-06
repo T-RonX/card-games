@@ -361,15 +361,38 @@
 
                 <div style="margin-bottom: 10px">
                     <b>Scoreboard</b><br/>
-                {% set scoreboard = [] %}
+                {% set score_counter = [] %}
                 {% for player in game.state.players.freshLoopIterator %}
-                    {% set scoreboard = scoreboard|merge({(player.name): game_score.totalPlayerScore(player.id)}) %}
+                    {% set score_counter = score_counter|merge({(player.id): 0}) %}
                 {% endfor %}
-                    {% for player, score in scoreboard|sort|reverse %}
-                    {{ player }}: {{ score }}<br/>
-                    {% endfor %}
-                </div>
-
+                <table style="width: 160px;">
+                    <thead>
+                        <tr>
+                            <td></td>
+                            {% for player in game.state.players.freshLoopIterator %}
+                                <td>{{ player.name }}</td>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody id="scoreboard">
+                        <tr>
+                            {% for round in state_data.score.past_rounds %}
+                                <td style="vertical-align: top;">{{ loop.index }}</td>
+                                {% for player in game.state.players.freshLoopIterator %}
+                                    <td>
+                                        {% set round_score = round[player.id].score - round[player.id].hand %}
+                                        {% set score_counter = score_counter|merge({(player.id): score_counter[player.id] + round_score}) %}
+                                        {{ score_counter[player.id] }}
+                                        {% if loop.parent.loop.index > 1 %}
+                                            <br/>
+                                            <span style="font-size: 10px;">{{ (round_score < 0 ? '-' : '+') ~ round_score }}</span>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
                 <div style="margin-bottom: 10px">
                     <br/><a href="#" id="deal" style="display: none;">DEAL CARDS</a>
 
