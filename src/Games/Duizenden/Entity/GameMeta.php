@@ -19,6 +19,8 @@ class GameMeta implements UuidableInterface
 
 	private $first_meld_minimum_points;
 
+	private $round_finish_extra_points;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,5 +72,17 @@ class GameMeta implements UuidableInterface
 		$this->first_meld_minimum_points = $points;
 
 		return $this;
+	}
+
+	public function setRoundFinishExtraPoints(?int $round_finish_extra_points): self
+	{
+		$this->round_finish_extra_points = $round_finish_extra_points;
+
+		return $this;
+	}
+
+	public function getRoundFinishExtraPoints(): int
+	{
+		return $this->round_finish_extra_points;
 	}
 }

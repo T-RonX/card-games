@@ -62,6 +62,7 @@ class StateBuilder
 		$state_data->setGameId($game->getId())
 			->setTargetScore($game->getState()->getTargetScore())
 			->setFirstMeldMinimumPoints($game->getState()->getFirstMeldMinimumPoints())
+			->setRoundFinishExtraPoints($game->getState()->getRoundFinishExtraPoints())
 			->setCurrentPlayer($state->getPlayers()->getCurrentPlayer())
 			->setAllowedActions($this->createAllowedActions($game))
 			->setUndrawnPool($state->getUndrawnPool())

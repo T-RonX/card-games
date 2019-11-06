@@ -65,6 +65,10 @@ class CreateGameType extends AbstractType
 			->add('first_meld_minimum_points', IntegerType::class, [
 				'label' => 'Minimum points of first meld',
 				'data' => 30
+			])
+			->add('round_finish_extra_points', IntegerType::class, [
+				'label' => 'Extra points for finishing a round',
+				'data' => 0
 			]);
 	}
 

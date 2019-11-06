@@ -158,6 +158,7 @@ class GameController extends AbstractController
 			$first_dealer = $form['first_dealer']->getData();
 			$target_score = $form['target_score']->getData();
 			$first_meld_minimum_points = $form['first_meld_minimum_points']->getData();
+			$round_finish_extra_points = $form['round_finish_extra_points']->getData();
 			$game_players = [];
 
 			foreach ($players as $player)
@@ -172,7 +173,8 @@ class GameController extends AbstractController
 				->setFirstDealer($this->player_factory->create($first_dealer->getUuid()))
 				->setIsDealerRandom($is_dealer_random)
 				->setTargetScore($target_score)
-				->setFirstMeldMinimumPoints($first_meld_minimum_points);
+				->setFirstMeldMinimumPoints($first_meld_minimum_points)
+				->setRoundFinishExtraPoints($round_finish_extra_points);
 
 			$game = $this->create($configurator);
 			$this->session->set('game_id', $game->getId());

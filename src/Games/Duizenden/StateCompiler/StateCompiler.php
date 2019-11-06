@@ -57,11 +57,12 @@ class StateCompiler implements StateCompilerInterface
 		];
 	}
 
-	private function createConfigData(StateData $state_data)
+	private function createConfigData(StateData $state_data): array
 	{
 		return [
 			'target_score' => $state_data->getTargetScore(),
 			'first_meld_minimum_points' => $state_data->getFirstMeldMinimumPoints(),
+			'round_finish_extra_points' => $state_data->getRoundFinishExtraPoints(),
 		];
 	}
 

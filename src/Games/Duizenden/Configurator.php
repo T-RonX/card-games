@@ -50,6 +50,11 @@ class Configurator
 	private $first_meld_minimum_points = 30;
 
 	/**
+	 * @var int
+	 */
+	private $round_finish_extra_points = 0;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -233,5 +238,17 @@ class Configurator
 	public function getFirstMeldMinimumPoints(): int
 	{
 		return $this->first_meld_minimum_points;
+	}
+
+	public function setRoundFinishExtraPoints(int $round_finish_extra_points): self
+	{
+		$this->round_finish_extra_points = $round_finish_extra_points;
+
+		return $this;
+	}
+
+	public function getRoundFinishExtraPoints(): int
+	{
+		return $this->round_finish_extra_points;
 	}
 }

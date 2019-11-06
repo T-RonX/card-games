@@ -179,7 +179,7 @@ class GameEventMessageHandler {
         let message = `${finisher} finished the round${next_dealer} the next dealer.`;
 
         this.writeLogMessage(message);
-        alert(message);
+        alert(message + state.getRoundFinishExtraPoints());
     }
 
     discardEndGame(state) {

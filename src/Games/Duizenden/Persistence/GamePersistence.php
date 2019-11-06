@@ -150,6 +150,7 @@ class GamePersistence
 
 		$game_meta->setTargetScore($game->getState()->getTargetScore());
 		$game_meta->setFirstMeldMinimumPoints($game->getState()->getFirstMeldMinimumPoints());
+		$game_meta->setRoundFinishExtraPoints($game->getState()->getRoundFinishExtraPoints());
 		$game_meta->setDeckRebuilder($game->getDeckRebuilder()->getName());
 
 		($new_game_entity = clone $game_entity)

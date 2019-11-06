@@ -7,6 +7,7 @@
     <field name="uuid" type="string" unique="true" length="36" nullable="false"/>
     <field name="target_score" type="integer" nullable="true"/>
     <field name="first_meld_minimum_points" type="integer" nullable="true"/>
+    <field name="round_finish_extra_points" type="integer" nullable="true"/>
     <field name="deck_rebuilder" type="string" nullable="true"/>
     <many-to-one field="DealingPlayerMeta" target-entity="App\Games\Duizenden\Entity\GamePlayerMeta">
       <join-columns>

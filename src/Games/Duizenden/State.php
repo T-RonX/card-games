@@ -41,6 +41,11 @@ class State
 	private $first_meld_minimum_points = 30;
 
 	/**
+	 * @var int
+	 */
+	private $round_finish_extra_points = 0;
+
+	/**
 	 * @param Players $players
 	 * @param PlayerInterface $dealing_player
 	 * @param CardPool $undrawn_pool
@@ -139,5 +144,17 @@ class State
 	public function getFirstMeldMinimumPoints(): int
 	{
 		return $this->first_meld_minimum_points;
+	}
+
+	public function setRoundFinishExtraPoints(int $round_finish_extra_points): self
+	{
+		$this->round_finish_extra_points = $round_finish_extra_points;
+
+		return $this;
+	}
+
+	public function getRoundFinishExtraPoints(): int
+	{
+		return $this->round_finish_extra_points;
 	}
 }

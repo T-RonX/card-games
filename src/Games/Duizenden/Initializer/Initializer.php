@@ -67,6 +67,7 @@ class Initializer
 		$state = new State($config->getPlayers(), $dealing_player, $pack, new DiscardedCardPool());
 		$state->setTargetScore($config->getTargetScore());
 		$state->setFirstMeldMinimumPoints($config->getFirstMeldMinimumPoints());
+		$state->setRoundFinishExtraPoints($config->getRoundFinishExtraPoints());
 
 		return $state;
 	}

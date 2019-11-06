@@ -76,6 +76,11 @@ class StateData
 	private $first_meld_minimum_points;
 
 	/**
+	 * @var int
+	 */
+	private $round_finish_extra_points;
+
+	/**
 	 * @var array|null
 	 */
 	private $extra;
@@ -280,6 +285,21 @@ class StateData
 	public function setFirstMeldMinimumPoints(int $first_meld_minimum_points): self
 	{
 		$this->first_meld_minimum_points = $first_meld_minimum_points;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRoundFinishExtraPoints(): int
+	{
+		return $this->round_finish_extra_points;
+	}
+
+	public function setRoundFinishExtraPoints(int $round_finish_extra_points): self
+	{
+		$this->round_finish_extra_points = $round_finish_extra_points;
 
 		return $this;
 	}

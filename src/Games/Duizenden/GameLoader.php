@@ -111,6 +111,7 @@ class GameLoader
 		$state = new State($players, $dealing_player, $undrawn_pool, $discarded_pool);
 		$state->setTargetScore($game_entity->getGameMeta()->getTargetScore());
 		$state->setFirstMeldMinimumPoints($game_entity->getGameMeta()->getFirstMeldMinimumPoints());
+		$state->setRoundFinishExtraPoints($game_entity->getGameMeta()->getRoundFinishExtraPoints());
 
 		if ($current_player)
 		{

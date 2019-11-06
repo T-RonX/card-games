@@ -176,6 +176,10 @@ class State {
         return this.getConfig().target_score;
     }
 
+    getRoundFinishExtraPoints() {
+        return this.getConfig().round_finish_extra_points;
+    }
+
     getFirstMeldMinimumPoints() {
         return this.getConfig().first_meld_minimum_points;
     }

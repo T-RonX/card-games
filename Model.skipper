@@ -80,6 +80,7 @@
       <field name="dealing_player_meta_id" type="integer" uuid="5071fd59-3adc-4a96-abaa-bb00f9ec0f1b"/>
       <field name="target_score" type="integer" uuid="392b13f3-0385-4448-b0c0-c19ca0af2430"/>
       <field name="first_meld_minimum_points" type="integer" uuid="a76e8fe5-6266-410a-bdf6-57478d2f6d07"/>
+      <field name="round_finish_extra_points" type="integer" uuid="d55f3c60-7c2f-43fa-8b5d-7cb911564349"/>
       <field name="deck_rebuilder" type="string" uuid="867d12ec-e2f3-49af-a37a-69bfbe0489ee"/>
       <orm-attributes>
         <attribute name="table">game_meta</attribute>
@@ -267,10 +268,10 @@
     <entity uuid="d4d7a305-a8fe-4a2a-9202-c3d3f112cd54" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="200" size-x="0" size-x2="93" size-y="0" size-y2="73"/>
     <entity uuid="ed23d10e-d188-4126-a915-0aeb06406e17" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="250" position-y="50" size-x="0" size-x2="104" size-y="0" size-y2="73"/>
     <entity uuid="f479ea46-f595-4d59-bb05-1e26e3c28cb4" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="39" position-y="28" size-x="0" size-x2="161" size-y="0" size-y2="101"/>
-    <module uuid="1cea5b4d-337c-49ae-b398-41c121d9d0be" bg-color="#D6ECFF" position-x="50" position-y="550" size-x="0" size-x2="450" size-y="0" size-y2="300"/>
+    <module uuid="1cea5b4d-337c-49ae-b398-41c121d9d0be" bg-color="#D6ECFF" position-x="50" position-y="600" size-x="0" size-x2="450" size-y="0" size-y2="300"/>
     <module uuid="851ccd02-4a44-4cad-b221-7bf63aca835d" bg-color="#FEFCE8" position-x="650" position-y="50" size-x="0" size-x2="250" size-y="0" size-y2="350"/>
-    <module uuid="a2d2131f-136f-483d-94e8-4de5c0a0d5ef" bg-color="#E4F3E8" position-x="61" position-y="72" size-x="11" size-x2="539" size-y="22" size-y2="428"/>
-    <module uuid="fb629686-c16c-4d78-9287-3c7df1fbf4d2" bg-color="#FFE9D6" position-x="550" position-y="550" size-x="0" size-x2="450" size-y="0" size-y2="200"/>
+    <module uuid="a2d2131f-136f-483d-94e8-4de5c0a0d5ef" bg-color="#E4F3E8" position-x="61" position-y="72" size-x="11" size-x2="539" size-y="22" size-y2="478"/>
+    <module uuid="fb629686-c16c-4d78-9287-3c7df1fbf4d2" bg-color="#FFE9D6" position-x="550" position-y="600" size-x="0" size-x2="450" size-y="0" size-y2="200"/>
     <project uuid="cea3ec92-bd9d-4391-940a-b784fe11aef6" size-x="0" size-x2="1100" size-y="0" size-y2="950"/>
   </visual-data>
 </skipper>
