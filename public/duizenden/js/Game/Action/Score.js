@@ -13,14 +13,13 @@ class Score {
             let tr = `<tr><td style="vertical-align: top;">#${i}</td>`;
 
             for (const player of players) {
-                let td = '<td>';
+                let td = '<td style="white-space: nowrap">';
                 const round_score = (round[player.id].score - round[player.id].hand) + round[player.id].round_finish_extra_points;
                 score_counter[player.id] += round_score;
                 td += score_counter[player.id];
 
                 if (i > 1) {
-                    td = '<br/>';
-                    td = `<span style="font-size: 10px;">${(round_score < 0 ? '-' : '+') + round_score}</span>`;
+                    td += ` <span style="padding-left: .5em; font-size: 10px;">(${(round_score < 0 ? '-' : '+') + round_score})</span>`;
                 }
 
                 td += '</td>';
