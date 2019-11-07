@@ -127,4 +127,23 @@ final class GameRepository extends ServiceEntityRepository
 			->leftJoin(Game::class, sprintf('%1$s_latest', $alias), Join::WITH, sprintf('%1$s.Game = %1$s_latest.Game AND %1$s_latest.sequence > %1$s.sequence', $alias))
 			->where(sprintf('%s_latest.id IS NULL', $alias));
 	}
+
+
+	/**
+	 * @return array
+	 */
+	public function getPlayersBySequences(string $game_id, array $sequences): array
+	{
+		return $this->createQueryBuilder('g', 'g.round')
+			->select('g.round, p.uuid AS player_id')
+			->join('g.GameMeta', 'gm', Join::WITH, 'gm.uuid = :uuid')
+			->join('g.CurrentPlayer', 'cp')
+			->join('cp.GamePlayerMeta', 'cpm')
+			->join('cpm.Player', 'p')
+			->where('g.sequence IN (:sequences)')
+			->setParameter('uuid', $game_id)
+			->setParameter('sequences', $sequences)
+			->getQuery()
+			->getResult(Query::HYDRATE_ARRAY);
+	}
 }

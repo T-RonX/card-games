@@ -172,6 +172,7 @@ class GameEventMessageHandler {
         this.manageMeldButton(state);
         this.manageDraggableUndrawnCard(state);
         this.manageDiscardedCard(state);
+        this.manageScore(state);
 
         const same_player = state.getCurrentPlayerId() === state.getSourcePlayerId();
         const finisher = state.isLocalPlayerCurrentPlayer() ? 'You' : state.getSourcePlayer().name;
@@ -187,6 +188,10 @@ class GameEventMessageHandler {
         this.manageMeldButton(state);
         this.manageDraggableUndrawnCard(state);
         this.manageDiscardedCard(state);
+    }
+
+    manageScore(state) {
+        Score.update(state.getPlayers(), state.getPastRoundsScore());
     }
 
     manageDealButton(state) {

@@ -17,35 +17,48 @@ class ScoreCalculator
 	private $game_player_repository;
 
 	/**
+	 * @var GameRepository
+	 */
+	private $game_repository;
+
+	/**
+	 * @param GameRepository $game_repository
 	 * @param GamePlayerRepository $game_player_repository
 	 */
-	public function __construct(GamePlayerRepository $game_player_repository)
+	public function __construct(
+		GameRepository $game_repository,
+		GamePlayerRepository $game_player_repository
+	)
 	{
+		$this->game_repository = $game_repository;
 		$this->game_player_repository = $game_player_repository;
 	}
 
 	/**
-	 * @param string $uuid
+	 * @param string $game_id
+	 * @param int $round_finish_extra_points
 	 *
 	 * @return GameScore
 	 *
 	 * @throws UnmappedCardException
 	 */
-	public function calculateGameScore(string $uuid): GameScore
+	public function calculateGameScore(string $game_id, int $round_finish_extra_points): GameScore
 	{
-		$data = $this->game_player_repository->getGameScoreData($uuid);
+		$data = $this->game_player_repository->getGameScoreData($game_id);
 
-		$game_score = new GameScore();
+		$finishers = $this->getRoundFinishersByScoreData($game_id, $data);
+
+		$game_score = new GameScore($round_finish_extra_points);
 		$round_scores = [];
 
-		foreach ($data as ['player_uuid' => $player_uuid, 'game_id' => $game_id, 'hand' => $hand, 'melds' => $melds])
+		foreach ($data as ['round' => $round, 'player_uuid' => $player_uuid, 'hand' => $hand, 'melds' => $melds])
 		{
 			$hand = json_decode($hand);
 			$melds = json_decode($melds);
 
-			if (!array_key_exists($game_id, $round_scores))
+			if (!array_key_exists($round, $round_scores))
 			{
-				$round_scores[$game_id] = new RoundScore();
+				$round_scores[$round] = new RoundScore();
 			}
 
 			$meld_points = 0;
@@ -55,7 +68,17 @@ class ScoreCalculator
 				$meld_points += $this->calculateCardIdArray($meld);
 			}
 
-			$round_scores[$game_id]->addPlayerScore(new PlayerScore($player_uuid, $meld_points, $this->calculateCardIdArray($hand)));
+			$is_round_finisher = $player_uuid === $finishers[$round]['player_id'];
+
+			$player_score = new PlayerScore(
+				$player_uuid,
+				$meld_points,
+				$this->calculateCardIdArray($hand),
+				$is_round_finisher,
+				$round_finish_extra_points,
+			);
+
+			$round_scores[$round]->addPlayerScore($player_score);
 		}
 
 		$game_score->setRoundScores($round_scores);
@@ -63,14 +86,30 @@ class ScoreCalculator
 		return $game_score;
 	}
 
+	private function getRoundFinishersByScoreData(string $game_id, array $data): array
+	{
+		$sequences = [];
+
+		foreach ($data as $item)
+		{
+			$sequences[] = $item['sequence'] - 1;
+		}
+
+		$finishers = $this->game_repository->getPlayersBySequences($game_id, $sequences);
+
+		return $finishers;
+	}
+
 	/**
 	 * @param PlayerInterface $player
+	 * @param bool $is_round_finisher
+	 * @param int $round_finish_extra_points
 	 *
 	 * @return PlayerScore
 	 *
 	 * @throws UnmappedCardException
 	 */
-	public function calculatePlayerRoundScore(PlayerInterface $player): PlayerScore
+	public function calculatePlayerRoundScore(PlayerInterface $player, bool $is_round_finisher, int $round_finish_extra_points): PlayerScore
 	{
 		$hand_points = $this->calculateCardPool($player->getHand());
 		$meld_points = 0;
@@ -80,7 +119,7 @@ class ScoreCalculator
 			$meld_points += $this->calculateCardPool($meld->getCards());
 		}
 
-		return new PlayerScore($player->getId(), $meld_points, $hand_points);
+		return new PlayerScore($player->getId(), $meld_points, $hand_points, $is_round_finisher, $round_finish_extra_points);
 	}
 
 	/**

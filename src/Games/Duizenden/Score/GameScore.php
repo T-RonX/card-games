@@ -7,6 +7,16 @@ use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 class GameScore
 {
 	/**
+	 * @var int
+	 */
+	private $round_finish_extra_points;
+
+	public function __construct(int $round_finish_extra_points)
+	{
+		$this->round_finish_extra_points = $round_finish_extra_points;
+	}
+
+	/**
 	 * @var RoundScore[]
 	 */
 	private $round_scores = [];
@@ -49,14 +59,9 @@ class GameScore
 		foreach ($this->round_scores as $round_score)
 		{
 			$player_score = $round_score->getByPlayerId($player_id);
-			$score += $player_score->getScore();
+			$score += $player_score->getScore() + ($player_score->isRoundFinisher() ? $this->round_finish_extra_points : 0);
 		}
 
 		return $score;
-	}
-
-	public function getLastRound(): ?RoundScore
-	{
-		return $this->round_scores ? end($this->round_scores) : null;
 	}
 }

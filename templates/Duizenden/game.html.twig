@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 {% import _self as self %}
 
+{% block title %}{{ parent() }}{{ player.id == current_player_id ? ' - Your turn' }}{% endblock %}
+
 {% block stylesheets %}
 <style>
     body {
@@ -315,7 +317,6 @@
 {% set can_draw_from_discarded = player.id == current_player_id and workflow_can(game, 'draw_from_discarded') and ((not player.hasMelds and discarded_pool_is_first_card) or game.scoreCalculator.calculatePlayerMeldsScore(player) >= 30) %}
 
 {% block body %}
-    {% set game_score = game.scoreCalculator.calculateGameScore(game.id) %}
     {% set current_player = game.state.players.currentPlayer %}
 
     <a style="float: right" href="#" onclick="undoLastAction(); return false;">&#x293A; Undo </a>
@@ -323,8 +324,9 @@
 {% for player in game.state.players %}
     <span data-player-id="{{ player.id }}" class="player_name{{ player.id == current_player_id ? ' active' }}">{{ player.name }} ({{ player.melds|length }})</span>
 {% endfor %}
-    <div id="opponent_panes"></div>
-    <div id="melds"></div>
+
+<div id="opponent_panes"></div>
+<div id="melds"></div>
 <div>
     <div style="float: left; height: 260px; width: 312px; border: 3px #034823 solid; border-right: none;">
         <div  style="float: left; width: 150px; height: 250px;">
@@ -343,28 +345,24 @@
             {% endif %}
         </div>
 
-        <div style="border-top: 3px #034823 solid; clear: left;">
-            <div class="pad">
-                <div style="margin-bottom: 10px">
-                    <b>Allowed actions</b><br/>
-                    <div id="allowed_actions">
-                {% for transition in workflow_transitions(game) %}
-                    {{ transition.name }}<br/>
-                {% else %}
-                    No actions available<br/>
-                {% endfor %}
+        <div style="border-top: 3px #034823 solid; clear: left;" class="pad">
+            <div style="margin-bottom: 10px">
+                <b>Allowed actions</b><br/>
+                <div id="allowed_actions">
+            {% for transition in workflow_transitions(game) %}
+                {{ transition.name }}<br/>
+            {% else %}
+                No actions available<br/>
+            {% endfor %}
                 </div>
+            </div>
 
-                <div style="margin-bottom: 10px">
+            <div style="margin-bottom: 10px">
                 <br/><input id="meld_button" style="display: none" type="button" value="Meld cards" onclick="meld()" />
-                </div>
+            </div>
 
-                <div style="margin-bottom: 10px">
-                    <b>Scoreboard</b><br/>
-                {% set score_counter = [] %}
-                {% for player in game.state.players.freshLoopIterator %}
-                    {% set score_counter = score_counter|merge({(player.id): 0}) %}
-                {% endfor %}
+            <div style="margin-bottom: 10px">
+                <b>Scoreboard</b><br/>
                 <table style="width: 160px;">
                     <thead>
                         <tr>
@@ -374,55 +372,18 @@
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody id="scoreboard">
-                        <tr>
-                            {% for round in state_data.score.past_rounds %}
-                                <td style="vertical-align: top;">{{ loop.index }}</td>
-                                {% for player in game.state.players.freshLoopIterator %}
-                                    <td>
-                                        {% set round_score = round[player.id].score - round[player.id].hand %}
-                                        {% set score_counter = score_counter|merge({(player.id): score_counter[player.id] + round_score}) %}
-                                        {{ score_counter[player.id] }}
-                                        {% if loop.parent.loop.index > 1 %}
-                                            <br/>
-                                            <span style="font-size: 10px;">{{ (round_score < 0 ? '-' : '+') ~ round_score }}</span>
-                                        {% endif %}
-                                    </td>
-                                {% endfor %}
-                            {% endfor %}
-                        </tr>
-                    </tbody>
+                    <tbody id="scoreboard"></tbody>
                 </table>
-                <div style="margin-bottom: 10px">
-                    <br/><a href="#" id="deal" style="display: none;">DEAL CARDS</a>
+            </div>
 
+            <div style="margin-bottom: 10px">
+                <br/><a href="#" id="deal" style="display: none;">DEAL CARDS</a>
                 {% if workflow_can(game, 'restart_game') %}
                     <br/><a href="{{ path('duizenden.new') }}" id="restart">RESTART</a>
                 {% endif %}
-                </div>
             </div>
         </div>
     </div>
-
-{#    <div style="border-left: 3px #034823 solid; clear: right; display: inline-block">#}
-{#        <div class="pad">#}
-{#            {% for player in game.state.players %}#}
-{#            <div style="display: flex; height: 230px">#}
-{#                <div style="width: 90px; height: 230px; vertical-align: middle; line-height: 230px">#}
-{#                    <span data-player-id="{{ player.id }}" class="player_name{{ player.id == current_player_id ? ' active' }}">{{ player.name }} ({{ player.melds|length }})</span>#}
-{#                </div>#}
-                {% for meld in player.melds %}
-                    {% set meld_container_unique = player.id ~ '_' ~ loop.index %}
-                    {% set meld_cards = [] %}
-                    {% for card in meld.cards %}
-                        {% set meld_cards = meld_cards|merge([card.identifier|lower]) %}
-                    {% endfor %}
-                   {# <div class="meld_container" data-meld-unique="{{ meld_container_unique }}" data-meld-id="{{ loop.index }}" data-meld-cards="{{ meld_cards|json_encode() }}"></div> #}
-                {% endfor %}
-{#            </div>#}
-{#            {% endfor %}#}
-{#        </div>#}
-{#   </div>#}
 
     <div style="position: fixed; top: 0; right: 0; width: 300px; padding-bottom: 20px;">
         <div id="log" style="display:none;font-family: 'Lucida Console'; font-size: 13px; width: inherit; height: 400px; background-color: rgba(255,0,0,.25); overflow-y: scroll; overflow-x: hidden; border-bottom-left-radius: 10px; padding: 0 0 3px 5px;"></div>
@@ -430,31 +391,8 @@
     </div>
 </div>
 
-    <script>
-        function logSlide() {
-            const log = $('#log');
-            const log_slider = $('#log_slider');
-
-            log_slider.html(log.is(':visible') ? 'show': 'hide');
-
-            log.slideToggle();
-        }
-    </script>
-
-<div id="hand_container" style="display: none; position: fixed; bottom: 0; left: 50%; margin: 0 auto;">
-{#    {% for card in player.hand %}#}
-{#        {{ self.drawCardHand(card, loop.index) }}#}
-{#    {% endfor %}#}
-</div>
+<div id="hand_container" style="display: none; position: fixed; bottom: 0; left: 50%; margin: 0 auto;"></div>
 {% endblock %}
-
-{% macro drawCardHand(card, index) %}
-    <div data-card-order="{{ index }}" data-card-id="{{ card.identifier|lower }}" class="card hand {{ card.identifierValue|lower }} draggable"></div>
-{% endmacro %}
-
-{% macro drawCardTable(card, draggable = false, turned = false, id = false) %}
-    <div {{ id ? 'id=' ~ id ~ ' ' }}data-card-id="{{ card.identifier|lower }}" class="card table {{  not turned ? card.identifierValue|lower : card.backColor.name }}{{ draggable ? ' draggable' }}"></div>
-{% endmacro %}
 
 {% block javascripts %}
     <script src="{{ asset('duizenden/js/Game/Game.js') }}"></script>
@@ -483,76 +421,81 @@
     <script src="{{ asset('duizenden/js/Game/Action/MeldButton.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/AllowedActions.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/Melds.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/Action/Score.js') }}"></script>
 <script>
-    let game;
+let game;
+$(document).ready(() => {
+    const card_separation_melds = .19;
+    //let elem = document.querySelector('.card.hand');
+    //let elem_style = document.querySelector('.card.table');
+    const extend_meld_url = '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}';
+    const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
+    const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}', extend_meld_url, card_separation_melds);
+    const event_handler = new GameEvent(connection, message_handler);
+    window.player_event_message_handler.setGameEventHandler(message_handler);
+    event_handler.initialize();
+
+    //if (elem) {
+    // let style = window.getComputedStyle(elem);
+    //let style_meld = window.getComputedStyle(elem_style);
+
+    {% set cards_hand = [] %}
+    {% for card in player.hand %}
+    {% set cards_hand = cards_hand|merge([card.identifier|lower]) %}
+    {% endfor %}
+
+    {% set cards_players = [] %}
+    {% for p in game.state.players.freshLoopIterator|filter(p => p.id != current_player_id) %}
+    {% set cards_players = cards_players|merge([{'player_id': p.id, 'hand': game.state.players.playerById(p.id).hand.cards|length}]) %}
+    {% endfor %}
+
+    {% set melds = [] %}
+    {% for p in state_data.players|filter(p => p.id == player.id) %}
+    {% set melds = p.melds %}
+    {% endfor %}
+
+    let state;
+    state = {{ state_data|json_encode|raw }};
+
     $(document).ready(() => {
-        const card_separation_melds = .19;
-        //let elem = document.querySelector('.card.hand');
-        //let elem_style = document.querySelector('.card.table');
-        const extend_meld_url = '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}';
-        const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
-        const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}', extend_meld_url, card_separation_melds);
-        const event_handler = new GameEvent(connection, message_handler);
-        window.player_event_message_handler.setGameEventHandler(message_handler);
-        event_handler.initialize();
+        game = Game.create(
+            '{{ player.id }}',
+            connection,
+            event_handler,
+            '#hand_container',
+            {{ cards_hand|json_encode()|raw }},
+            {{ state_data.players|filter(p => p.id != player.id)|resetKeys|json_encode|raw }},
+            {{ melds|json_encode()|raw }},
+            '.card',
+            '{{ path('duizenden.draw_from_discarded', {meld_cards: '000'}) }}',
+            '{{ path('duizenden.draw_from_undrawn') }}',
+            139,// parseInt(style.width),
+            220,// parseInt(style.height),
+            113,// parseInt(style_meld.width),
+            180,// parseInt(style_meld.height),
+            .28,
+            card_separation_melds,
+            extend_meld_url,
+        );
 
-        //if (elem) {
-        // let style = window.getComputedStyle(elem);
-        //let style_meld = window.getComputedStyle(elem_style);
-
-        {% set cards_hand = [] %}
-        {% for card in player.hand %}
-        {% set cards_hand = cards_hand|merge([card.identifier|lower]) %}
-        {% endfor %}
-
-        {% set cards_players = [] %}
-        {% for p in game.state.players.freshLoopIterator|filter(p => p.id != current_player_id) %}
-        {% set cards_players = cards_players|merge([{'player_id': p.id, 'hand': game.state.players.playerById(p.id).hand.cards|length}]) %}
-        {% endfor %}
-
-        {% set melds = [] %}
-        {% for p in state_data.players|filter(p => p.id == player.id) %}
-        {% set melds = p.melds %}
-        {% endfor %}
-
-        $(document).ready(() => {
-            game = Game.create(
-                '{{ player.id }}',
-                connection,
-                event_handler,
-                '#hand_container',
-                {{ cards_hand|json_encode()|raw }},
-                {{ state_data.players|filter(p => p.id != player.id)|resetKeys|json_encode|raw }},
-                {{ melds|json_encode()|raw }},
-                '.card',
-                '{{ path('duizenden.draw_from_discarded', {meld_cards: '000'}) }}',
-                '{{ path('duizenden.draw_from_undrawn') }}',
-                139,// parseInt(style.width),
-                220,// parseInt(style.height),
-                113,// parseInt(style_meld.width),
-                180,// parseInt(style_meld.height),
-                .28,
-                card_separation_melds,
-                extend_meld_url,
-            );
-
-            game.initialize();
-            UndrawnCard.resetCard();
-            {% if not (current_player_id == player.id and workflow_can(game, 'draw_from_undrawn')) %}
-            UndrawnCard.disableDraggable();
-            {% endif %}
-            {% set top_card = game.state.discardedPool|last %}
-            {% if top_card %}
-            DiscardedCard.resetCard({{ ("'" ~ top_card.identifier ~ "'")|raw }}, {{ current_player_id == player.id and can_draw_from_discarded ? 'true' : 'false' }});
-            {% endif %}
-            {% if current_player_id == player.id and workflow_can(game, 'meld') %}
-            MeldButton.show();
-            {% endif %}
-            {% if is_granted('deal', game) %}
-            DealButton.show();
-            {% endif %}
-        });
+        game.initialize();
+        UndrawnCard.resetCard();
+        {% if not (current_player_id == player.id and workflow_can(game, 'draw_from_undrawn')) %}
+        UndrawnCard.disableDraggable();
+        {% endif %}
+        {% set top_card = game.state.discardedPool|last %}
+        {% if top_card %}
+        DiscardedCard.resetCard({{ ("'" ~ top_card.identifier ~ "'")|raw }}, {{ current_player_id == player.id and can_draw_from_discarded ? 'true' : 'false' }});
+        {% endif %}
+        {% if current_player_id == player.id and workflow_can(game, 'meld') %}
+        MeldButton.show();
+        {% endif %}
+        {% if is_granted('deal', game) %}
+        DealButton.show();
+        {% endif %}
+        Score.update(state.players, state.score.past_rounds);
     });
+});
 
 $("#deal").click(function () {
     let url = '{{ path('duizenden.deal') }}';
@@ -620,8 +563,20 @@ function undoLastAction() {
     var url = '{{ path('duizenden.undo_last_action', { uuid: game.id}) }}';
     $.get(url);
 }
-</script>
 
+function logSlide() {
+    const log = $('#log');
+    const log_slider = $('#log_slider');
+    log_slider.html(log.is(':visible') ? 'show': 'hide');
+    log.slideToggle();
+}
+</script>
 {% endblock %}
 
-{% block title %}{{ parent() }}{{ player.id == current_player_id ? ' - Your turn' }}{% endblock %}
+{% macro drawCardHand(card, index) %}
+    <div data-card-order="{{ index }}" data-card-id="{{ card.identifier|lower }}" class="card hand {{ card.identifierValue|lower }} draggable"></div>
+{% endmacro %}
+
+{% macro drawCardTable(card, draggable = false, turned = false, id = false) %}
+    <div {{ id ? 'id=' ~ id ~ ' ' }}data-card-id="{{ card.identifier|lower }}" class="card table {{  not turned ? card.identifierValue|lower : card.backColor.name }}{{ draggable ? ' draggable' }}"></div>
+{% endmacro %}

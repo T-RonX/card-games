@@ -169,7 +169,7 @@ class StateCompiler implements StateCompilerInterface
 	 */
 	private function createRoundScoreData(StateData $state_data): array
 	{
-		$game_score = $this->score_calculator->calculateGameScore($state_data->getGameId());
+		$game_score = $this->score_calculator->calculateGameScore($state_data->getGameId(), $state_data->getRoundFinishExtraPoints());
 
 		$rounds = [];
 		$n = 0;
@@ -179,6 +179,8 @@ class StateCompiler implements StateCompilerInterface
 			foreach ($round_score->getPlayerScores() as $player_score)
 			{
 				$rounds[$n][$player_score->getPlayerId()] = [
+					'finished_round' => $player_score->isRoundFinisher(),
+					'round_finish_extra_points' => $player_score->isRoundFinisher() ? $player_score->getRoundFinishExtraPoints() : 0,
 					'score' => $player_score->getMeldPoints(),
 					'hand' => $player_score->getHandPoints(),
 				];

@@ -176,12 +176,12 @@ class DiscardCard extends StateChangeAction
 	 */
 	private function getPlayerScore(Game $game, PlayerInterface $player, bool $include_current_round): int
 	{
-		$game_score = $this->score_calculator->calculateGameScore($game->getId());
+		$game_score = $this->score_calculator->calculateGameScore($game->getId(), $game->getState()->getRoundFinishExtraPoints());
 		$score = $game_score->getTotalPlayerScore($player->getId());
 
 		if ($include_current_round)
 		{
-			$current_score = $this->score_calculator->calculatePlayerRoundScore($player);
+			$current_score = $this->score_calculator->calculatePlayerRoundScore($player, true, $game->getState()->getRoundFinishExtraPoints());
 			$score += $current_score->getScore();
 		}
 

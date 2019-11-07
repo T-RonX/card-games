@@ -86,7 +86,7 @@ class StateBuilder
 	 */
 	private function addPlayerScores(StateData $state_data, Game $game): void
 	{
-		$score = $game->getScoreCalculator()->calculateGameScore($game->getId());
+		$score = $game->getScoreCalculator()->calculateGameScore($game->getId(), $game->getState()->getRoundFinishExtraPoints());
 
 		foreach ($state_data->getPlayers() as $player)
 		{

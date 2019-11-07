@@ -22,14 +22,14 @@ final class GamePlayerRepository extends ServiceEntityRepository
 	}
 
 	/**
-	 * @param string $uuid
+	 * @param string $game_id
 	 *
 	 * @return array
 	 */
-	public function getGameScoreData(string $uuid): array
+	public function getGameScoreData(string $game_id): array
 	{
 		return $this->createQueryBuilder('gp')
-			->select('p.uuid AS player_uuid, IDENTITY(gp.Game) AS game_id, gp.hand, gp.melds')
+			->select('p.uuid AS player_uuid, gp.hand, gp.melds, g.sequence, g.round')
 			->join('gp.Game', 'g', Join::WITH, 'g.workflow_marking in (:marking)')
 			->join('g.GameMeta', 'gm', Join::WITH, 'gm.uuid = :uuid')
 			->join('gp.GamePlayerMeta', 'gpm')
@@ -37,7 +37,7 @@ final class GamePlayerRepository extends ServiceEntityRepository
 			->orderBy('g.created_at', 'ASC')
 			->addOrderBy('gp.Game', 'ASC')
 			->setParameter('marking', [MarkingType::ROUND_END()->getValue(), MarkingType::GAME_END()->getValue()])
-			->setParameter('uuid', $uuid)
+			->setParameter('uuid', $game_id)
 			->getQuery()
 			->getResult(Query::HYDRATE_ARRAY);
 	}
