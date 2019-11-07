@@ -79,7 +79,7 @@ class DiscardCardController extends AbstractController
 				break;
 
 			default:
-				$this->notifyPlayersAllHandCardsTurned($game, $current_player, ActionType::DISCARD_END_TURN());
+				$this->notifyPlayers($game, $current_player, ActionType::DISCARD_END_TURN());
 				break;
 		}
 
