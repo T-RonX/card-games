@@ -43,10 +43,7 @@ class FromDiscardedPool extends StateChangeAction
 	{
 		$state = $game->getState();
 
-		if (
-			$state->getDiscardedPool()->isFirstCard() ||
-			$state->getPlayers()->getCurrentPlayer()->hasMelds()
-		)
+		if ($state->getDiscardedPool()->isFirstCard())
 		{
 			$this->drawCard($state);
 			$this->state_machine->apply($game, TransitionType::DRAW_FROM_DISCARDED()->getValue());
