@@ -133,7 +133,9 @@ class GameVoter extends Voter
 
 	private function canDrawFromDiscarded(): bool
 	{
-		return $this->isCurrentPlayer() && $this->canTransitionTo(TransitionType::DRAW_FROM_DISCARDED());
+		return $this->isCurrentPlayer()
+			&& $this->canTransitionTo(TransitionType::DRAW_FROM_DISCARDED()) &&
+			$this->game->getState()->getPlayers()->getCurrentPlayer()->hasMelds();
 	}
 
 	private function canMeld(): bool
