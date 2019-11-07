@@ -44,7 +44,7 @@ class State {
     }
 
     isSourcePlayerCurrentPlayer() {
-        return this.player_id === this.getSourcePlayerId();
+        return this.isSourcePlayerId(this.player_id);
     }
 
     getGameState() {

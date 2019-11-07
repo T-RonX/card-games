@@ -86,7 +86,7 @@ class GameEventMessageHandler {
     }
 
     reorderCards(state) {
-        if (!state.isSourcePlayerId(this.player_id)) {
+        if (!state.isSourcePlayerCurrentPlayer()) {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
         }
@@ -130,19 +130,19 @@ class GameEventMessageHandler {
     }
 
     meldCards(state) {
-        if (state.isSourcePlayerId(this.player_id)) {
+        if (state.isSourcePlayerCurrentPlayer()) {
             Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $('#melds'), 113, 179, this.card_separation_melds, this.extend_meld_url, 0, state.getExtra('meld_id') + 1);
             this.game.getHand().removeCards(state.getExtra('cards_melted'));
         } else {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
-            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $(`#opponent_melds_${state.getSourcePlayerId()}`), 113, 179, this.card_separation_melds, null, 180, state.getExtra('meld_id') + 1);
+            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $(`#opponent_melds_${state.getSourcePlayerId()}`), 113, 179, this.card_separation_melds, null, 180, state.getExtra('meld_id') + 1, true);
         }
     }
 
     extendMeld(state) {
         const meld = state.getPlayerMeld(state.getSourcePlayerId(), state.getExtra('meld_id'));
-        if (state.isSourcePlayerId(this.player_id)) {
+        if (state.isSourcePlayerCurrentPlayer()) {
             Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, 113, 179, this.card_separation_melds, this.extend_meld_url, 0);
             this.game.getHand().removeCard(state.getExtra('card_melted'));
         } else {
@@ -153,7 +153,7 @@ class GameEventMessageHandler {
     }
 
     discardEndTurn(state) {
-        if (!state.isSourcePlayerId(this.player_id)) {
+        if (!state.isSourcePlayerCurrentPlayer()) {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
             this.manageDiscardedCard(state);
