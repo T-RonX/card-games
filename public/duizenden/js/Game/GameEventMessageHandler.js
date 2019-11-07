@@ -179,7 +179,7 @@ class GameEventMessageHandler {
         this.manageScore(state);
 
         const same_player = state.getCurrentPlayerId() === state.getSourcePlayerId();
-        const finisher = state.isLocalPlayerCurrentPlayer() ? 'You' : state.getSourcePlayer().name;
+        const finisher = state.isSourcePlayerCurrentPlayer() ? 'You' : state.getSourcePlayer().name;
         const next_dealer = same_player ? ` and ${state.isLocalPlayerCurrentPlayer() ? 'are' : 'is'}` : `. ${state.isLocalPlayerCurrentPlayer() ?  'You are' : state.getCurrentPlayer().name} is`;
         let message = `${finisher} finished the round${next_dealer} the next dealer.`;
 

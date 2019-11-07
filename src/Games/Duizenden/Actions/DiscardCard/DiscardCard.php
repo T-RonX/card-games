@@ -8,6 +8,7 @@ use App\Cards\Standard\Suit\Spades;
 use App\Deck\Card\CardInterface;
 use App\Games\Duizenden\Actions\StateChangeAction;
 use App\Games\Duizenden\Actions\Meld\RevertMeld;
+use App\Games\Duizenden\Dealer\DealerFinder;
 use App\Games\Duizenden\DiscardCardResultType;
 use App\Games\Duizenden\Exception\DiscardCardException;
 use App\Games\Duizenden\Game;
@@ -34,16 +35,24 @@ class DiscardCard extends StateChangeAction
 	 */
 	private $score_calculator;
 
+
+	/**
+	 * @var DealerFinder
+	 */
+	private $dealer_finder;
+
 	public function __construct(
 		StateMachine $state_machine,
 		RevertMeld $revert_meld,
-		ScoreCalculator $score_calculator
+		ScoreCalculator $score_calculator,
+		DealerFinder $dealer_finder
 	)
 	{
 		parent::__construct($state_machine);
 
 		$this->revert_meld = $revert_meld;
 		$this->score_calculator = $score_calculator;
+		$this->dealer_finder = $dealer_finder;
 	}
 
 	/**
@@ -97,6 +106,8 @@ class DiscardCard extends StateChangeAction
 				break;
 
 			case DiscardCardResultType::END_ROUND():
+				$dealer = $this->dealer_finder->findNextDealer($game);
+				$state->getPlayers()->setCurrentPlayer($dealer);
 				$this->state_machine->apply($game, TransitionType::DISCARD_END_ROUND()->getValue());
 				break;
 
