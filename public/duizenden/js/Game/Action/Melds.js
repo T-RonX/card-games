@@ -6,10 +6,14 @@ class Melds {
         }
     }
 
-    static createMeld(player_id, zfighter, cards, container, card_width, card_height, card_separation, path_extend_meld, offset_angle, unique) {
+    static createMeld(player_id, zfighter, cards, container, card_width, card_height, card_separation, path_extend_meld, offset_angle, unique, prepend = false) {
         const meld_container = $(`<div class="meld_container" data-meld-unique="${player_id + '_' + unique}" data-meld-id="${unique}"></div>`);
         this.updateMeldContainer(zfighter, cards, meld_container, card_width, card_height, card_separation, path_extend_meld, offset_angle);
-        container.append(meld_container);
+        if (prepend) {
+            container.prepend(meld_container);
+        } else {
+            container.append(meld_container);
+        }
     }
 
     static extendMeld(player_id, meld_id, cards, card_width, card_height, card_separation, path_extend_meld, offset_angle) {
