@@ -25,11 +25,11 @@ class Melds {
 
     static removeMelds(player_id = null) {
         if (null == player_id) {
-            $('.meld_container').empty();
+            $('.meld_container').remove();
             return [];
         } else {
             let cards = this.getCardIdsFromMeld(player_id);
-            $(`.meld_container[data-meld-unique^=${player_id}_]`).empty();
+            $(`.meld_container[data-meld-unique^=${player_id}_]`).remove();
             return cards;
         }
     }
