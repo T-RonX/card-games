@@ -35,17 +35,16 @@ class State {
     getSourcePlayerId() {
         return this.getSource().player.id;
     }
-
-    getSourcePlayerMelds() {
-        return this.getPlayerMelds(this.getSourcePlayerId());
-    }
-
     isSourcePlayerId(id) {
         return id === this.getSourcePlayerId();
     }
 
     getSourceActionId() {
         return this.getSourceAction().id;
+    }
+
+    isSourcePlayerCurrentPlayer() {
+        return this.player_id === this.getSourcePlayerId();
     }
 
     getGameState() {
