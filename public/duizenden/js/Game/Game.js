@@ -147,7 +147,7 @@ class Game {
             Melds.createMelds(
                 opponent.id,
                 this.z_fighter,
-                this.opponent_cards[i].melds,
+                this.opponent_cards[i].melds.reverse(),
                 melds_container,
                 this.card_width_meld,
                 this.card_height_meld,
