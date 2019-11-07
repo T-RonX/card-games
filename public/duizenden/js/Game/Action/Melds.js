@@ -26,8 +26,20 @@ class Melds {
     static removeMelds(player_id = null) {
         if (null == player_id) {
             $('.meld_container').empty();
+            return [];
         } else {
+            let cards = this.getCardIdsFromMeld(player_id);
             $(`.meld_container[data-meld-unique^=${player_id}_]`).empty();
+            return cards;
         }
+    }
+
+    static getCardIdsFromMeld(player_id) {
+        let cards = [];
+        $(`.meld_container[data-meld-unique^=${player_id}_] [data-card-id]`).each((i, e) => {
+            cards.push($(e).data('card-id'));
+        });
+
+        return cards;
     }
 }

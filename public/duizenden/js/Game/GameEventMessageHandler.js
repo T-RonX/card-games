@@ -239,7 +239,17 @@ class GameEventMessageHandler {
     }
 
     invalidFirstMeld(state) {
-        Melds.removeMelds(state.getSourcePlayerId());
+        const cards = Melds.removeMelds(state.getSourcePlayerId());
+
+        if (state.isCurrentPlayer(this.player_id)) {
+            this.game.getHand().addCards(cards)
+        } else {
+            this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
+            this.game.initializeOpponentHands();
+        }
+
+        this.manageDraggableUndrawnCard(state);
+        this.manageDiscardedCard(state);
     }
 
     writeLogMessage(message, player = null, add_time = true) {
