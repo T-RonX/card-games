@@ -148,6 +148,16 @@ class State {
     getScore() {
         return this.getGameState().score;
     }
+
+    getTotalPlayerScore(player_id) {
+        let score = 0;
+
+        for (const round of this.getPastRoundsScore()) {
+            score += (round[player_id].score - round[player_id].hand) + (round[player_id].finished_round ? round[player_id].round_finish_extra_points : 0);
+        }
+
+        return score;
+    }
     
     hasExtras() {
         return 'extra' in this.getSource();

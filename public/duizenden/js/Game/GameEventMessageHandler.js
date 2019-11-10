@@ -181,17 +181,29 @@ class GameEventMessageHandler {
         const same_player = state.getCurrentPlayerId() === state.getSourcePlayerId();
         const finisher = state.isSourcePlayerCurrentPlayer() ? 'You' : state.getSourcePlayer().name;
         const next_dealer = same_player ? ` and ${state.isLocalPlayerCurrentPlayer() ? 'are' : 'is'}` : `. ${state.isLocalPlayerCurrentPlayer() ?  'You are' : state.getCurrentPlayer().name} is`;
-        let message = `${finisher} finished the round${next_dealer} the next dealer.`;
+        const message = `${finisher} finished the round${next_dealer} the next dealer.`;
 
         this.writeLogMessage(message);
         alert(message);
     }
 
     discardEndGame(state) {
+        this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
+        this.game.initializeOpponentHands();
+
         this.manageDealButton(state);
         this.manageMeldButton(state);
+        this.manageRestartButton(state);
         this.manageDraggableUndrawnCard(state);
         this.manageDiscardedCard(state);
+        this.manageScore(state);
+
+        const finisher = state.isSourcePlayerCurrentPlayer() ? 'You' : state.getSourcePlayer().name;
+        const score = state.getTotalPlayerScore(state.getSourcePlayerId());
+        const message = `${finisher} finished the game with ${score} points.`;
+
+        this.writeLogMessage(message);
+        alert(message);
     }
 
     manageScore(state) {
@@ -219,6 +231,13 @@ class GameEventMessageHandler {
             UndrawnCard.enableDraggable();
         } else {
             UndrawnCard.disableDraggable();
+        }
+    }
+    manageRestartButton(state) {
+        if (state.isActionAllowed('restart_game')) {
+            RestartButton.show();
+        } else {
+            RestartButton.hide();
         }
     }
 

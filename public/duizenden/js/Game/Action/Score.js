@@ -19,7 +19,7 @@ class Score {
                 td += score_counter[player.id];
 
                 if (i > 1) {
-                    td += ` <span style="padding-left: .5em; font-size: 10px;">(${(round_score < 0 ? '-' : '+') + round_score})</span>`;
+                    td += ` <span style="padding-left: .5em; font-size: 10px;">(${(round_score < 0 ? '' : '+') + round_score})</span>`;
                 }
 
                 td += '</td>';

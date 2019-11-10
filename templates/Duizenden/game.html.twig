@@ -378,9 +378,7 @@
 
             <div style="margin-bottom: 10px">
                 <br/><a href="#" id="deal" style="display: none;">DEAL CARDS</a>
-                {% if workflow_can(game, 'restart_game') %}
-                    <br/><a href="{{ path('duizenden.new') }}" id="restart">RESTART</a>
-                {% endif %}
+                <br/><a style="display: none;" href="{{ path('duizenden.new') }}" id="restart">RESTART</a>
             </div>
         </div>
     </div>
@@ -422,6 +420,7 @@
     <script src="{{ asset('duizenden/js/Game/Action/AllowedActions.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/Melds.js') }}"></script>
     <script src="{{ asset('duizenden/js/Game/Action/Score.js') }}"></script>
+    <script src="{{ asset('duizenden/js/Game/Action/RestartButton.js') }}"></script>
 <script>
 let game;
 $(document).ready(() => {
@@ -494,6 +493,9 @@ $(document).ready(() => {
         DealButton.show();
         {% endif %}
         Score.update(state.players, state.score.past_rounds);
+        {% if workflow_can(game, 'restart_game') %}
+        RestartButton.show();
+        {% endif %}
     });
 });
 
