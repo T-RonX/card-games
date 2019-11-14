@@ -1,9 +1,9 @@
 services:
   Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
     arguments:
-      - 'mysql:dbname=duizenden; host=127.0.0.1; port=3306'
-      - { db_username: root, db_password: developer, db_table: session, db_id_col: id, db_data_col: data, db_lifetime_col: lifetime, db_time_col: time }
-      -
+      - 'mysql:dbname=%env(DATABASE_NAME)%; host=%env(DATABASE_HOST)%; port=%env(DATABASE_PORT)%'
+      - { db_username: '%env(DATABASE_USER)%', db_password: '%env(DATABASE_PASSWORD)%', db_table: session, db_id_col: id, db_data_col: data, db_lifetime_col: lifetime, db_time_col: time }
+
   app.listener.session_secret:
       class: App\Listener\SessionSecretListener
       tags:
