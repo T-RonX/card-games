@@ -1,21 +1,21 @@
 class DiscardedCard
 {
     static createCard(card_id, draggable) {
-        $('#discarded_pool').append(
-            `<div id="card_discarded_pool" data-card-id="${card_id}" class="card table ${CardHelper.getValueFromId(card_id)} ${draggable ? 'draggable' : ''}"></div>`
+        $('#discarded-pool').append(
+            `<div id="card-discarded-pool" data-card-id="${card_id}" class="card table ${CardHelper.getValueFromId(card_id)} ${draggable ? 'draggable' : ''}"></div>`
         );
     }
 
     static removeCard() {
-        $('#card_discarded_pool').remove();
+        $('#card-discarded-pool').remove();
     }
 
     static resetCard(card_id, draggable) {
-        $("#card_discarded_pool").remove();
+        $("#card-discarded-pool").remove();
 
         this.createCard(card_id, draggable);
-        const card = $("#card_discarded_pool");
-        
+        const card = $("#card-discarded-pool");
+
         card.data({
             'originalLeft': card.css('left'),
             'originalTop': card.css('top')
@@ -23,33 +23,29 @@ class DiscardedCard
 
         if (draggable) {
             card.draggable({
-                drag: function (event, ui) {
-                    dragCheck = true;
-
-                    $('.card_hand_dropper').css('display', 'block');
-
-                },
+                // drag: function (event, ui) {
+                // },
                 start: function (event, ui) {
-
-                    $(this).css('z-index', ++z);
+                    dragCheck = true;
+                    $(this).css('z-index', 9999);
                     drag_source = $(this).parent().attr('id');
+                    $('.card-hand-dropper').show();
                 },
                 stop: function (event, ui) {
-                    $(this).css('z-index', z - 1);
+                    $(this).css('z-index', 1);
                     $(this).css({
                         'left': $(this).data('originalLeft'),
                         'top': $(this).data('originalTop')
                     });
                     dragCheck = false;
-
-                    $('.card_hand_dropper').css('display', 'none');
+                    $('.card-hand-dropper').hide();
                 }
             });
         }
     }
 
     static disableDraggable() {
-        const card = $('#card_discarded_pool');
+        const card = $('#card-discarded-pool');
 
         if (card.data('uiDraggable')) {
             card.draggable('disable');
@@ -57,7 +53,7 @@ class DiscardedCard
     }
 
     static enableDraggable() {
-        const card = $('#card_discarded_pool');
+        const card = $('#card-discarded-pool');
 
         if (card.data('uiDraggable')) {
             card.draggable('enable');

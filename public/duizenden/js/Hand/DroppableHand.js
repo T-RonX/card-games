@@ -7,12 +7,13 @@ class DroppableHand {
     }
 
     makeDropable() {
-        this.hand.getHandContainer().getContainer().find('.card_hand_dropper').droppable({
+        this.hand.getHandContainer().getContainer().find('.card-hand-dropper').droppable({
             hoverClass: 'highlight',
+            tolerance: "pointer",
             drop: async (e, ui) => {
                 //console.log(ui.draggable.data('card-order') + ' to ' + $(this).data('card-order'));
 
-                if (drag_source === 'discarded_pool') {
+                if (drag_source === 'discarded-pool') {
                     let cards = [];
 
                     this.hand.getHandContainer().getContainer().find('.selected').each(function (item) {
@@ -30,7 +31,7 @@ class DroppableHand {
                     }
                 }
 
-                if (drag_source === 'hand_container' && !this.is_hand_dropping) {
+                if (drag_source === 'hand-local-container' && !this.is_hand_dropping) {
                     this.is_hand_dropping = true;
 
                     let target = $(e.target);
@@ -48,7 +49,7 @@ class DroppableHand {
                     });
                 }
 
-                if (drag_source === 'undrawn_pool') {
+                if (drag_source === 'undrawn-pool') {
 
                     $.post(this.path_draw_from_undrawn, null, function (data) {
                         //location.reload();

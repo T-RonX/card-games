@@ -1,7 +1,7 @@
 {% import _self as self %}
-{% extends 'base.html.twig' %}
+{% extends 'base_flex.html.twig' %}
 
-{% block body %}
+{% block content %}
     {% if invitations_create|length %}
         <div><b>Invitations created</b></div>
         {% for invitation in invitations_create|filter(invitation => invitation.invitees|length > 1) %}

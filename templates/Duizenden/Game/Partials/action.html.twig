@@ -1,0 +1,16 @@
+<div id="actions">
+    <br/><a href="#" id="deal" style="display: none;">DEAL CARDS</a>
+    <br/><a style="display: none;" href="{{ path('duizenden.new') }}" id="restart">RESTART</a>
+    <br/><a href="#" onclick="undoLastAction(); return false;">&#x293A; Undo </a>
+    <br/><input id="meld-button" style="display: none" type="button" value="Meld cards" onclick="meld()" />
+    <div style="margin-bottom: 10px; float: right;">
+        <b>Allowed actions</b><br/>
+        <div id="allowed-actions">
+    {% for transition in workflow_transitions(game) %}
+        {{ transition.name }}<br/>
+    {% else %}
+        No actions available<br/>
+    {% endfor %}
+        </div>
+    </div>
+</div>

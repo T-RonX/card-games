@@ -1,6 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_flex.html.twig' %}
 
-{% block body %}
+{% block content %}
     {{ form_errors(form) }}
     {{ form_start(form, {'method': 'POST', 'action': path('duizenden.create', invitation ? {invitation: invitation.uuid} : {})}) }}
     <table>

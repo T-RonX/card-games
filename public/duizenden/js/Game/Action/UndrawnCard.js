@@ -1,7 +1,7 @@
 class UndrawnCard
 {
     static updateColor(color_id) {
-        const card = $("#card_undrawn_pool");
+        const card = $("#card-undrawn-pool");
         const color = CardHelper.createColorFromColorId(color_id);
 
         if (!card.hasClass(color)) {
@@ -10,42 +10,40 @@ class UndrawnCard
     }
 
     static resetCard() {
-        const card = $("#card_undrawn_pool");
+        const card = $("#card-undrawn-pool");
         card.data({
             'originalLeft': card.css('left'),
             'origionalTop': card.css('top')
         });
 
         card.draggable({
-            drag: function (event, ui) {
+            // drag: function (event, ui) {
+            //
+            // },
+            start: function (event, ui) {
                 dragCheck = true;
 
-                $('.card_hand_dropper').css('display', 'block');
-
-            },
-            start: function (event, ui) {
-
-                $(this).css('z-index', ++z);
+                $(this).css('z-index', 9999);
                 drag_source = $(this).parent().attr('id');
+                $('.card-hand-dropper').show();
             },
-            stop: function( event, ui ) {
-                $(this).css('z-index', z - 1);
+            stop: function (event, ui) {
+                $(this).css('z-index', 1);
                 $(this).css({
-                        'left': $(this).data('originalLeft'),
-                        'top': $(this).data('origionalTop')
-                    });
+                    'left': $(this).data('originalLeft'),
+                    'top': $(this).data('origionalTop')
+                });
                 dragCheck = false;
-
-                $('.card_hand_dropper').css('display', 'none');
+                $('.card-hand-dropper').hide();
             }
         });
     }
 
     static disableDraggable() {
-        $("#card_undrawn_pool").draggable('disable');
+        $("#card-undrawn-pool").draggable('disable');
     }
 
     static enableDraggable() {
-        $("#card_undrawn_pool").draggable('enable');
+        $("#card-undrawn-pool").draggable('enable');
     }
 }

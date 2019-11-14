@@ -7,7 +7,7 @@ class Melds {
     }
 
     static createMeld(player_id, zfighter, cards, container, card_width, card_height, card_separation, path_extend_meld, offset_angle, unique, prepend = false) {
-        const meld_container = $(`<div class="meld_container" data-meld-unique="${player_id + '_' + unique}" data-meld-id="${unique}"></div>`);
+        const meld_container = $(`<div class="meld-container" data-meld-unique="${player_id + '_' + unique}" data-meld-id="${unique}"></div>`);
         this.updateMeldContainer(zfighter, cards, meld_container, card_width, card_height, card_separation, path_extend_meld, offset_angle);
         if (prepend) {
             container.prepend(meld_container);
@@ -17,7 +17,7 @@ class Melds {
     }
 
     static extendMeld(player_id, meld_id, cards, card_width, card_height, card_separation, path_extend_meld, offset_angle) {
-        const container = $(`.meld_container[data-meld-unique=${player_id}_${meld_id}]`);
+        const container = $(`.meld-container[data-meld-unique=${player_id}_${meld_id}]`);
         container.empty();
         this.updateMeldContainer(new ZFighter(1), cards, container, card_width, card_height, card_separation, path_extend_meld, offset_angle);
     }
@@ -29,18 +29,18 @@ class Melds {
 
     static removeMelds(player_id = null) {
         if (null == player_id) {
-            $('.meld_container').remove();
+            $('.meld-container').remove();
             return [];
         } else {
             let cards = this.getCardIdsFromMeld(player_id);
-            $(`.meld_container[data-meld-unique^=${player_id}_]`).remove();
+            $(`.meld-container[data-meld-unique^=${player_id}_]`).remove();
             return cards;
         }
     }
 
     static getCardIdsFromMeld(player_id) {
         let cards = [];
-        $(`.meld_container[data-meld-unique^=${player_id}_] [data-card-id]`).each((i, e) => {
+        $(`.meld-container[data-meld-unique^=${player_id}_] [data-card-id]`).each((i, e) => {
             cards.push($(e).data('card-id'));
         });
 

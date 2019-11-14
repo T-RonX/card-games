@@ -1,6 +1,6 @@
 class AllowedActions {
     static update(actions) {
-        const div = $('#allowed_actions');
+        const div = $('#allowed-actions');
         let text = '';
 
         if (actions.length) {

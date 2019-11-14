@@ -1,9 +1,16 @@
-<nav style="margin-bottom: 10px;">
-    <a href="{{ path('duizenden.new') }}">new</a>
-    <a href="{{ path('game.saved') }}">load</a>
-    <a href="{{ path('lobby.show') }}">lobby</a>
-    <a href="{{ path('lobby.invitations') }}">invitations</a>
-{% if app.user %}
-    <a title="{{ app.user.uuid }}" href="{{ path('logout') }}">terminate<span style="font-size: 10px;"> ({{ app.user.name }})</span></a>
-{% endif %}
+<nav id="menu-toggle" role="navigation">
+    <input type="checkbox" />
+    <span></span>
+    <span></span>
+    <span></span>
+    <ul id="menu">
+        <li id="name">Hi, {{ app.user.name }}!</li>
+        <a href="{{ path('duizenden.new') }}"><li>Start new game</li></a>
+        <a href="{{ path('game.saved') }}"><li>Load previous game</li></a>
+        <a href="{{ path('lobby.show') }}"><li>Meeting lobby</li></a>
+        <a href="{{ path('lobby.invitations') }}"><li>Invitations</li></a>
+    {% if app.user %}
+        <a title="{{ app.user.uuid }}" href="{{ path('logout') }}"><li>Terminate</li></a>
+    {% endif %}
+    </ul>
 </nav>

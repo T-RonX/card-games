@@ -123,7 +123,7 @@ class GameController extends AbstractController
 			'by_invitation' => null !== $invitation
 		]);
 
-		return $this->render('Duizenden\new.html.twig', [
+		return $this->render('Duizenden\Game\new.html.twig', [
 			'form' => $form->createView(),
 			'invitation' => $invitation
 		]);
@@ -190,7 +190,7 @@ class GameController extends AbstractController
 			]));
 		}
 
-		return $this->render('Duizenden\new.html.twig', [
+		return $this->render('Duizenden\Game\new.html.twig', [
 			'form' => $form->createView(),
 			'invitation' => $invitation
 		]);
@@ -236,7 +236,22 @@ class GameController extends AbstractController
 		$state_data = $this->state_builder->createStateData($game);
 		$this->complementStateData($game, $state_data);
 
-		return $this->render('Duizenden\game.html.twig', [
+		return $this->render('Duizenden\Game\game.html.twig', [
+			'game' => $game,
+			'state_data' => $state_data->create()
+		]);
+	}
+
+	public function playGameFlex(string $uuid): Response
+	{
+		$this->session->set('game_id', $uuid);
+		$game = $this->loadGame($uuid);
+		$this->denyAccessUnlessGranted(GameVoter::ENTER_GAME, $game);
+
+		$state_data = $this->state_builder->createStateData($game);
+		$this->complementStateData($game, $state_data);
+
+		return $this->render('Duizenden\Game\play.html.twig', [
 			'game' => $game,
 			'state_data' => $state_data->create()
 		]);

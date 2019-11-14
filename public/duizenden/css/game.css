@@ -1,0 +1,121 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+#game-container div {
+    /*box-sizing: border-box;*/
+    /*border: yellow 1px dotted;*/
+}
+
+#game-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#hands-opponents {
+    display: flex;
+    height: 18vh;
+}
+
+.hand-opponent, .melds-opponent {
+    flex: 1;
+    flex-wrap: wrap;
+    max-height: 46vh;
+}
+
+.hand-opponent {
+    display: flex;
+    justify-content: center;
+}
+
+.melds-opponent {
+    display: flex;
+    justify-content: center;
+}
+
+.melds-opponent .meld-container {
+    margin: 0 .5vw 1vw .5vw;
+}
+
+#table-opponents {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 64vh;
+    justify-content: space-between;
+}
+
+#melds-opponents {
+    display: flex;
+    overflow-y: auto;
+}
+
+#melds-local {
+    display: flex;
+    max-height: 18vh;
+    overflow-y: auto;
+    justify-content: center;
+}
+
+#local-player {
+    display: flex;
+    justify-content: space-between;
+    height: 18vh;
+}
+
+#card-stacks, #reporting {
+    flex-basis: 20%;
+}
+
+#card-stacks {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#hand-local {
+    display: flex;
+    flex-basis: 40%;
+    justify-content: center;
+}
+
+#hand-local-container {
+    display: none;
+    position: relative;
+    width: 1px;
+    height: 1px;
+}
+
+.meld-container {
+    position: relative;
+}
+
+#melds-local .meld-container {
+    margin: 0 .5vw 1vw .5vw;
+}
+
+.hand-opponent-container {
+    /*display: none;*/
+    position: relative;
+    width: 1px;
+    height: 1px;
+    margin-top: 1vh;
+}
+.card-hand-dropper {
+    display: none;
+}
+
+.card-hand-dropper.highlight .card-hand-dropper-indicator{
+    float: right;
+    opacity: .7;
+    background-color: lawngreen;
+    border-radius: 5px;
+}
+
+#undrawn-pool.highlighted {
+    background: #801f0E;
+}
+
+#discarded-pool.highlighted {
+    background: #801f0E;
+}

@@ -1,0 +1,8 @@
+{% import _self as self %}
+
+<div id="undrawn-pool">{{ game.state.undrawnPool|last ? self.drawCardTable(game.state.undrawnPool|last, workflow_can(game, 'draw_from_undrawn'), true, 'card-undrawn-pool') }}</div>
+<div id="discarded-pool">{{ game.state.discardedPool|last ? self.drawCardTable(game.state.discardedPool|last, can_draw_from_discarded, false, 'card-discarded-pool') }}</div>
+
+{% macro drawCardTable(card, draggable = false, turned = false, id = false) %}
+<div {{ id ? 'id=' ~ id ~ ' ' }}data-card-id="{{ card.identifier|lower }}" class="card table {{ not turned ? card.identifierValue|lower : card.backColor.name }}{{ draggable ? ' draggable' }}"></div>
+{% endmacro %}

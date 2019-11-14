@@ -8,7 +8,7 @@ class DroppableMeld {
         this.meld_pool.droppable({
             hoverClass: 'highlight_meld',
             drop: (event, ui) => {
-                if (drag_source === 'hand_container') {
+                if (drag_source === 'hand-local-container') {
                     let target = $(event.target);
                     let url = this.path_extend_meld.replace('111', ui.draggable.data('card-id')).replace('000', target.data('meld-id') - 1);
                     ui.draggable.remove();

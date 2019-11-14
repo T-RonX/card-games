@@ -1,0 +1,12 @@
+<b>Scoreboard</b><br/>
+<table>
+    <thead>
+        <tr>
+            <td></td>
+            {% for player in game.state.players.freshLoopIterator %}
+                <td>{{ player.name }}</td>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody id="scoreboard"></tbody>
+</table>

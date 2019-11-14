@@ -1,0 +1,192 @@
+{% extends 'base_flex.html.twig' %}
+
+{% block title %}{{ parent() }}{{ player.id == current_player_id ? ' - Your turn' }}{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ asset('/duizenden/css/game.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('/duizenden/css/cards.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('duizenden/js/Game/Game.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/GameEvent.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/GameEventMessageHandler.js') }}"></script>
+<script src="{{ asset('duizenden/js/Helper/MathHelper.js') }}"></script>
+<script src="{{ asset('duizenden/js/Helper/ZFighter.js') }}"></script>
+<script src="{{ asset('duizenden/js/Helper/CardHelper.js') }}"></script>
+<script src="{{ asset('duizenden/js/Card/CardDragger.js') }}"></script>
+<script src="{{ asset('duizenden/js/Hand/DroppableHand.js') }}"></script>
+<script src="{{ asset('duizenden/js/Hand/Hand.js') }}"></script>
+<script src="{{ asset('duizenden/js/Hand/OpponentHand.js') }}"></script>
+<script src="{{ asset('duizenden/js/Hand/HandCardDragger.js') }}"></script>
+<script src="{{ asset('duizenden/js/Hand/HandContainer.js') }}"></script>
+<script src="{{ asset('duizenden/js/Hand/HandHoverAnimator.js') }}"></script>
+<script src="{{ asset('duizenden/js/CardPositioning/Fan.js') }}"></script>
+<script src="{{ asset('duizenden/js/Meld/MeldContainer.js') }}"></script>
+<script src="{{ asset('duizenden/js/Meld/DroppableMeld.js') }}"></script>
+<script src="{{ asset('duizenden/js/Meld/Meld.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/DiffCalculator.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/UndrawnCard.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/DiscardedCard.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/State.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/UpdateCurrentPlayer.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/DealButton.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/MeldButton.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/AllowedActions.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/Melds.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/Score.js') }}"></script>
+<script src="{{ asset('duizenden/js/Game/Action/RestartButton.js') }}"></script>
+{% endblock %}
+
+{% set discarded_pool_is_first_card = game.state.discardedPool.firstCard %}
+{% set player = game.state.players.playerById(app.user.uuid) %}
+{% set current_player_id = game.state.players.currentPlayer.id %}
+{% set can_draw_from_discarded = player.id == current_player_id and workflow_can(game, 'draw_from_discarded') and ((not player.hasMelds and discarded_pool_is_first_card) or game.scoreCalculator.calculatePlayerMeldsScore(player) >= 30) %}
+{% set current_player = game.state.players.currentPlayer %}
+
+{% block content %}
+<div id="game-container">
+    <div id="hands-opponents"></div>
+    <div id="table-opponents">
+        <div id="melds-opponents"></div>
+        <div id="melds-local"></div>
+    </div>
+    <div id="local-player">
+        <div id="card-stacks">{% include 'Duizenden/Game/Partials/stacks.html.twig' %}</div>
+        <div id="hand-local"><div id="hand-local-container"></div></div>
+        <div id="reporting">
+            {% include 'Duizenden/Game/Partials/action.html.twig'%}
+            {% include 'Duizenden/Game/Partials/scoreboard.html.twig'%}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts_end %}
+<script>
+let game;
+$(document).ready(() => {
+    const card_separation_melds = .19;
+    const extend_meld_url = '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}';
+    const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
+    const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}', extend_meld_url, card_separation_melds);
+    const event_handler = new GameEvent(connection, message_handler);
+    window.player_event_message_handler.setGameEventHandler(message_handler);
+    event_handler.initialize();
+
+    {% set cards_hand = [] %}
+    {% for card in player.hand %}
+    {% set cards_hand = cards_hand|merge([card.identifier|lower]) %}
+    {% endfor %}
+
+    {% set melds = [] %}
+    {% for p in state_data.players|filter(p => p.id == player.id) %}
+    {% set melds = p.melds %}
+    {% endfor %}
+
+    let state;
+    state = {{ state_data|json_encode|raw }};
+
+    $(document).ready(() => {
+        game = Game.create(
+            '{{ player.id }}',
+            connection,
+            event_handler,
+            '#hand-local-container',
+            {{ cards_hand|json_encode()|raw }},
+            {{ state_data.players|filter(p => p.id != player.id)|resetKeys|json_encode|raw }},
+            {{ melds|json_encode()|raw }},
+            '.card',
+            '{{ path('duizenden.draw_from_discarded', {meld_cards: '000'}) }}',
+            '{{ path('duizenden.draw_from_undrawn') }}',
+            139,
+            220,
+            113,
+            180,
+            .28,
+            card_separation_melds,
+            extend_meld_url,
+        );
+
+        game.initialize();
+        UndrawnCard.resetCard();
+        {% if not (current_player_id == player.id and workflow_can(game, 'draw_from_undrawn')) %}
+        UndrawnCard.disableDraggable();
+        {% endif %}
+        {% set top_card = game.state.discardedPool|last %}
+        {% if top_card %}
+        DiscardedCard.resetCard({{ ("'" ~ top_card.identifier ~ "'")|raw }}, {{ current_player_id == player.id and can_draw_from_discarded ? 'true' : 'false' }});
+        {% endif %}
+        {% if current_player_id == player.id and workflow_can(game, 'meld') %}
+        MeldButton.show();
+        MeldButton.show();
+        {% endif %}
+        {% if is_granted('deal', game) %}
+        DealButton.show();
+        {% endif %}
+        Score.update(state.players, state.score.past_rounds);
+        {% if workflow_can(game, 'restart_game') %}
+        RestartButton.show();
+        {% endif %}
+    });
+});
+</script>
+
+<script>
+$("#deal").click(function () {
+    let url = '{{ path('duizenden.deal') }}';
+    $.post(url, null, function (data) {
+       // location.reload();
+    });
+});
+
+{% if drawn_card is defined %}
+let drawn_card = $(".card.hand[data-card-id='" + {{ drawn_card.suit.name ~ drawn_card.rank.name }}  + "']");
+drawn_card.css('outline', '4px solid orange');
+drawn_card.css('outline-offset', '-4px');
+{% endif %}
+
+function meld() {
+    let cards = [];
+
+    $('#hand-local-container').find('.card.hand.selected').each(function (item) {
+        cards.push($(this).data('card-id'));
+    });
+
+    $.post('{{ path('duizenden.meld', {cards: '000'}) }}'.replace('000', cards.join()), null, function (data) {
+        //location.reload();
+    });
+}
+
+var dragCheck = false;
+
+let z = 1;
+let drag_source = 'none';
+
+// $("#discarded-pool .draggable").draggable({});
+
+$("#discarded-pool").droppable({
+  drop: function(event, ui) {
+      if (drag_source === 'hand-local-container') {
+          let url = '{{ path('duizenden.discard', { card: '000' }) }}'.replace('000', ui.draggable.data('card-id'));
+
+          let card_id = ui.draggable.data('card-id');
+          game.getHand().removeCard(card_id);
+          DiscardedCard.resetCard(card_id, false);
+          $.post(url);
+      }
+  }
+});
+
+function undoLastAction() {
+    $.get('{{ path('duizenden.undo_last_action', { uuid: game.id}) }}');
+}
+
+function logSlide() {
+    const log = $('#log');
+    const log_slider = $('#log_slider');
+    log_slider.html(log.is(':visible') ? 'show': 'hide');
+    log.slideToggle();
+}
+</script>
+{% endblock %}

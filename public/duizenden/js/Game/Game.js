@@ -47,7 +47,7 @@ class Game {
 
     initialize() {
         UndrawnCard.resetCard();
-        Melds.createMelds(this.player_id, this.z_fighter, this.melds, $('#melds'), 113, 179, this.card_separation_meld, this.path_extend_meld, 0);
+        Melds.createMelds(this.player_id, this.z_fighter, this.melds, $('#melds-local'), 113, 179, this.card_separation_meld, this.path_extend_meld, 0);
 
         this.initializeHand();
         this.initializeOpponentHands();
@@ -113,36 +113,39 @@ class Game {
             }
         }
 
-        const opponent_panes = $('#opponent_panes');
+        const opponent_hands = $('#hands-opponents');
+        const opponent_melds = $('#melds-opponents');
         // body.append($(`<div style="position: absolute; top: ${center_point.y}px; left: ${center_point.x}px; width: 20px; height: 20px; background: red; border-radius: 50%"></div>`));
         //
         // for (const data of new_coords) {
         //     body.append($(`<div style="position: absolute; top: ${data.coord.y}px; left: ${data.coord.x}px; width: 2px; height: 2px; background: yellow; border-radius: 50%"></div>`));
         // }
         for (const [i, opponent] of this.opponent_cards.entries()) {
+            let hand_pane = $(`.hand-opponent[data-player-id='${opponent.id}']`);
+            let melds_pane = $(`.melds-opponent[data-player-id='${opponent.id}']`);
+            let hand_container;
 
-            let pane = $(`#opponent_pane_${opponent.id}`);
-            let melds_container = $(`#opponent_melds_${opponent.id}`);
-
-            if (!pane.length) {
-                pane = $(`<div id="opponent_pane_${opponent.id}" class="opponent_hand" style="box-sizing: border-box; position: relative; float: left; width: ${opponent_pane_width}%; height: ${b}px;" data-player-id="${opponent.id}"></div>`);
-                melds_container = $(`<div id="opponent_melds_${opponent.id}" class="opponent_melds"></div>`);
+            if (!hand_pane.length) {
+                hand_container = $('<div class="hand-opponent-container"></div>');
+                hand_pane = $(`<div class="hand-opponent" data-player-id="${opponent.id}"></div>`);
+                hand_pane.append(hand_container);
+                melds_pane = $(`<div class="melds-opponent" data-player-id="${opponent.id}"></div>`);
+            }  else {
+                hand_container = $(`.hand-opponent[data-player-id='${opponent.id}'] .hand-opponent-container`)
             }
 
             const cards = CardHelper.cardIdsHaveValues(opponent.hand.cards) ? opponent.hand.cards : opponent.hand.cards.reverse();
-            const hand = new OpponentHand(this.z_fighter, cards, pane, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
+            const hand = new OpponentHand(this.z_fighter, cards, hand_container, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
             hand.initialize();
 
-            pane.append(melds_container);
-            opponent_panes.append(pane);
+            opponent_hands.append(hand_pane);
+            opponent_melds.append(melds_pane);
         }
     }
 
-
-
     initializeOpponentMelds() {
         for (const [i, opponent] of this.opponent_cards.entries()) {
-            let melds_container = $(`#opponent_melds_${opponent.id}`);
+            let melds_container = $(`.melds-opponent[data-player-id='${opponent.id}']`);
 
             Melds.createMelds(
                 opponent.id,
@@ -153,7 +156,7 @@ class Game {
                 this.card_height_meld,
                 this.card_separation_meld,
                 this.path_extend_meld,
-                180);
+                0);
         }
     }
 }

@@ -1,6 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_flex.html.twig' %}
 
-{% block body %}
+{% block content %}
     {% if game_metas|length %}
         {% for game_name, games in game_metas %}
             <h3>{{ game_name|capitalize }}</h3>

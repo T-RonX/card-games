@@ -1,9 +1,9 @@
 class MeldButton {
     static show() {
-        $('#meld_button').show();
+        $('#meld-button').show();
     }
 
     static hide() {
-        $('#meld_button').hide();
+        $('#meld-button').hide();
     }
 }

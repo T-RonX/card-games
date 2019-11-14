@@ -39,8 +39,10 @@ class Main extends AbstractController
 	 */
 	public function saved(): Response
 	{
+		$player = $this->getUser();
+
 		return $this->render('Game\saved.html.twig', [
-			'game_metas' => $this->game_meta_loader->getAll()
+			'game_metas' => $this->game_meta_loader->getAll($player)
 		]);
 	}
 
