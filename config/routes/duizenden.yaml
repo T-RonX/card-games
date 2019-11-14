@@ -17,10 +17,10 @@ duizenden.play:
   requirements:
     uuid: '^[0-9a-f]{8}-[0-9a-f]{4}-[5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
 
-duizenden.play-flex:
-  path: /play-flex/{uuid}
+duizenden.play-old:
+  path: /play-old/{uuid}
   methods: ['GET']
-  controller: App\Controller\Duizenden\GameController::playGameFlex
+  controller: App\Controller\Duizenden\GameController::playGameOld
   requirements:
     uuid: '^[0-9a-f]{8}-[0-9a-f]{4}-[5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
 

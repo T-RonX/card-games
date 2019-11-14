@@ -227,7 +227,7 @@ class GameController extends AbstractController
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	public function playGame(string $uuid): Response
+	public function playGameOld(string $uuid): Response
 	{
 		$this->session->set('game_id', $uuid);
 		$game = $this->loadGame($uuid);
@@ -236,13 +236,13 @@ class GameController extends AbstractController
 		$state_data = $this->state_builder->createStateData($game);
 		$this->complementStateData($game, $state_data);
 
-		return $this->render('Duizenden\Game\game.html.twig', [
+		return $this->render('Duizenden\Game\game_old.html.twig', [
 			'game' => $game,
 			'state_data' => $state_data->create()
 		]);
 	}
 
-	public function playGameFlex(string $uuid): Response
+	public function playGame(string $uuid): Response
 	{
 		$this->session->set('game_id', $uuid);
 		$game = $this->loadGame($uuid);
