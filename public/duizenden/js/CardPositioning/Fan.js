@@ -11,6 +11,8 @@ class Fan {
         this.offset_angle = offset_angle;
         this.z_fighter = z_fighter;
         this.reverse_stacking = reverse_stacking;
+        this.zero_out_x_avg = 0;
+        this.zero_out_y_avg = 0;
     }
 
     setup() {
@@ -87,6 +89,9 @@ class Fan {
             this.card_positions[i].x -= x + this.offset_x;
             this.card_positions[i].y -= y + this.offset_y;
         }
+
+        this.zero_out_x_avg = x + this.offset_x;
+        this.zero_out_y_avg = y + this.offset_y;
     }
 
     getCoordinates(angle, add_deviation) {
@@ -124,13 +129,9 @@ class Fan {
         let container = this.card_container.getContainer();
         this.z_fighter.up(this.card_count);
 
-        this.angle = (-90 + this.offset_angle) - (((this.separation_angle * this.card_count) / 2) - (this.separation_angle / 2));
-        this.angle -= this.separation_angle;
-        let coords = this.getCoordinates(this.angle, false);
-        let rotate = this.getRotation(coords.x, coords.y, false);
-        let n = 0;
+        this.addLeadingCardDropper(container);
 
-        this.addDropper(container, 0, coords.x, coords.y, rotate, this.z_fighter.current(), false);
+        let n = 0;
 
         for (let [i, card_position] of this.card_positions.entries())
         {
@@ -139,9 +140,17 @@ class Fan {
         }
     }
 
+    addLeadingCardDropper(container) {
+        this.angle = (-90 + this.offset_angle) - (((this.separation_angle * this.card_count) / 2) - (this.separation_angle / 2));
+        this.angle -= this.separation_angle;
+        let coords = this.getCoordinates(this.angle, false);
+        let rotate = this.getRotation(coords.x, coords.y, false);
+        this.addDropper(container, 0, coords.x - this.zero_out_x_avg, coords.y - this.zero_out_y_avg, rotate, this.z_fighter.current(), false);
+    }
+
     addDropper(container, id, x, y, rotate, zindex, is_last) {
-        let dropper = $('<div class="card_hand_dropper"></div>');
-        let indicator = $('<div class="card_hand_dropper_indicator"></div>');
+        let dropper = $('<div class="card-hand-dropper"></div>');
+        let indicator = $('<div class="card-hand-dropper-indicator"></div>');
 
         dropper.css('position', 'absolute');
         dropper.css('left', x + 'px');
