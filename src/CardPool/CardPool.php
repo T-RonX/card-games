@@ -57,9 +57,10 @@ class CardPool implements CardPoolInterface, Countable
 	/**
 	 * @inheritDoc
 	 */
-	function addCard(CardInterface $card): void
+	function addCard(CardInterface $card, int $target = null): void
 	{
-		$this->cards[] = $card;
+		$index = null === $target ? $this->getCardCount() : $target;
+		array_splice($this->cards, $index, 0, [$card]);
 	}
 
 	/**

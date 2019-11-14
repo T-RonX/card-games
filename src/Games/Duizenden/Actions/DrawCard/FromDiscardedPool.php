@@ -39,13 +39,13 @@ class FromDiscardedPool extends StateChangeAction
 	 * @throws DrawCardException
 	 * @throws EmptyCardPoolException
 	 */
-	public function draw(Game $game): void
+	public function draw(Game $game, int $target = null): void
 	{
 		$state = $game->getState();
 
 		if ($state->getDiscardedPool()->isFirstCard())
 		{
-			$this->drawCard($state);
+			$this->drawCard($state, $target);
 			$this->state_machine->apply($game, TransitionType::DRAW_FROM_DISCARDED()->getValue());
 		}
 		else
@@ -92,9 +92,9 @@ class FromDiscardedPool extends StateChangeAction
 	 *
 	 * @throws EmptyCardPoolException
 	 */
-	private function drawCard(State $state): void
+	private function drawCard(State $state, int $target = null): void
 	{
 		$card = $state->getDiscardedPool()->drawTopCard();
-		$state->getPlayers()->getCurrentPlayer()->getHand()->addCard($card);
+		$state->getPlayers()->getCurrentPlayer()->getHand()->addCard($card, $target);
 	}
 }

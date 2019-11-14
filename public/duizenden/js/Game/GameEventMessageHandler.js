@@ -97,7 +97,7 @@ class GameEventMessageHandler {
             const player_cards = this.getLocalPlayer(state).hand.cards;
             const cards = this.game.getHand().getHandContainer().getCards(true);
             const cards_added = DiffCalculator.cardDiff(player_cards, cards);
-            this.game.getHand().addCards(cards_added);
+            this.game.getHand().addCards(cards_added, state.getExtra('target'));
             UndrawnCard.resetCard();
         } else {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));

@@ -30,14 +30,14 @@ class DiscardedCardPool extends CardPool
 	/**
 	 * @param CardInterface $card
 	 */
-	public function addCard(CardInterface $card): void
+	public function addCard(CardInterface $card, int $target = null): void
 	{
 		if (count($this) >= 1)
 		{
 			$this->isFirstCard(false);
 		}
 
-		parent::addCard($card);
+		parent::addCard($card, $target);
 	}
 
 	/**

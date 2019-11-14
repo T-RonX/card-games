@@ -20,13 +20,13 @@ class FromUndrawnPool extends StateChangeAction
 	 * @throws EmptyCardPoolException
 	 * @throws OutOfCardsException
 	 */
-	public function draw(Game $game): CardInterface
+	public function draw(Game $game, int $target = null): CardInterface
 	{
 		$state = $game->getState();
 
 		try
 		{
-			$card = $this->drawCard($state);
+			$card = $this->drawCard($state, $target);
 		}
 		catch (EmptyCardPoolException $e)
 		{
@@ -52,10 +52,10 @@ class FromUndrawnPool extends StateChangeAction
 	 *
 	 * @throws EmptyCardPoolException
 	 */
-	private function drawCard(State $state): CardInterface
+	private function drawCard(State $state, int $target = null): CardInterface
 	{
 		$card = $state->getUndrawnPool()->drawTopCard();
-		$state->getPlayers()->getCurrentPlayer()->getHand()->addCard($card);
+		$state->getPlayers()->getCurrentPlayer()->getHand()->addCard($card, $target);
 
 		return $card;
 	}

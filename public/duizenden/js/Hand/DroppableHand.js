@@ -20,12 +20,15 @@ class DroppableHand {
                         cards.push($(this).data('card-id'));
                     });
 
+                    const target = $(e.target);
+                    const target_id = target.data('card-order');
+
                     if (cards.length) {
-                        $.post(this.path_draw_from_discarded.replace('000', cards.join()), null, function (data) {
+                        $.post(this.path_draw_from_discarded.replace('111', '0').replace('000', cards.join()), null, function (data) {
                             //location.reload();
                         });
                     } else {
-                        $.post(this.path_draw_from_discarded, null, function (data) {
+                        $.post(this.path_draw_from_discarded.replace('111', target_id), null, function (data) {
                             //location.reload();
                         });
                     }
@@ -34,9 +37,9 @@ class DroppableHand {
                 if (drag_source === 'hand-local-container' && !this.is_hand_dropping) {
                     this.is_hand_dropping = true;
 
-                    let target = $(e.target);
-                    let target_id = target.data('card-order');
-                    let source_id = ui.draggable.data('card-order');
+                    const target = $(e.target);
+                    const target_id = target.data('card-order');
+                    const source_id = ui.draggable.data('card-order');
 
                     if (target_id === undefined || source_id === undefined) {
                         return;
@@ -50,8 +53,10 @@ class DroppableHand {
                 }
 
                 if (drag_source === 'undrawn-pool') {
+                    const target = $(e.target);
+                    const target_id = target.data('card-order');
 
-                    $.post(this.path_draw_from_undrawn, null, function (data) {
+                    $.post(this.path_draw_from_undrawn.replace('000', target_id), null, function (data) {
                         //location.reload();
                     });
                 }

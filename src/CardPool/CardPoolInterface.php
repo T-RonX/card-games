@@ -26,7 +26,7 @@ interface CardPoolInterface extends Iterator
 	/**
 	 * @param CardInterface $card
 	 */
-	function addCard(CardInterface $card): void;
+	function addCard(CardInterface $card, int $target = null): void;
 
 	/**
 	 * @return int

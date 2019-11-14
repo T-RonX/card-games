@@ -65,8 +65,8 @@ class Hand {
         return this.hand_container;
     }
 
-    addCards(cards) {
-        this.hand_container.addCards(cards);
+    addCards(cards, target) {
+        this.hand_container.addCards(cards, target);
         this.initializeCards();
     }
 

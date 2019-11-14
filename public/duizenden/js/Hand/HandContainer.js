@@ -43,14 +43,25 @@ class HandContainer {
         return this.container;
     }
 
-    addCards(cards) {
+    addCards(cards, target) {
         cards = Array.isArray(cards) ? cards : [cards];
         this.cards = this.cards.concat(cards);
 
-        for (const card of cards) {
-            const card_elem = this.createCard(card, this.cards.length);
-            this.card_elems.push(card_elem);
-            this.container.append(card_elem);
+        if (cards.length === 1)
+        {
+            const card_elem = this.createCard(cards[0], this.cards.length);
+            this.card_elems.splice(target, 0, card_elem);
+            if (target < 1) {
+                this.container.prepend(card_elem);
+            } else {
+                card_elem.insertAfter(this.container.find(`.card:nth-child(${target})`));
+            }
+        } else {
+            for (const card of cards) {
+                const card_elem = this.createCard(card, this.cards.length);
+                this.card_elems.push(card_elem);
+                this.container.append(card_elem);
+            }
         }
     }
 

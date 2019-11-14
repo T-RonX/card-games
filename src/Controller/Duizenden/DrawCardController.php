@@ -69,14 +69,14 @@ class DrawCardController extends AbstractController
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	public function drawFromUndrawn(): Response
+	public function drawFromUndrawn(int $target = null): Response
 	{
 		$game = $this->loadGame();
 		$this->denyAccessUnlessGranted(GameVoter::DRAW_FROM_UNDRAWN, $game);
 
-		$card = $this->draw_from_undrawn_pool->draw($game);
+		$this->draw_from_undrawn_pool->draw($game, $target);
 
-		$this->notifyPlayersIndividually($game, ActionType::DRAW_FROM_UNDRAWN());
+		$this->notifyPlayersIndividually($game, ActionType::DRAW_FROM_UNDRAWN(), $target);
 
 		return $this->json([]);
 	}
@@ -100,7 +100,7 @@ class DrawCardController extends AbstractController
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	public function drawFromDiscarded(CardPool $meld_cards = null): Response
+	public function drawFromDiscarded(CardPool $meld_cards = null, int $target = null): Response
 	{
 		$game = $this->loadGame();
 		$this->denyAccessUnlessGranted(GameVoter::DRAW_FROM_DISCARDED, $game);
@@ -117,11 +117,11 @@ class DrawCardController extends AbstractController
 		}
 		else
 		{
-			$this->draw_from_discarded_pool->draw($game);
+			$this->draw_from_discarded_pool->draw($game, $target);
 			$action = ActionType::DRAW_FROM_DISCARDED();
 		}
 
-		$this->notifyPlayersIndividually($game, $action);
+		$this->notifyPlayersIndividually($game, $action, $target);
 
 		return $this->json([]);
 	}
@@ -133,7 +133,7 @@ class DrawCardController extends AbstractController
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	private function notifyPlayersIndividually(Game $game, ActionType $action)
+	private function notifyPlayersIndividually(Game $game, ActionType $action, int $target = null)
 	{
 		$current_player = $game->getState()->getPlayers()->getCurrentPlayer();
 
@@ -153,6 +153,13 @@ class DrawCardController extends AbstractController
 				$message->setExtras([
 					'meld_id' => $melds->count() - 1,
 					'cards_melted' => $melds->last()->getCards()->getIdentifiers(),
+				]);
+			}
+
+			if (null !== $target)
+			{
+				$message->setExtras([
+					'target' => $target,
 				]);
 			}
 
