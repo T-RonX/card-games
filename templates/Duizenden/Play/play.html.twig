@@ -1,4 +1,4 @@
-{% extends 'base_flex.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}{{ parent() }}{{ player.id == current_player_id ? ' - Your turn' }}{% endblock %}
 
@@ -52,11 +52,11 @@
         <div id="melds-local"></div>
     </div>
     <div id="local-player">
-        <div id="card-stacks">{% include 'Duizenden/Game/Partials/stacks.html.twig' %}</div>
+        <div id="card-stacks">{% include 'Duizenden/Play/Partials/stacks.html.twig' %}</div>
         <div id="hand-local"><div id="hand-local-container"></div></div>
         <div id="reporting">
-            {% include 'Duizenden/Game/Partials/action.html.twig'%}
-            {% include 'Duizenden/Game/Partials/scoreboard.html.twig'%}
+            {% include 'Duizenden/Play/Partials/action.html.twig'%}
+            {% include 'Duizenden/Play/Partials/scoreboard.html.twig'%}
         </div>
     </div>
 </div>

@@ -123,7 +123,7 @@ class GameController extends AbstractController
 			'by_invitation' => null !== $invitation
 		]);
 
-		return $this->render('Duizenden\Game\new.html.twig', [
+		return $this->render('Duizenden\new.html.twig', [
 			'form' => $form->createView(),
 			'invitation' => $invitation
 		]);
@@ -190,7 +190,7 @@ class GameController extends AbstractController
 			]));
 		}
 
-		return $this->render('Duizenden\Game\new.html.twig', [
+		return $this->render('Duizenden\new.html.twig', [
 			'form' => $form->createView(),
 			'invitation' => $invitation
 		]);
@@ -236,7 +236,7 @@ class GameController extends AbstractController
 		$state_data = $this->state_builder->createStateData($game);
 		$this->complementStateData($game, $state_data);
 
-		return $this->render('Duizenden\Game\game_old.html.twig', [
+		return $this->render('Duizenden\Play\game_old.html.twig', [
 			'game' => $game,
 			'state_data' => $state_data->create()
 		]);
@@ -251,7 +251,7 @@ class GameController extends AbstractController
 		$state_data = $this->state_builder->createStateData($game);
 		$this->complementStateData($game, $state_data);
 
-		return $this->render('Duizenden\Game\play.html.twig', [
+		return $this->render('Duizenden\Play\play.html.twig', [
 			'game' => $game,
 			'state_data' => $state_data->create()
 		]);

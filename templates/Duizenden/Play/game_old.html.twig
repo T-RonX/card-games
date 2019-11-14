@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_old.html.twig' %}
 {% import _self as self %}
 
 {% block title %}{{ parent() }}{{ player.id == current_player_id ? ' - Your turn' }}{% endblock %}
