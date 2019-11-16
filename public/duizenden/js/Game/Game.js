@@ -11,6 +11,11 @@ class Game {
         this.card_separation_meld = card_separation_meld;
         this.path_extend_meld = path_extend_meld;
         this.player_id = player_id;
+        this.all_melds = [];
+    }
+
+    getAllMelds() {
+        return this.all_melds;
     }
 
     setOpponentCards(opponent) {
@@ -47,11 +52,20 @@ class Game {
 
     initialize() {
         UndrawnCard.resetCard();
-        Melds.createMelds(this.player_id, this.z_fighter, this.melds, $('#melds-local'), 113, 179, this.card_separation_meld, this.path_extend_meld, 0);
-
         this.initializeHand();
+        this.initializeLocalMelds();
         this.initializeOpponentHands();
         this.initializeOpponentMelds();
+    }
+
+    initializeLocalMelds() {
+        const container = $('#melds-local');
+        let unique = 0;
+
+        for (const meld of this.melds) {
+            const m = Melds.createMeld(this.player_id, this.z_fighter, meld.cards.cards, container, 113, 179, this.card_separation_meld, this.path_extend_meld, 0, ++unique);
+            this.all_melds.push(m);
+        }
     }
 
     initializeHand(cards = null) {
@@ -85,7 +99,7 @@ class Game {
             }
 
             const cards = CardHelper.cardIdsHaveValues(opponent.hand.cards) ? opponent.hand.cards : opponent.hand.cards.reverse();
-            const hand = new OpponentHand(this.z_fighter, cards, hand_container, 76, 120, .2, 0, 0, 0);
+            const hand = new OpponentHand(this.z_fighter, cards, hand_container, 76, 120, .2, 0);
             hand.initialize();
             this.opponent_hands.push(hand);
 
@@ -98,16 +112,23 @@ class Game {
         for (const [i, opponent] of this.opponent_cards.entries()) {
             let melds_container = $(`.melds-opponent[data-player-id='${opponent.id}']`);
 
-            Melds.createMelds(
-                opponent.id,
-                this.z_fighter,
-                this.opponent_cards[i].melds.reverse(),
-                melds_container,
-                this.card_width_meld,
-                this.card_height_meld,
-                this.card_separation_meld,
-                this.path_extend_meld,
-                0);
+            let u = 0;
+            for (const meld of this.opponent_cards[i].melds.reverse()) {
+                const m = Melds.createMeld(
+                    opponent.id,
+                    this.z_fighter,
+                    meld.cards.cards,
+                    melds_container,
+                    this.card_width_meld,
+                    this.card_height_meld,
+                    this.card_separation_meld,
+                    this.path_extend_meld,
+                    0,
+                    ++u
+                );
+
+                this.all_melds.push(m);
+            }
         }
     }
 

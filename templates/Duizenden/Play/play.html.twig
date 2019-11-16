@@ -132,8 +132,13 @@ $(document).ready(() => {
 
     $(window).resize(function () {
         game.getHand().redraw(vmin(12), vmin(19));
+
         for (const hand of game.getOpponentHands()) {
             hand.redraw(vmin(7.6), vmin(12));
+        }
+
+        for (const meld of game.getAllMelds()) {
+            meld.redraw(vmin(10.7), vmin(17));
         }
     })
 });
