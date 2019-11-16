@@ -75,6 +75,10 @@ class Hand {
         this.initializeCards();
     }
 
+    getCardElementAt(index) {
+        return this.hand_container.getCardElementAt(index);
+    }
+
     redrawCards() {
         this.hand_container.createCards();
         this.initializeCards();

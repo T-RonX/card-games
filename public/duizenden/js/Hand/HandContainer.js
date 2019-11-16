@@ -19,6 +19,10 @@ class HandContainer {
         }
     }
 
+    getCardElementAt(index) {
+        return this.container.find(`.card[data-card-order='${index}']`);
+    }
+
     setCards(cards) {
         this.cards = cards;
     }
@@ -62,6 +66,17 @@ class HandContainer {
                 this.card_elems.push(card_elem);
                 this.container.append(card_elem);
             }
+        }
+
+        this.resetOrderIds();
+    }
+
+    resetOrderIds() {
+        let order = 1;
+
+        for (const card of this.card_elems) {
+            card.attr('data-card-order', order);
+            ++order;
         }
     }
 

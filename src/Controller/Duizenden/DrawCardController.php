@@ -110,10 +110,6 @@ class DrawCardController extends AbstractController
 			$this->draw_from_discarded_pool->drawAndMeld($game, $meld_cards->getCards());
 
 			$action = ActionType::DRAW_FROM_DISCARDED_AND_MELD();
-//			$this->notifyPlayers($game, $game->getState()->getPlayers()->getCurrentPlayer(), ActionType::DRAW_FROM_DISCARDED_AND_MELD(), [
-//				'meld_id' => $melds->count() - 1,
-//				'cards_melted' => $melds->last()->getCards()->getIdentifiers(),
-//			]);
 		}
 		else
 		{

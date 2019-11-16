@@ -103,15 +103,3 @@ body {
 .card-hand-dropper {
     display: none;
 }
-
-.card-hand-dropper.highlight .card-hand-dropper-indicator {
-    float: right;
-    opacity: .7;
-    background-color: lawngreen;
-    border-radius: 5px;
-}
-
-#discarded-pool.highlighted {
-    background: #801f0E;
-    min-width: 11vmin;
-}

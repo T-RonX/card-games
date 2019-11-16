@@ -94,10 +94,7 @@ class GameEventMessageHandler {
 
     drawFromUndrawn(state) {
         if (state.isCurrentPlayer(this.player_id)) {
-            const player_cards = this.getLocalPlayer(state).hand.cards;
-            const cards = this.game.getHand().getHandContainer().getCards(true);
-            const cards_added = DiffCalculator.cardDiff(player_cards, cards);
-            this.game.getHand().addCards(cards_added, state.getExtra('target'));
+            this.addExtraCardToLocalHand(state);
             UndrawnCard.resetCard();
         } else {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
@@ -112,7 +109,7 @@ class GameEventMessageHandler {
 
     drawFromDiscarded(state) {
         if (state.isCurrentPlayer(this.player_id)) {
-            this.game.initializeHand(this.getLocalPlayer(state).hand.cards);
+            this.addExtraCardToLocalHand(state);
         } else {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
@@ -122,6 +119,15 @@ class GameEventMessageHandler {
         this.manageMeldButton(state);
         this.manageDraggableUndrawnCard(state);
         this.manageDiscardedCard(state);
+    }
+
+    addExtraCardToLocalHand(state) {
+        const player_cards = this.getLocalPlayer(state).hand.cards;
+        const cards = this.game.getHand().getHandContainer().getCards(true);
+        const cards_added = DiffCalculator.cardDiff(player_cards, cards);
+        this.game.getHand().addCards(cards_added, state.getExtra('target'));
+        const card = this.game.getHand().getCardElementAt(state.getExtra('target') + 1);
+        this.outlineAddedCard(card);
     }
 
     drawFromDiscardedAndMeld(state) {
@@ -150,6 +156,12 @@ class GameEventMessageHandler {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
         }
+    }
+
+    outlineAddedCard(card) {
+        card.addClass('add-in add-out');
+        setTimeout(() => { card.removeClass('add-in'); }, 1000);
+        setTimeout(() => { card.removeClass('add-out'); }, 2500);
     }
 
     discardEndTurn(state) {
