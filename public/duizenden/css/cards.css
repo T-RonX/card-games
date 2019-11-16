@@ -46,6 +46,11 @@
     background-size: 988px; /* 13 * 76px */
 }
 
+
+.card.draggable {
+    cursor: grab;
+}
+
 .card.hand.s2 { background-position: 0 0; }
 .card.hand.s3 { background-position: -139px 0; }
 .card.hand.s4 { background-position: -278px 0; }

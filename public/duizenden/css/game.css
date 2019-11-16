@@ -95,7 +95,6 @@ body {
 }
 
 .hand-opponent-container {
-    /*display: none;*/
     position: relative;
     width: 1px;
     height: 1px;
@@ -105,17 +104,14 @@ body {
     display: none;
 }
 
-.card-hand-dropper.highlight .card-hand-dropper-indicator{
+.card-hand-dropper.highlight .card-hand-dropper-indicator {
     float: right;
     opacity: .7;
     background-color: lawngreen;
     border-radius: 5px;
 }
 
-#undrawn-pool.highlighted {
-    background: #801f0E;
-}
-
 #discarded-pool.highlighted {
     background: #801f0E;
+    min-width: 11vmin;
 }
