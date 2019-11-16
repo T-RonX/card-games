@@ -93,16 +93,16 @@ $(document).ready(() => {
             connection,
             event_handler,
             '#hand-local-container',
-            {{ cards_hand|json_encode()|raw }},
-            {{ state_data.players|filter(p => p.id != player.id)|resetKeys|json_encode|raw }},
-            {{ melds|json_encode()|raw }},
+                {{ cards_hand|json_encode()|raw }},
+                {{ state_data.players|filter(p => p.id != player.id)|resetKeys|json_encode|raw }},
+                {{ melds|json_encode()|raw }},
             '.card',
             '{{ path('duizenden.draw_from_discarded', {meld_cards: '000', target: '111'}) }}',
             '{{ path('duizenden.draw_from_undrawn', {target: '000'}) }}',
-            139,
-            220,
-            113,
-            180,
+            vmin(12),
+            vmin(19),
+            vmin(10.7),
+            vmin(17),
             .28,
             card_separation_melds,
             extend_meld_url,
@@ -129,10 +129,19 @@ $(document).ready(() => {
         RestartButton.show();
         {% endif %}
     });
-});
-</script>
 
-<script>
+    $(window).resize(function () {
+        game.getHand().redraw(vmin(12), vmin(19));
+        for (const hand of game.getOpponentHands()) {
+            hand.redraw(vmin(7.6), vmin(12));
+        }
+    })
+});
+
+function vmin(v) {
+    return Math.min(window.innerHeight, window.innerWidth) * (v / 100);
+}
+
 $("#deal").click(function () {
     let url = '{{ path('duizenden.deal') }}';
     $.post(url, null, function (data) {

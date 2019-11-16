@@ -68,58 +68,8 @@ class Game {
     }
 
     initializeOpponentHands() {
-        const max_angle = 20;
-        let count = this.opponent_cards.length;
-        let angle_per_player = max_angle / (count - 1);
-        let start_angle = count === 1 ? 0 : -(max_angle / 2);
+        this.opponent_hands = [];
 
-        const window_height = window.innerHeight;
-        const window_width = window.innerWidth;
-        const opponent_pane_width = Math.floor(100 / count);
-        const opponent_pane_width_px = Math.floor(window_width / count);
-        const opponent_pane_height = Math.floor(window_height * .4);
-        const cards_offset_x = -(Math.floor((window_width * (opponent_pane_width / 100)) / 2));
-        const cards_offset_y = 0;
-
-        let i = 1;
-
-        const a = Math.floor(window_width / 2);
-        const b = Math.floor(window_height / 2);
-
-        const center_point = {x: a, y: b};
-
-
-        let points_x = [];
-
-        const start = count % 2 === 0 ? Math.floor(opponent_pane_width_px / 2) : 0;
-
-        let new_coords = [];
-
-        for (const i of Array(Math.ceil(count / 2)).keys()) {
-            const x = start + (i * opponent_pane_width_px);
-            let y = b * Math.sqrt(1 - Math.pow(x / a, 2));
-            y = Math.round(-y + cards_offset_y + Math.floor(b));
-            const x_left = -x + a;
-            const x_right = x + a;
-
-            const point_left = {x: x_left, y: y};
-            const angle_left = Math.round(MathHelper.getAngle(point_left, center_point));
-            new_coords.splice(0, 0, {coord: point_left, angle: angle_left});
-
-            if (x_right !== x_left) {
-                const point_right = {x: x_right, y: y};
-                const angle_right = Math.round(MathHelper.getAngle(point_right, center_point));
-                new_coords.push({coord: point_right, angle: angle_right});
-            }
-        }
-
-        const opponent_hands = $('#hands-opponents');
-        const opponent_melds = $('#melds-opponents');
-        // body.append($(`<div style="position: absolute; top: ${center_point.y}px; left: ${center_point.x}px; width: 20px; height: 20px; background: red; border-radius: 50%"></div>`));
-        //
-        // for (const data of new_coords) {
-        //     body.append($(`<div style="position: absolute; top: ${data.coord.y}px; left: ${data.coord.x}px; width: 2px; height: 2px; background: yellow; border-radius: 50%"></div>`));
-        // }
         for (const [i, opponent] of this.opponent_cards.entries()) {
             let hand_pane = $(`.hand-opponent[data-player-id='${opponent.id}']`);
             let melds_pane = $(`.melds-opponent[data-player-id='${opponent.id}']`);
@@ -135,11 +85,12 @@ class Game {
             }
 
             const cards = CardHelper.cardIdsHaveValues(opponent.hand.cards) ? opponent.hand.cards : opponent.hand.cards.reverse();
-            const hand = new OpponentHand(this.z_fighter, cards, hand_container, 76, 120, .2, 0, -Math.round(opponent_pane_width_px / 2), 0);
+            const hand = new OpponentHand(this.z_fighter, cards, hand_container, 76, 120, .2, 0, 0, 0);
             hand.initialize();
+            this.opponent_hands.push(hand);
 
-            opponent_hands.append(hand_pane);
-            opponent_melds.append(melds_pane);
+            $('#hands-opponents').append(hand_pane);
+            $('#melds-opponents').append(melds_pane);
         }
     }
 
@@ -158,5 +109,9 @@ class Game {
                 this.path_extend_meld,
                 0);
         }
+    }
+
+    getOpponentHands() {
+        return this.opponent_hands;
     }
 }

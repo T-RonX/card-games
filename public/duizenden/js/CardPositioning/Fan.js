@@ -1,5 +1,5 @@
 class Fan {
-    constructor(card_container, card_overlap, card_width, card_height, add_random_deviation, offset_y, offset_x, offset_zero_out, offset_angle, z_fighter, reverse_stacking) {
+    constructor(card_container, card_overlap, card_width, card_height, add_random_deviation, offset_y, offset_x, offset_zero_out, offset_angle, z_fighter, reverse_stacking, add_dropper) {
         this.card_container = card_container;
         this.card_overlap = card_overlap;
         this.card_width = card_width;
@@ -13,6 +13,7 @@ class Fan {
         this.reverse_stacking = reverse_stacking;
         this.zero_out_x_avg = 0;
         this.zero_out_y_avg = 0;
+        this.add_dropper = add_dropper;
     }
 
     setup() {
@@ -28,7 +29,16 @@ class Fan {
         this.card_positions = [];
     }
 
-    positionCards(add_dropper) {
+    redraw(card_width, card_height, offset_y, offset_x) {
+        this.card_width = card_width;
+        this.card_height = card_height;
+        this.offset_y = offset_y;
+        this.offset_x = offset_x;
+
+        this.positionCards();
+    }
+
+    positionCards() {
         this.setup();
         let i = 0;
 
@@ -37,12 +47,11 @@ class Fan {
         }
 
         for (const card of this.card_container.getCards()) {
-            let add_deviation = this.add_random_deviation && this.card_count !== 1;
-            let coords = this.getCoordinates(this.angle, add_deviation);
-            let rotate = this.getRotation(coords.x, coords.y, add_deviation);
+            const add_deviation = this.add_random_deviation && this.card_count !== 1;
+            const coords = this.getCoordinates(this.angle, add_deviation);
+            const rotate = this.getRotation(coords.x, coords.y, add_deviation);
             this.card_positions[i] = { x: coords.x, y: coords.y, rotate: rotate };
 
-           // let card = $(element);
             card.data('rotation_angle', rotate);
             card.css('position', 'absolute');
             card.css('left', coords.x + 'px');
@@ -68,7 +77,7 @@ class Fan {
             }
         }
 
-        if (add_dropper) {
+        if (this.add_dropper) {
             this.addDroppableArea();
         }
     }
@@ -131,12 +140,13 @@ class Fan {
 
         this.addLeadingCardDropper(container);
 
-        let n = 0;
+        let i = 0;
 
-        for (let [i, card_position] of this.card_positions.entries())
-        {
-            this.addDropper(container, ++n, card_position.x, card_position.y, card_position.rotate, this.z_fighter.current(), i === this.card_count - 1);
+        for (const card of this.card_container.getCards()) {
+            const card_position = this.card_positions[i];
+            this.addDropper(container, card, i + 1, card_position.x, card_position.y, card_position.rotate, this.z_fighter.current(), i === this.card_count - 1);
             this.z_fighter.up();
+            ++i;
         }
     }
 
@@ -145,12 +155,19 @@ class Fan {
         this.angle -= this.separation_angle;
         let coords = this.getCoordinates(this.angle, false);
         let rotate = this.getRotation(coords.x, coords.y, false);
-        this.addDropper(container, 0, coords.x - this.zero_out_x_avg, coords.y - this.zero_out_y_avg, rotate, this.z_fighter.current(), false);
+        this.addDropper(container, null, 0, coords.x - this.zero_out_x_avg, coords.y - this.zero_out_y_avg, rotate, this.z_fighter.current(), false);
     }
 
-    addDropper(container, id, x, y, rotate, zindex, is_last) {
-        let dropper = $('<div class="card-hand-dropper"></div>');
-        let indicator = $('<div class="card-hand-dropper-indicator"></div>');
+    addDropper(container, card, id, x, y, rotate, zindex, is_last) {
+        let dropper = container.find(`.card-hand-dropper[data-dropper-id='${id}']`);
+        let indicator = container.find(`.card-hand-dropper-indicator[data-dropper-id='${id}']`);
+        let is_new = false;
+
+        if (0 === dropper.length) {
+            is_new = true;
+            dropper = $(`<div class="card-hand-dropper" data-dropper-id="${id}"></div>`);
+            indicator = $(`<div class="card-hand-dropper-indicator" data-dropper-id="${id}"></div>`);
+        }
 
         dropper.css('position', 'absolute');
         dropper.css('left', x + 'px');
@@ -164,7 +181,10 @@ class Fan {
 
         indicator.css('width',  (this.card_width * .05) + 'px');
         indicator.css('height', this.card_height + 'px');
-        dropper.append(indicator);
-        container.append(dropper);
+
+        if (is_new) {
+            dropper.append(indicator);
+            container.append(dropper);
+        }
     }
 }

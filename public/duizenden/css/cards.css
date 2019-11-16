@@ -1,19 +1,6 @@
 .card {
-    /*font-size: 22px;*/
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-content:center;*/
-    /*flex-direction:column;*/
-    /*vertical-align: middle;*/
-    /*text-align: center;*/
-    /*background: #fbfbfb;*/
-    /*line-height: 22px;*/
-    /*margin-top: 6px;*/
     border: 1px solid #ddd;
     border-radius: 5px;
-    /*background-size: contain;*/
-    /*margin-right: 5px;*/
-    /*margin-bottom: 11px;*/
     transition: margin-bottom .09s, margin-right .09s, width .09s, height .09s;
     background-image: url('/duizenden/deck1.gif');
 }
@@ -24,203 +11,84 @@
 }
 
 .card.hand {
-    background-size: 1807px; /* .278 */
-    /*overflow: hidden;*/
-    width: 139px; /* height * 0,63 */
-    height: 220px;
-    /*border: 1px solid #ddd;*/
-    /*border-radius: 5px;*/
-    /*background-color: #fff;*/
+    background-size: 156vmin; /* 100vw * cw * 13 * 100 / 100vw */
+    width: 12vmin; /* height * 0,63 */
+    height: 19vmin;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.09);
 }
 
 .card.table {
-    width: 113px; /* height * 0,63 */
-    height: 180px;
-    background-size: 1469px; /* .226 */
+    background-size: 139.1vmin;
+    width: 10.7vmin;
+    height: 17vmin;
 }
 
 .card.opponent {
-    width: 76px; /* height * 0,63 */
-    height: 120px;
-    background-size: 988px; /* 13 * 76px */
+    background-size: 98.8vmin;
+    width: 7.6vmin;
+    height: 12vmin;
 }
-
 
 .card.draggable {
     cursor: grab;
 }
 
-.card.hand.s2 { background-position: 0 0; }
-.card.hand.s3 { background-position: -139px 0; }
-.card.hand.s4 { background-position: -278px 0; }
-.card.hand.s5 { background-position: -417px 0; }
-.card.hand.s6 { background-position: -556px 0; }
-.card.hand.s7 { background-position: -695px 0; }
-.card.hand.s8 { background-position: -834px 0; }
-.card.hand.s9 { background-position: -973px 0; }
-.card.hand.s10 { background-position: -1112px 0; }
-.card.hand.sj { background-position: -1251px 0; }
-.card.hand.sq { background-position: -1390px 0; }
-.card.hand.sk { background-position: -1529px 0; }
-.card.hand.sa, .card.hand.s1 { background-position: -1668px 0; }
-.card.hand.h2 { background-position: 0 -220px; }
-.card.hand.h3 { background-position: -139px -220px; }
-.card.hand.h4 { background-position: -278px -220px; }
-.card.hand.h5 { background-position: -417px -220px; }
-.card.hand.h6 { background-position: -556px -220px; }
-.card.hand.h7 { background-position: -695px -220px; }
-.card.hand.h8 { background-position: -834px -220px; }
-.card.hand.h9 { background-position: -973px -220px; }
-.card.hand.h10 { background-position: -1112px -220px; }
-.card.hand.hj { background-position: -1251px -220px; }
-.card.hand.hq { background-position: -1390px -220px; }
-.card.hand.hk { background-position: -1529px -220px; }
-.card.hand.ha, .card.hand.h1 { background-position: -1668px -220px; }
-.card.hand.d2 { background-position: 0 -440px; }
-.card.hand.d3 { background-position: -139px -440px; }
-.card.hand.d4 { background-position: -278px -440px; }
-.card.hand.d5 { background-position: -417px -440px; }
-.card.hand.d6 { background-position: -556px -440px; }
-.card.hand.d7 { background-position: -695px -440px; }
-.card.hand.d8 { background-position: -834px -440px; }
-.card.hand.d9 { background-position: -973px -440px; }
-.card.hand.d10 { background-position: -1112px -440px; }
-.card.hand.dj { background-position: -1251px -440px; }
-.card.hand.dq { background-position: -1390px -440px; }
-.card.hand.dk { background-position: -1529px -440px; }
-.card.hand.da, .card.hand.d1 { background-position: -1668px -440px; }
-.card.hand.c2 { background-position: 0 -660px; }
-.card.hand.c3 { background-position: -139px -660px; }
-.card.hand.c4 { background-position: -278px -660px; }
-.card.hand.c5 { background-position: -417px -660px; }
-.card.hand.c6 { background-position: -556px -660px; }
-.card.hand.c7 { background-position: -695px -660px; }
-.card.hand.c8 { background-position: -834px -660px; }
-.card.hand.c9 { background-position: -973px -660px; }
-.card.hand.c10 { background-position: -1112px -660px; }
-.card.hand.cj { background-position: -1251px -660px; }
-.card.hand.cq { background-position: -1390px -660px; }
-.card.hand.ck { background-position: -1529px -660px; }
-.card.hand.ca, .card.hand.c1 { background-position: -1668px -660px; }
-.card.hand.y0 { background-position: 0 -880px; }
-.card.hand.x0 { background-position: -139px -880px; }
-.card.table.blue { background-position: -278px -880px; }
-.card.table.red { background-position: -417px -880px; }
-
-.card.opponent.s2 { background-position: 0 0; }
-.card.opponent.s3 { background-position: -76px 0; }
-.card.opponent.s4 { background-position: -152px 0; }
-.card.opponent.s5 { background-position: -228px 0; }
-.card.opponent.s6 { background-position: -304px 0; }
-.card.opponent.s7 { background-position: -380px 0; }
-.card.opponent.s8 { background-position: -456px 0; }
-.card.opponent.s9 { background-position: -532px 0; }
-.card.opponent.s10 { background-position: -608px 0; }
-.card.opponent.sj { background-position: -684px 0; }
-.card.opponent.sq { background-position: -760px 0; }
-.card.opponent.sk { background-position: -836px 0; }
-.card.opponent.sa, .card.opponent.s1 { background-position: -912px 0; }
-.card.opponent.h2 { background-position: 0 -120px; }
-.card.opponent.h3 { background-position: -76px -120px; }
-.card.opponent.h4 { background-position: -152px -120px; }
-.card.opponent.h5 { background-position: -228px -120px; }
-.card.opponent.h6 { background-position: -304px -120px; }
-.card.opponent.h7 { background-position: -380px -120px; }
-.card.opponent.h8 { background-position: -456px -120px; }
-.card.opponent.h9 { background-position: -532px -120px; }
-.card.opponent.h10 { background-position: -608px -120px; }
-.card.opponent.hj { background-position: -684px -120px; }
-.card.opponent.hq { background-position: -760px -120px; }
-.card.opponent.hk { background-position: -836px -120px; }
-.card.opponent.ha, .card.opponent.h1 { background-position: -912px -120px; }
-.card.opponent.d2 { background-position: 0 -240px; }
-.card.opponent.d3 { background-position: -76px -240px; }
-.card.opponent.d4 { background-position: -152px -240px; }
-.card.opponent.d5 { background-position: -228px -240px; }
-.card.opponent.d6 { background-position: -304px -240px; }
-.card.opponent.d7 { background-position: -380px -240px; }
-.card.opponent.d8 { background-position: -456px -240px; }
-.card.opponent.d9 { background-position: -532px -240px; }
-.card.opponent.d10 { background-position: -608px -240px; }
-.card.opponent.dj { background-position: -684px -240px; }
-.card.opponent.dq { background-position: -760px -240px; }
-.card.opponent.dk { background-position: -836px -240px; }
-.card.opponent.da, .card.opponent.d1 { background-position: -912px -240px; }
-.card.opponent.c2 { background-position: 0 -360px; }
-.card.opponent.c3 { background-position: -76px -360px; }
-.card.opponent.c4 { background-position: -152px -360px; }
-.card.opponent.c5 { background-position: -228px -360px; }
-.card.opponent.c6 { background-position: -304px -360px; }
-.card.opponent.c7 { background-position: -380px -360px; }
-.card.opponent.c8 { background-position: -456px -360px; }
-.card.opponent.c9 { background-position: -532px -360px; }
-.card.opponent.c10 { background-position: -608px -360px; }
-.card.opponent.cj { background-position: -684px -360px; }
-.card.opponent.cq { background-position: -760px -360px; }
-.card.opponent.ck { background-position: -836px -360px; }
-.card.opponent.ca, .card.opponent.c1 { background-position: -912px -360px; }
-.card.opponent.y0 { background-position: 0 -360px; }
-.card.opponent.x0 { background-position: -76px -480px; }
-.card.opponent.blue { background-position: -152px -480px; }
-.card.opponent.red { background-position: -228px -480px; }
-
-.card.table.s2 { background-position: 0 0; }
-.card.table.s3 { background-position: -113px 0; }
-.card.table.s4 { background-position: -226px 0; }
-.card.table.s5 { background-position: -339px 0; }
-.card.table.s6 { background-position: -452px 0; }
-.card.table.s7 { background-position: -565px 0; }
-.card.table.s8 { background-position: -678px 0; }
-.card.table.s9 { background-position: -791px 0; }
-.card.table.s10 { background-position: -904px 0; }
-.card.table.sj { background-position: -1017px 0; }
-.card.table.sq { background-position: -1130px 0; }
-.card.table.sk { background-position: -1243px 0; }
-.card.table.sa, .card.table.s1 { background-position: -1356px 0; }
-.card.table.h2 { background-position: 0 -179px; }
-.card.table.h3 { background-position: -113px -179px; }
-.card.table.h4 { background-position: -226px -179px; }
-.card.table.h5 { background-position: -339px -179px; }
-.card.table.h6 { background-position: -452px -179px; }
-.card.table.h7 { background-position: -565px -179px; }
-.card.table.h8 { background-position: -678px -179px; }
-.card.table.h9 { background-position: -791px -179px; }
-.card.table.h10 { background-position: -904px -179px; }
-.card.table.hj { background-position: -1017px -179px; }
-.card.table.hq { background-position: -1130px -179px; }
-.card.table.hk { background-position: -1243px -179px; }
-.card.table.ha, .card.table.h1 { background-position: -1356px -179px; }
-.card.table.d2 { background-position: 0 -358px; }
-.card.table.d3 { background-position: -113px -358px; }
-.card.table.d4 { background-position: -226px -358px; }
-.card.table.d5 { background-position: -339px -358px; }
-.card.table.d6 { background-position: -452px -358px; }
-.card.table.d7 { background-position: -565px -358px; }
-.card.table.d8 { background-position: -678px -358px; }
-.card.table.d9 { background-position: -791px -358px; }
-.card.table.d10 { background-position: -904px -358px; }
-.card.table.dj { background-position: -1017px -358px; }
-.card.table.dq { background-position: -1130px -358px; }
-.card.table.dk { background-position: -1243px -358px; }
-.card.table.da, .card.table.d1 { background-position: -1356px -358px; }
-.card.table.c2 { background-position: 0 -537px; }
-.card.table.c3 { background-position: -113px -537px; }
-.card.table.c4 { background-position: -226px -537px; }
-.card.table.c5 { background-position: -339px -537px; }
-.card.table.c6 { background-position: -452px -537px; }
-.card.table.c7 { background-position: -565px -537px; }
-.card.table.c8 { background-position: -678px -537px; }
-.card.table.c9 { background-position: -791px -537px; }
-.card.table.c10 { background-position: -904px -537px; }
-.card.table.cj { background-position: -1017px -537px; }
-.card.table.cq { background-position: -1130px -537px; }
-.card.table.ck { background-position: -1243px -537px; }
-.card.table.ca, .card.table.c1 { background-position: -1356px -537px; }
-.card.table.y0 { background-position: 0 -716px; }
-.card.table.x0 { background-position: -113px -716px; }
-.card.table.blue { background-position: -226px -716px; }
-.card.table.red { background-position: -339px -716px; }
+.card.s2 { background-position: 0 0; }
+.card.s3 { background-position: calc(1 * 8.333%) 0; }
+.card.s4 { background-position: calc(2 * 8.333%) 0; }
+.card.s5 { background-position: calc(3 * 8.333%) 0; }
+.card.s6 { background-position: calc(4 * 8.333%) 0; }
+.card.s7 { background-position: calc(5 * 8.333%) 0; }
+.card.s8 { background-position: calc(6 * 8.333%) 0; }
+.card.s9 { background-position: calc(7 * 8.333%) 0; }
+.card.s10 { background-position: calc(8 * 8.333%) 0; }
+.card.sj { background-position: calc(9 * 8.333%) 0; }
+.card.sq { background-position: calc(10 * 8.333%) 0; }
+.card.sk { background-position: calc(11 * 8.333%) 0; }
+.card.sa, .card.s1 { background-position: calc(12 * 8.333%) 0; }
+.card.h2 { background-position: 0 25%; }
+.card.h3 { background-position: calc(1 * 8.333%) 25%; }
+.card.h4 { background-position: calc(2 * 8.333%) 25%; }
+.card.h5 { background-position: calc(3 * 8.333%) 25%; }
+.card.h6 { background-position: calc(4 * 8.333%) 25%; }
+.card.h7 { background-position: calc(5 * 8.333%) 25%; }
+.card.h8 { background-position: calc(6 * 8.333%) 25%; }
+.card.h9 { background-position: calc(7 * 8.333%) 25%; }
+.card.h10 { background-position: calc(8 * 8.333%) 25%; }
+.card.hj { background-position: calc(9 * 8.333%) 25%; }
+.card.hq { background-position: calc(10 * 8.333%) 25%; }
+.card.hk { background-position: calc(11 * 8.333%) 25%; }
+.card.ha, .card.h1 { background-position: calc(12 * 8.333%) 25%; }
+.card.d2 { background-position: 0 50%; }
+.card.d3 { background-position: calc(1 * 8.333%) 50%; }
+.card.d4 { background-position: calc(2 * 8.333%) 50%; }
+.card.d5 { background-position: calc(3 * 8.333%) 50%; }
+.card.d6 { background-position: calc(4 * 8.333%) 50%; }
+.card.d7 { background-position: calc(5 * 8.333%) 50%; }
+.card.d8 { background-position: calc(6 * 8.333%) 50%; }
+.card.d9 { background-position: calc(7 * 8.333%) 50%; }
+.card.d10 { background-position: calc(8 * 8.333%) 50%; }
+.card.dj { background-position: calc(9 * 8.333%) 50%; }
+.card.dq { background-position: calc(10 * 8.333%) 50%; }
+.card.dk { background-position: calc(11 * 8.333%) 50%; }
+.card.da, .card.d1 { background-position: calc(12 * 8.333%) 50%; }
+.card.c2 { background-position: 0 75%; }
+.card.c3 { background-position: calc(1 * 8.333%) 75%; }
+.card.c4 { background-position: calc(2 * 8.333%) 75%; }
+.card.c5 { background-position: calc(3 * 8.333%) 75%; }
+.card.c6 { background-position: calc(4 * 8.333%) 75%; }
+.card.c7 { background-position: calc(5 * 8.333%) 75%; }
+.card.c8 { background-position: calc(6 * 8.333%) 75%; }
+.card.c9 { background-position: calc(7 * 8.333%) 75%; }
+.card.c10 { background-position: calc(8 * 8.333%) 75%; }
+.card.cj { background-position: calc(9 * 8.333%) 75%; }
+.card.cq { background-position: calc(10 * 8.333%) 75%; }
+.card.ck { background-position: calc(11 * 8.333%) 75%; }
+.card.ca, .card.c1 { background-position: calc(12 * 8.333%) 75%; }
+.card.y0 { background-position: 0 100%; }
+.card.x0 { background-position: calc(1 * 8.333%) 100%; }
+.card.blue { background-position: calc(2 * 8.333%) 100%; }
+.card.red { background-position: calc(3 * 8.333%) 100%; }
 
 .card_hand_dropper {
     display: none;

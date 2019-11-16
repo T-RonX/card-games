@@ -1,6 +1,10 @@
 class HandHoverAnimator {
     constructor(card_container, card_width, card_height, trans_top) {
         this.card_container = card_container;
+        this.setParameters(card_width, card_height, trans_top);
+    }
+
+    setParameters(card_width, card_height, trans_top) {
         this.card_width = card_width;
         this.card_height = card_height;
         this.trans_top = trans_top;
@@ -45,9 +49,7 @@ class HandHoverAnimator {
 
             });
 
-            card.hover(
-                null,
-                e => {
+            card.hover(null, e => {
                     let card = $(e.target);
                     if (card.data('is_hover_animated') && !card.data('dragger').isDragging()) {
                         card.animate({transform: '+=translate(0, ' + this.trans_top + 'px) '}, 34);
