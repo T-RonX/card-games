@@ -21,6 +21,10 @@
     transition: outline-width .1s, outline-color .1s;
 }
 
+.card.ui-draggable-dragging {
+    opacity: .75;
+}
+
 .card.hand {
     background-size: 156vmin; /* 100vw * cw * 13 * 100 / 100vw */
     width: 12vmin; /* height * 0,63 */
@@ -101,12 +105,10 @@
 .card.blue { background-position: calc(2 * 8.333%) 100%; }
 .card.red { background-position: calc(3 * 8.333%) 100%; }
 
-
 .card-hand-dropper.highlight .card-hand-dropper-indicator {
     float: right;
-    opacity: .7;
-    background-color: lawngreen;
-    border-radius: .48vmin;
+    background-color: #eac300;
+    border-radius: 5vmin;
 }
 
 #discarded-pool.highlighted {

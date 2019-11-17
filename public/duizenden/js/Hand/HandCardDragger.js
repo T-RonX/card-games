@@ -17,7 +17,6 @@ class HandCardDragger extends CardDragger {
 
             card.data('rotation_angle', rotate);
             card.css('transform', 'rotate(' + rotate + 'deg)');
-            card.css('opacity', .6/*Math.max(.3, 1 - allowed_angle)*/);
         }
     }
 }
