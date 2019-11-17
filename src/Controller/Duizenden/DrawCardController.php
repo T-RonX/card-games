@@ -154,9 +154,7 @@ class DrawCardController extends AbstractController
 
 			if (null !== $target)
 			{
-				$message->setExtras([
-					'target' => $target,
-				]);
+				$message->addExtra('target', $target);
 			}
 
 			if ($player->equals($current_player))

@@ -244,6 +244,13 @@ class StateData
 		return $this;
 	}
 
+	public function addExtra(string $key, $value): self
+	{
+		$this->extra[$key] = $value;
+
+		return $this;
+	}
+
 	public function getExtras(): ?array
 	{
 		return $this->extra;

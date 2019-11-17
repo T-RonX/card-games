@@ -94,7 +94,7 @@ class GameEventMessageHandler {
 
     drawFromUndrawn(state) {
         if (state.isCurrentPlayer(this.player_id)) {
-            this.addExtraCardToLocalHand(state);
+            this.addExtraCardToLocalHand(state, true);
             UndrawnCard.resetCard();
         } else {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
@@ -107,9 +107,9 @@ class GameEventMessageHandler {
         this.manageDraggableDiscardedCard(state);
     }
 
-    drawFromDiscarded(state) {
+    drawFromDiscarded(state, do_outline = true) {
         if (state.isCurrentPlayer(this.player_id)) {
-            this.addExtraCardToLocalHand(state);
+            this.addExtraCardToLocalHand(state, do_outline);
         } else {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
@@ -121,18 +121,21 @@ class GameEventMessageHandler {
         this.manageDiscardedCard(state);
     }
 
-    addExtraCardToLocalHand(state) {
+    addExtraCardToLocalHand(state, do_outline) {
         const player_cards = this.getLocalPlayer(state).hand.cards;
         const cards = this.game.getHand().getHandContainer().getCards(true);
         const cards_added = DiffCalculator.cardDiff(player_cards, cards);
         this.game.getHand().addCards(cards_added, state.getExtra('target'));
         const card = this.game.getHand().getCardElementAt(state.getExtra('target') + 1);
-        this.outlineAddedCard(card);
+
+        if (do_outline) {
+            this.outlineAddedCard(card);
+        }
     }
 
     drawFromDiscardedAndMeld(state) {
         this.meldCards(state);
-        this.drawFromDiscarded(state);
+        this.drawFromDiscarded(state, false);
     }
 
     meldCards(state) {
