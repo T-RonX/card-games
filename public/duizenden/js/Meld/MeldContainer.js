@@ -20,7 +20,7 @@ class MeldContainer {
     }
 
     createCard(identifier) {
-        return $(`<div data-card-id="${identifier}" class="card table ${CardHelper.getValueFromId(identifier)} draggable"></div>`);
+        return $(`<div data-card-id="${identifier}" class="card table ${CardHelper.getValueFromId(identifier)}"></div>`);
     }
 
     clear() {
