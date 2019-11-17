@@ -7,7 +7,7 @@
 
 .card.add-out {
     transition: outline-width 1.6s, outline-color 1.6s;
-    outline: 3.5vmin solid transparent;
+    outline: 2.5vmin solid transparent;
 }
 
 .card.add-in {
@@ -112,6 +112,6 @@
 }
 
 #discarded-pool.highlighted {
-    background: #801f0E;
+    background: #801f0e;
     min-width: 11vmin;
 }
