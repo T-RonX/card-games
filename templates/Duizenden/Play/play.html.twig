@@ -101,8 +101,8 @@ $(document).ready(() => {
             '{{ path('duizenden.draw_from_undrawn', {target: '000'}) }}',
             vmin(12),
             vmin(19),
-            vmin(10.7),
-            vmin(17),
+            vmin(9.45),
+            vmin(15),
             .28,
             card_separation_melds,
             extend_meld_url,
@@ -138,7 +138,7 @@ $(document).ready(() => {
         }
 
         for (const meld of game.getAllMelds()) {
-            meld.redraw(vmin(10.7), vmin(17));
+            meld.redraw(vmin(9.45), vmin(15));
         }
     })
 });

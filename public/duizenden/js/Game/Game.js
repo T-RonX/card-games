@@ -63,7 +63,7 @@ class Game {
         let unique = 0;
 
         for (const meld of this.melds) {
-            const m = Melds.createMeld(this.player_id, this.z_fighter, meld.cards.cards, container, 113, 179, this.card_separation_meld, this.path_extend_meld, 0, ++unique);
+            const m = Melds.createMeld(this.player_id, this.z_fighter, meld.cards.cards, container, this.card_width_meld, this.card_height_meld, this.card_separation_meld, this.path_extend_meld, 0, ++unique);
             this.all_melds.push(m);
         }
     }

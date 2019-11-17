@@ -17,6 +17,7 @@ class Meld {
     }
 
     redraw(card_width, card_height) {
-        this.card_fan.redraw(card_width, card_height, 0, this.getOffsetX(card_width));
+        this.meld_container.redraw(card_width, card_height);
+        this.card_fan.redraw(card_width, card_height, 0, -this.getOffsetX(card_width));
     }
 }

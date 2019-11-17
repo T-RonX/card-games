@@ -1,6 +1,4 @@
 body {
-    height: 100vh;
-    width: 100vw;
     overflow: hidden;
 }
 
@@ -22,7 +20,7 @@ body {
 .hand-opponent, .melds-opponent {
     flex: 1;
     flex-wrap: wrap;
-    max-height: 46vh;
+    max-height: 28vh;
 }
 
 .hand-opponent {
@@ -53,9 +51,10 @@ body {
 
 #melds-local {
     display: flex;
-    max-height: 18vh;
+    max-height: 36vh;
     overflow-y: auto;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 #local-player {
