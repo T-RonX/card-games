@@ -4,7 +4,7 @@ class Hand {
         this.selector = selector;
         this.hand_container = new HandContainer(hand_cards, selector, this.createCardElement);
        // this.cards = $(selector);
-        this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, true, Math.ceil(card_height / 3.5), Math.ceil(card_width / 2), true, 0, z_fighter, false, true);
+        this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, true, -Math.ceil(card_height * .03), Math.ceil(card_width / 2), true, 0, z_fighter, false, true);
         this.hover_animator = new HandHoverAnimator(this.hand_container, card_width, card_height, Math.ceil(card_height * .175));
         this.dropable_hand = new DroppableHand(this, path_draw_from_discarded, path_draw_from_undrawn);
     }
@@ -18,7 +18,7 @@ class Hand {
     }
 
     redraw(card_width, card_height) {
-        this.card_fan.redraw(card_width, card_height, Math.ceil(card_height / 3.5), Math.ceil(card_width / 2));
+        this.card_fan.redraw(card_width, card_height, -Math.ceil(card_height * .03), Math.ceil(card_width / 2));
         this.hover_animator.setParameters(card_width, card_height, Math.ceil(card_height * .175));
     }
 

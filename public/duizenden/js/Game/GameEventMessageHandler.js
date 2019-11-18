@@ -1,9 +1,11 @@
 class GameEventMessageHandler {
-    constructor(game_id, player_id, extend_meld_url, card_separation_melds) {
+    constructor(game_id, player_id, extend_meld_url, meld_card_width, meld_card_height, card_separation_melds) {
         this.game_id = game_id;
         this.player_id = player_id;
         this.game = null;
         this.extend_meld_url = extend_meld_url;
+        this.meld_card_width = meld_card_width;
+        this.meld_card_height = meld_card_height;
         this.card_separation_melds = card_separation_melds;
     }
 
@@ -140,22 +142,22 @@ class GameEventMessageHandler {
 
     meldCards(state) {
         if (state.isSourcePlayerCurrentPlayer()) {
-            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $('#melds-local'), 113, 179, this.card_separation_melds, this.extend_meld_url, 0, state.getExtra('meld_id') + 1);
+            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $('#melds-local'), this.meld_card_width, this.meld_card_height, this.card_separation_melds, this.extend_meld_url, 0, state.getExtra('meld_id') + 1);
             this.game.getHand().removeCards(state.getExtra('cards_melted'));
         } else {
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
-            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $(`.melds-opponent[data-player-id='${state.getSourcePlayerId()}']`), 113, 179, this.card_separation_melds, null, 0, state.getExtra('meld_id') + 1, true);
+            Melds.createMeld(state.getSourcePlayerId(), new ZFighter(1), state.getExtra('cards_melted'), $(`.melds-opponent[data-player-id='${state.getSourcePlayerId()}']`), this.meld_card_width, this.meld_card_height, this.card_separation_melds, null, 0, state.getExtra('meld_id') + 1, true);
         }
     }
 
     extendMeld(state) {
         const meld = state.getPlayerMeld(state.getSourcePlayerId(), state.getExtra('meld_id'));
         if (state.isSourcePlayerCurrentPlayer()) {
-            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, 113, 179, this.card_separation_melds, this.extend_meld_url, 0);
+            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, this.meld_card_width, this.meld_card_height, this.card_separation_melds, this.extend_meld_url, 0);
             this.game.getHand().removeCard(state.getExtra('card_melted'));
         } else {
-            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, 113, 179, this.card_separation_melds, null, 180);
+            Melds.extendMeld(state.getSourcePlayerId(), state.getExtra('meld_id') + 1, meld.cards.cards, this.meld_card_width, this.meld_card_height, this.card_separation_melds, null, 0);
             this.game.setOpponentCards(state.getPlayersExcept(this.player_id));
             this.game.initializeOpponentHands();
         }

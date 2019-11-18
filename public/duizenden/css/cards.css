@@ -26,9 +26,9 @@
 }
 
 .card.hand {
-    background-size: 156vmin; /* 100vw * cw * 13 * 100 / 100vw */
-    width: 12vmin; /* height * 0,63 */
-    height: 19vmin;
+    background-size: 139.1vmin; /* 100vw * cw * 13 * 100 / 100vw */
+    width: 10.7vmin; /* height * 0,63 */
+    height: 17vmin;
     box-shadow: 0 1.5vmin 2.5vmin rgba(0, 0, 0, 0.09);
 }
 

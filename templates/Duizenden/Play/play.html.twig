@@ -66,10 +66,21 @@
 <script>
 let game;
 $(document).ready(() => {
-    const card_separation_melds = .19;
+    const hand_card_width = 10.7;
+    const hand_card_height = 17;
+    const hand_card_separation = .28;
+
+    const meld_card_width = 9.45;
+    const meld_card_height = 15;
+    const meld_card_separation = .22;
+
+    const opponent_card_width = 7.6;
+    const opponent_card_height = 12;
+    const opponent_card_separation = .2;
+
     const extend_meld_url = '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}';
     const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
-    const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}', extend_meld_url, card_separation_melds);
+    const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}', extend_meld_url, vmin(meld_card_width), vmin(meld_card_height), meld_card_separation);
     const event_handler = new GameEvent(connection, message_handler);
     window.player_event_message_handler.setGameEventHandler(message_handler);
     event_handler.initialize();
@@ -99,13 +110,16 @@ $(document).ready(() => {
             '.card',
             '{{ path('duizenden.draw_from_discarded', {meld_cards: '000', target: '111'}) }}',
             '{{ path('duizenden.draw_from_undrawn', {target: '000'}) }}',
-            vmin(12),
-            vmin(19),
-            vmin(9.45),
-            vmin(15),
-            .28,
-            card_separation_melds,
+            vmin(hand_card_width),
+            vmin(hand_card_height),
+            vmin(meld_card_width),
+            vmin(meld_card_height),
+            hand_card_separation,
+            meld_card_separation,
             extend_meld_url,
+            opponent_card_separation,
+            vmin(opponent_card_width),
+            vmin(opponent_card_height)
         );
 
         game.initialize();
@@ -131,14 +145,14 @@ $(document).ready(() => {
     });
 
     $(window).resize(function () {
-        game.getHand().redraw(vmin(12), vmin(19));
+        game.getHand().redraw(vmin(hand_card_width), vmin(hand_card_height));
 
         for (const hand of game.getOpponentHands()) {
-            hand.redraw(vmin(7.6), vmin(12));
+            hand.redraw(vmin(opponent_card_width), vmin(opponent_card_height));
         }
 
         for (const meld of game.getAllMelds()) {
-            meld.redraw(vmin(9.45), vmin(15));
+            meld.redraw(vmin(meld_card_width), vmin(meld_card_height));
         }
     })
 });

@@ -3,7 +3,6 @@ body {
 }
 
 #game-container div {
-    /*box-sizing: border-box;*/
     /*border: yellow 1px dotted;*/
 }
 
@@ -14,13 +13,13 @@ body {
 
 #hands-opponents {
     display: flex;
-    height: 18vh;
+    height: 17vh;
 }
 
 .hand-opponent, .melds-opponent {
     flex: 1;
     flex-wrap: wrap;
-    max-height: 28vh;
+    max-height: 27vh;
 }
 
 .hand-opponent {
@@ -40,7 +39,7 @@ body {
 #table-opponents {
     display: flex;
     flex-direction: column;
-    flex-basis: 64vh;
+    flex-basis: 63vh;
     justify-content: space-between;
 }
 
@@ -60,7 +59,7 @@ body {
 #local-player {
     display: flex;
     justify-content: space-between;
-    height: 18vh;
+    height: 20vh;
 }
 
 #card-stacks, #reporting {

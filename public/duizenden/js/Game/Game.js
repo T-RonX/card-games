@@ -1,5 +1,5 @@
 class Game {
-    constructor(player_id, z_fighter, event_handler, hand, melds, opponent_cards, card_width_meld, card_height_meld, card_separation_meld, path_extend_meld) {
+    constructor(player_id, z_fighter, event_handler, hand, melds, opponent_cards, card_width_meld, card_height_meld, card_separation_meld, path_extend_meld, opponent_card_separation, opponent_card_width, opponent_card_height) {
         this.event_handler = event_handler;
         this.z_fighter = z_fighter;
         this.hand = hand;
@@ -12,6 +12,9 @@ class Game {
         this.path_extend_meld = path_extend_meld;
         this.player_id = player_id;
         this.all_melds = [];
+        this.opponent_card_separation = opponent_card_separation;
+        this.opponent_card_width = opponent_card_width;
+        this.opponent_card_height = opponent_card_height;
     }
 
     getAllMelds() {
@@ -39,12 +42,15 @@ class Game {
         card_height_meld,
         card_separation,
         card_separation_meld,
-        path_extend_meld) {
+        path_extend_meld,
+        opponent_card_separation,
+        opponent_card_width,
+        opponent_card_height) {
 
         const z_fighter = new ZFighter(100);
         const hand = new Hand(z_fighter, hand_container_selector, hand_cards, path_draw_from_discarded, path_draw_from_undrawn, card_width, card_height, card_separation);
 
-        let game = new Game(player_id, z_fighter, event_handler, hand, melds, opponent_cards, card_width_meld, card_height_meld, card_separation_meld, path_extend_meld);
+        let game = new Game(player_id, z_fighter, event_handler, hand, melds, opponent_cards, card_width_meld, card_height_meld, card_separation_meld, path_extend_meld, opponent_card_separation, opponent_card_width, opponent_card_height);
         event_handler.setGame(game);
 
         return game;
@@ -99,7 +105,7 @@ class Game {
             }
 
             const cards = CardHelper.cardIdsHaveValues(opponent.hand.cards) ? opponent.hand.cards : opponent.hand.cards.reverse();
-            const hand = new OpponentHand(this.z_fighter, cards, hand_container, 76, 120, .2, 0);
+            const hand = new OpponentHand(this.z_fighter, cards, hand_container, this.opponent_card_width, this.opponent_card_height, this.opponent_card_separation, 0);
             hand.initialize();
             this.opponent_hands.push(hand);
 
