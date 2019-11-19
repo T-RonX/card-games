@@ -33,12 +33,11 @@ class MeldContainer {
         this.show()
     }
 
-    show()
-    {
-        const width = ((((this.card_count - 1) * this.card_width) * this.card_separation) + this.card_width) * 1.03;
-        const height = this.card_height * (1 + (this.card_count / 100));
-        this.container.css('width', width  + 'px');
-        this.container.css('height', height  + 'px');
+    show() {
+        const width = ((((this.card_count - 1) * this.card_width) * this.card_separation) + this.card_width) * 1.015;
+        const height = this.card_height + this.card_height * .03;
+        this.container.css('width', width + 'px');
+        this.container.css('height', height + 'px');
         this.container.fadeIn(200);
     }
 

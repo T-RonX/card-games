@@ -1,7 +1,7 @@
 class OpponentHand {
     constructor(z_fighter, cards, selector, card_width, card_height, card_separation, angle) {
         this.hand_container = new HandContainer(cards, selector, this.createCardElement);
-        this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, .011, 0, Math.ceil(card_width / 2), true, angle, z_fighter, false, false);
+        this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, .013, 0, Math.ceil(card_width / 2), true, angle, z_fighter, false, false);
     }
 
     createCardElement(id, index) {

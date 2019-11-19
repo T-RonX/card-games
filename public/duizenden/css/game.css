@@ -13,13 +13,13 @@ body {
 
 #hands-opponents {
     display: flex;
-    height: 17vh;
+    height: 15vh;
 }
 
 .hand-opponent, .melds-opponent {
     flex: 1;
     flex-wrap: wrap;
-    max-height: 27vh;
+    max-height: 29vh;
 }
 
 .hand-opponent {
@@ -39,7 +39,7 @@ body {
 #table-opponents {
     display: flex;
     flex-direction: column;
-    flex-basis: 63vh;
+    flex-basis: 65vh;
     justify-content: space-between;
 }
 
@@ -50,7 +50,7 @@ body {
 
 #melds-local {
     display: flex;
-    max-height: 36vh;
+    max-height: 35vh;
     overflow-y: auto;
     justify-content: center;
     flex-wrap: wrap;

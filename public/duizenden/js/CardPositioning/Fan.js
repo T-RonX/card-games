@@ -146,7 +146,7 @@ class Fan {
                 offset_angle = Math.random();
             }
 
-            let div_angle = this.separation_angle * 10;
+            let div_angle = (this.card_width * this.random_deviation) * 8;
             div_rotate = (Math.floor(offset_angle * (2 * div_angle + 1)) - div_angle) / 10;
             rotate += div_rotate;
         }
