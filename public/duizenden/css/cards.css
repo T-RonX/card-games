@@ -27,79 +27,79 @@
 
 .card.hand {
     background-size: 139.1vmin; /* 100vw * cw * 13 * 100 / 100vw */
-    width: 10.7vmin; /* height * 0,63 */
-    height: 17vmin;
+    width: 10.70vmin; /* height * 0,63 */
+    height: 17.46vmin;
     box-shadow: 0 1.5vmin 2.5vmin rgba(0, 0, 0, 0.09);
 }
 
 .card.table {
     background-size: 122.8vmin;
     width: 9.45vmin;
-    height: 15vmin;
+    height: 15.42vmin;
 }
 
 .card.opponent {
     background-size: 98.8vmin;
-    width: 7.6vmin;
-    height: 12vmin;
+    width: 7.60vmin;
+    height: 12.40vmin;
 }
 
 .card.draggable {
     cursor: grab;
 }
 
-.card.s2 { background-position: 0 0; }
-.card.s3 { background-position: calc(1 * 8.333%) 0; }
-.card.s4 { background-position: calc(2 * 8.333%) 0; }
-.card.s5 { background-position: calc(3 * 8.333%) 0; }
-.card.s6 { background-position: calc(4 * 8.333%) 0; }
-.card.s7 { background-position: calc(5 * 8.333%) 0; }
-.card.s8 { background-position: calc(6 * 8.333%) 0; }
-.card.s9 { background-position: calc(7 * 8.333%) 0; }
-.card.s10 { background-position: calc(8 * 8.333%) 0; }
-.card.sj { background-position: calc(9 * 8.333%) 0; }
-.card.sq { background-position: calc(10 * 8.333%) 0; }
-.card.sk { background-position: calc(11 * 8.333%) 0; }
-.card.sa, .card.s1 { background-position: calc(12 * 8.333%) 0; }
-.card.h2 { background-position: 0 25%; }
-.card.h3 { background-position: calc(1 * 8.333%) 25%; }
-.card.h4 { background-position: calc(2 * 8.333%) 25%; }
-.card.h5 { background-position: calc(3 * 8.333%) 25%; }
-.card.h6 { background-position: calc(4 * 8.333%) 25%; }
-.card.h7 { background-position: calc(5 * 8.333%) 25%; }
-.card.h8 { background-position: calc(6 * 8.333%) 25%; }
-.card.h9 { background-position: calc(7 * 8.333%) 25%; }
-.card.h10 { background-position: calc(8 * 8.333%) 25%; }
-.card.hj { background-position: calc(9 * 8.333%) 25%; }
-.card.hq { background-position: calc(10 * 8.333%) 25%; }
-.card.hk { background-position: calc(11 * 8.333%) 25%; }
-.card.ha, .card.h1 { background-position: calc(12 * 8.333%) 25%; }
-.card.d2 { background-position: 0 50%; }
-.card.d3 { background-position: calc(1 * 8.333%) 50%; }
-.card.d4 { background-position: calc(2 * 8.333%) 50%; }
-.card.d5 { background-position: calc(3 * 8.333%) 50%; }
-.card.d6 { background-position: calc(4 * 8.333%) 50%; }
-.card.d7 { background-position: calc(5 * 8.333%) 50%; }
-.card.d8 { background-position: calc(6 * 8.333%) 50%; }
-.card.d9 { background-position: calc(7 * 8.333%) 50%; }
-.card.d10 { background-position: calc(8 * 8.333%) 50%; }
-.card.dj { background-position: calc(9 * 8.333%) 50%; }
-.card.dq { background-position: calc(10 * 8.333%) 50%; }
-.card.dk { background-position: calc(11 * 8.333%) 50%; }
-.card.da, .card.d1 { background-position: calc(12 * 8.333%) 50%; }
-.card.c2 { background-position: 0 75%; }
-.card.c3 { background-position: calc(1 * 8.333%) 75%; }
-.card.c4 { background-position: calc(2 * 8.333%) 75%; }
-.card.c5 { background-position: calc(3 * 8.333%) 75%; }
-.card.c6 { background-position: calc(4 * 8.333%) 75%; }
-.card.c7 { background-position: calc(5 * 8.333%) 75%; }
-.card.c8 { background-position: calc(6 * 8.333%) 75%; }
-.card.c9 { background-position: calc(7 * 8.333%) 75%; }
-.card.c10 { background-position: calc(8 * 8.333%) 75%; }
-.card.cj { background-position: calc(9 * 8.333%) 75%; }
-.card.cq { background-position: calc(10 * 8.333%) 75%; }
-.card.ck { background-position: calc(11 * 8.333%) 75%; }
-.card.ca, .card.c1 { background-position: calc(12 * 8.333%) 75%; }
+.card.c2 { background-position: 0 0; }
+.card.c3 { background-position: calc(1 * 8.333%) 0; }
+.card.c4 { background-position: calc(2 * 8.333%) 0; }
+.card.c5 { background-position: calc(3 * 8.333%) 0; }
+.card.c6 { background-position: calc(4 * 8.333%) 0; }
+.card.c7 { background-position: calc(5 * 8.333%) 0; }
+.card.c8 { background-position: calc(6 * 8.333%) 0; }
+.card.c9 { background-position: calc(7 * 8.333%) 0; }
+.card.c10 { background-position: calc(8 * 8.333%) 0; }
+.card.cj { background-position: calc(9 * 8.333%) 0; }
+.card.cq { background-position: calc(10 * 8.333%) 0; }
+.card.ck { background-position: calc(11 * 8.333%) 0; }
+.card.ca, .card.c1 { background-position: calc(12 * 8.333%) 0; }
+.card.d2 { background-position: 0 25%; }
+.card.d3 { background-position: calc(1 * 8.333%) 25%; }
+.card.d4 { background-position: calc(2 * 8.333%) 25%; }
+.card.d5 { background-position: calc(3 * 8.333%) 25%; }
+.card.d6 { background-position: calc(4 * 8.333%) 25%; }
+.card.d7 { background-position: calc(5 * 8.333%) 25%; }
+.card.d8 { background-position: calc(6 * 8.333%) 25%; }
+.card.d9 { background-position: calc(7 * 8.333%) 25%; }
+.card.d10 { background-position: calc(8 * 8.333%) 25%; }
+.card.dj { background-position: calc(9 * 8.333%) 25%; }
+.card.dq { background-position: calc(10 * 8.333%) 25%; }
+.card.dk { background-position: calc(11 * 8.333%) 25%; }
+.card.da, .card.d1 { background-position: calc(12 * 8.333%) 25%; }
+.card.h2 { background-position: 0 50%; }
+.card.h3 { background-position: calc(1 * 8.333%) 50%; }
+.card.h4 { background-position: calc(2 * 8.333%) 50%; }
+.card.h5 { background-position: calc(3 * 8.333%) 50%; }
+.card.h6 { background-position: calc(4 * 8.333%) 50%; }
+.card.h7 { background-position: calc(5 * 8.333%) 50%; }
+.card.h8 { background-position: calc(6 * 8.333%) 50%; }
+.card.h9 { background-position: calc(7 * 8.333%) 50%; }
+.card.h10 { background-position: calc(8 * 8.333%) 50%; }
+.card.hj { background-position: calc(9 * 8.333%) 50%; }
+.card.hq { background-position: calc(10 * 8.333%) 50%; }
+.card.hk { background-position: calc(11 * 8.333%) 50%; }
+.card.ha, .card.h1 { background-position: calc(12 * 8.333%) 50%; }
+.card.s2 { background-position: 0 75%; }
+.card.s3 { background-position: calc(1 * 8.333%) 75%; }
+.card.s4 { background-position: calc(2 * 8.333%) 75%; }
+.card.s5 { background-position: calc(3 * 8.333%) 75%; }
+.card.s6 { background-position: calc(4 * 8.333%) 75%; }
+.card.s7 { background-position: calc(5 * 8.333%) 75%; }
+.card.s8 { background-position: calc(6 * 8.333%) 75%; }
+.card.s9 { background-position: calc(7 * 8.333%) 75%; }
+.card.s10 { background-position: calc(8 * 8.333%) 75%; }
+.card.sj { background-position: calc(9 * 8.333%) 75%; }
+.card.sq { background-position: calc(10 * 8.333%) 75%; }
+.card.sk { background-position: calc(11 * 8.333%) 75%; }
+.card.sa, .card.s1 { background-position: calc(12 * 8.333%) 75%; }
 .card.y0 { background-position: 0 100%; }
 .card.x0 { background-position: calc(1 * 8.333%) 100%; }
 .card.blue { background-position: calc(2 * 8.333%) 100%; }
