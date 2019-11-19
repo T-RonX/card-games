@@ -14,6 +14,7 @@ class Fan {
         this.zero_out_x_avg = 0;
         this.zero_out_y_avg = 0;
         this.add_dropper = add_dropper;
+        this.card_offsets = [];
     }
 
     setup() {
@@ -48,16 +49,17 @@ class Fan {
 
         for (const card of this.card_container.getCards()) {
             const add_deviation = this.random_deviation && this.card_count !== 1;
-            const coords = this.getCoordinates(this.angle, add_deviation);
-            const rotate = this.getRotation(coords.x, coords.y, add_deviation);
-            this.card_positions[i] = { x: coords.x, y: coords.y, rotate: rotate };
+            const coords = this.getCoordinates(this.angle, add_deviation, i);
+            const rotate = this.getRotation(coords.x, coords.y, add_deviation, i);
+            this.card_positions[i] = { x: coords.x, y: coords.y, rotate: rotate.rotate };
+            this.card_offsets[i] = {offset_x: coords.offset_x, offset_y: coords.offset_y, offset_angle: rotate.offset_angle};
 
-            card.data('rotation_angle', rotate);
+            card.data('rotation_angle', rotate.rotate);
             card.css('position', 'absolute');
             card.css('left', coords.x + 'px');
             card.css('top', coords.y + 'px');
             card.css('z-index', this.reverse_stacking ? this.z_fighter.down() : this.z_fighter.up());
-            card.css('transform', 'rotate(' + rotate + 'deg)');
+            card.css('transform', 'rotate(' + rotate.rotate + 'deg)');
 
             this.angle += this.separation_angle;
             ++i;
@@ -103,35 +105,53 @@ class Fan {
         this.zero_out_y_avg = y + this.offset_y;
     }
 
-    getCoordinates(angle, add_deviation) {
+    getCoordinates(angle, add_deviation, i = null) {
         let x = (this.radius * Math.cos(MathHelper.degreesToRadians(angle))) + this.center_x;
         let y = (this.radius * Math.sin(MathHelper.degreesToRadians(angle))) + this.center_y;
 
         let div_x, div_y;
+        let offset_x = 0;
+        let offset_y = 0;
 
         if (add_deviation) {
+            if (null !== i && i in this.card_offsets) {
+                offset_x = this.card_offsets[i].offset_x;
+                offset_y = this.card_offsets[i].offset_y;
+            } else {
+                offset_x = Math.random();
+                offset_y = Math.random();
+            }
+
             let div = this.card_width * this.random_deviation;
-            div_x = Math.floor(Math.random() * (2 * div)) - div;
-            div_y = Math.floor(Math.random() * (2 * div)) - div;
+            div_x = Math.floor(offset_x * (2 * div)) - div;
+            div_y = Math.floor(offset_y * (2 * div)) - div;
 
             x += div_x;
             y += div_y;
         }
 
-        return {x: x, y: y};
+        return {x: x, y: y, offset_x: offset_x, offset_y: offset_y};
     }
 
-    getRotation(x, y, add_deviation) {
+    getRotation(x, y, add_deviation, i = null) {
         let rotate = MathHelper.radiansToDegrees(Math.atan2(y - this.center_y, x - this.center_x)) + 90;
         let div_rotate;
 
+        let offset_angle = 0;
+
         if (add_deviation) {
-            let div_angle = (this.card_width * this.random_deviation) * 6;
-            div_rotate = (Math.floor(Math.random() * (2 * div_angle + 1)) - div_angle) / 10;
+            if (null !== i && i in this.card_offsets) {
+                offset_angle = this.card_offsets[i].offset_angle;
+            } else {
+                offset_angle = Math.random();
+            }
+
+            let div_angle = this.separation_angle * 10;
+            div_rotate = (Math.floor(offset_angle * (2 * div_angle + 1)) - div_angle) / 10;
             rotate += div_rotate;
         }
 
-        return rotate;
+        return  { rotate: rotate, offset_angle: offset_angle };
     }
 
     addDroppableArea() {
@@ -155,7 +175,7 @@ class Fan {
         this.angle -= this.separation_angle;
         let coords = this.getCoordinates(this.angle, false);
         let rotate = this.getRotation(coords.x, coords.y, false);
-        this.addDropper(container, null, 0, coords.x - this.zero_out_x_avg, coords.y - this.zero_out_y_avg, rotate, this.z_fighter.current(), false);
+        this.addDropper(container, null, 0, coords.x - this.zero_out_x_avg, coords.y - this.zero_out_y_avg, rotate.rotate, this.z_fighter.current(), false);
     }
 
     addDropper(container, card, id, x, y, rotate, zindex, is_last) {
