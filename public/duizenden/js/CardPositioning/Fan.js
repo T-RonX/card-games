@@ -1,10 +1,10 @@
 class Fan {
-    constructor(card_container, card_overlap, card_width, card_height, add_random_deviation, offset_y, offset_x, offset_zero_out, offset_angle, z_fighter, reverse_stacking, add_dropper) {
+    constructor(card_container, card_overlap, card_width, card_height, random_deviation, offset_y, offset_x, offset_zero_out, offset_angle, z_fighter, reverse_stacking, add_dropper) {
         this.card_container = card_container;
         this.card_overlap = card_overlap;
         this.card_width = card_width;
         this.card_height = card_height;
-        this.add_random_deviation = add_random_deviation;
+        this.random_deviation = random_deviation;
         this.offset_y = offset_y;
         this.offset_x = offset_x;
         this.offset_zero_out = offset_zero_out;
@@ -47,7 +47,7 @@ class Fan {
         }
 
         for (const card of this.card_container.getCards()) {
-            const add_deviation = this.add_random_deviation && this.card_count !== 1;
+            const add_deviation = this.random_deviation && this.card_count !== 1;
             const coords = this.getCoordinates(this.angle, add_deviation);
             const rotate = this.getRotation(coords.x, coords.y, add_deviation);
             this.card_positions[i] = { x: coords.x, y: coords.y, rotate: rotate };
@@ -110,7 +110,7 @@ class Fan {
         let div_x, div_y;
 
         if (add_deviation) {
-            let div = 2;
+            let div = this.card_width * this.random_deviation;
             div_x = Math.floor(Math.random() * (2 * div)) - div;
             div_y = Math.floor(Math.random() * (2 * div)) - div;
 
@@ -126,7 +126,7 @@ class Fan {
         let div_rotate;
 
         if (add_deviation) {
-            let div_angle = 5;
+            let div_angle = (this.card_width * this.random_deviation) * 6;
             div_rotate = (Math.floor(Math.random() * (2 * div_angle + 1)) - div_angle) / 10;
             rotate += div_rotate;
         }
