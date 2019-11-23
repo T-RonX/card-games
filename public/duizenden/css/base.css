@@ -12,7 +12,8 @@ body {
     font-family: "Avenir Next", "Avenir", sans-serif;
     font-size: 14px;
     background-color: #0c392b;
-    background-image: url('/duizenden/background.jpg');
+    background-image: url('/duizenden/bg_green.jpg');
+    /*background-image: url('/duizenden/bg_blue.jpg');*/
     background-repeat: repeat;
 }
 
