@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listener;
+namespace App\Session;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -12,7 +12,7 @@ class SessionSecretListener
 	/**
 	 * @param RequestEvent $event
 	 */
-	public function onKernelRequest(RequestEvent $event): void
+	public function __invoke(RequestEvent $event): void
 	{
 		$session = $event->getRequest()->getSession();
 

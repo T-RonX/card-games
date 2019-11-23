@@ -4,7 +4,12 @@ services:
       - 'mysql:dbname=%env(DATABASE_NAME)%; host=%env(DATABASE_HOST)%; port=%env(DATABASE_PORT)%'
       - { db_username: '%env(DATABASE_USER)%', db_password: '%env(DATABASE_PASSWORD)%', db_table: session, db_id_col: id, db_data_col: data, db_lifetime_col: lifetime, db_time_col: time }
 
-  app.listener.session_secret:
-      class: App\Listener\SessionSecretListener
+  app.session.listener.secret:
+      class: App\Session\SessionSecretListener
       tags:
-        - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+        - { name: kernel.event_listener, event: kernel.request }
+
+  app.session.listener.kee_alive:
+      class: App\Session\KeepAliveListener
+      tags:
+        - { name: kernel.event_listener, event: kernel.response }

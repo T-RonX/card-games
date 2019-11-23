@@ -19,7 +19,7 @@ class InvitationAcceptedByAllEventListener
 		$this->notifier = $notifier;
 	}
 
-	public function onInvitationAcceptedByAll(InvitationEvent $event)
+	public function __invoke(InvitationEvent $event)
 	{
 		$invitation = $event->getInvitation();
 		$this->notifier->publishInvitationAcceptedByAll($invitation);

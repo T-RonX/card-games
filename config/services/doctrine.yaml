@@ -1,5 +1,5 @@
 services:
-  app.listener.uuid_listener:
-        class: App\Listener\GenerateUuidListener
+  app.doctrine.listener.uuid:
+        class: App\Doctrine\GenerateUuidListener
         tags:
             - { name: doctrine.event_listener, event: prePersist, method: prePersist }
