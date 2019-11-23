@@ -11,7 +11,7 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Component\Mercure\Publisher;
+use Symfony\Component\Mercure\PublisherInterface;
 use Symfony\Component\Mercure\Update;
 
 class ChatRoom
@@ -27,19 +27,19 @@ class ChatRoom
 	private $entity_manager;
 
 	/**
-	 * @var Publisher
+	 * @var PublisherInterface
 	 */
 	private $publisher;
 
 	/**
 	 * @param EntityManagerInterface $entity_manager
 	 * @param ChatRoomEntity $chat_room_entity
-	 * @param Publisher $publisher
+	 * @param PublisherInterface $publisher
 	 */
 	public function __construct(
 		EntityManagerInterface $entity_manager,
 		ChatRoomEntity $chat_room_entity,
-		Publisher $publisher
+		PublisherInterface $publisher
 	)
 	{
 		$this->entity_manager = $entity_manager;
@@ -254,7 +254,6 @@ class ChatRoom
 
 	public function updatePlayerActivity(Player $player): void
 	{
-		$this->entity_manager->merge($player);
 		$this->entity_manager->getUnitOfWork()->getEntityState($player);
 		$chat_room_player = $this->getChatRoomPlayer($player);
 

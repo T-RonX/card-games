@@ -3,12 +3,9 @@
 namespace App\Security\Voter\Duizenden;
 
 use App\Entity\Player;
-use App\Game\Meta\GameMeta;
 use App\Games\Duizenden\Dealer\DealerFinder;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Workflow\TransitionType;
-use App\Lobby\Entity\Invitation;
-use App\Lobby\Entity\Invitee;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

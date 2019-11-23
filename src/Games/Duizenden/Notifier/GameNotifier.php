@@ -11,12 +11,12 @@ use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Games\Duizenden\StateBuilder\StateBuilder;
 use App\Games\Duizenden\StateCompiler\StatusType;
 use App\Games\Duizenden\StateCompiler\TopicType;
-use Symfony\Component\Mercure\Publisher;
+use Symfony\Component\Mercure\PublisherInterface;
 
 class GameNotifier
 {
 	/**
-	 * @var Publisher
+	 * @var PublisherInterface
 	 */
 	private $publisher;
 
@@ -36,7 +36,7 @@ class GameNotifier
 	private $message_compiler;
 
 	public function __construct(
-		Publisher $publisher,
+		PublisherInterface $publisher,
 		StateBuilder $state_builder,
 		GameEventMessageCompiler $state_compiler,
 		MessageBuilder $message_builder

@@ -12,7 +12,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Mercure\Publisher;
+use Symfony\Component\Mercure\PublisherInterface;
 
 class Inviter
 {
@@ -22,7 +22,7 @@ class Inviter
 	private $entity_manager;
 
 	/**
-	 * @var Publisher
+	 * @var PublisherInterface
 	 */
 	private $publisher;
 
@@ -38,13 +38,13 @@ class Inviter
 
 	/**
 	 * @param EntityManagerInterface $entity_manager
-	 * @param Publisher $publisher
+	 * @param PublisherInterface $publisher
 	 * @param EventDispatcherInterface $event_dispatcher
 	 * @param InvitationRepository $invitation_repository
 	 */
 	public function __construct(
 		EntityManagerInterface $entity_manager,
-		Publisher $publisher,
+		PublisherInterface $publisher,
 		EventDispatcherInterface $event_dispatcher,
 		InvitationRepository $invitation_repository
 	)

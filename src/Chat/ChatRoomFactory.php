@@ -5,7 +5,7 @@ namespace App\Chat;
 use App\Chat\Entity\ChatRoom as ChatRoomEntity;
 use App\Chat\Repository\ChatRoomRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mercure\Publisher;
+use Symfony\Component\Mercure\PublisherInterface;
 use DateInterval;
 
 class ChatRoomFactory
@@ -21,19 +21,19 @@ class ChatRoomFactory
 	private $entity_manager;
 
 	/**
-	 * @var Publisher
+	 * @var PublisherInterface
 	 */
 	private $publisher;
 
 	/**
 	 * @param ChatRoomRepository $repository
 	 * @param EntityManagerInterface $entity_manager
-	 * @param Publisher $publisher
+	 * @param PublisherInterface $publisher
 	 */
 	public function __construct(
 		ChatRoomRepository $repository,
 		EntityManagerInterface $entity_manager,
-		Publisher $publisher
+		PublisherInterface $publisher
 	)
 	{
 		$this->repository = $repository;

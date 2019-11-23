@@ -5,13 +5,13 @@ namespace App\Lobby;
 use App\Entity\Player;
 use App\Lobby\Entity\Invitation;
 use App\Mercure\SubscriberIdGenerator;
-use Symfony\Component\Mercure\Publisher;
+use Symfony\Component\Mercure\PublisherInterface;
 use Symfony\Component\Mercure\Update;
 
 class LobbyNotifier
 {
 	/**
-	 * @var Publisher
+	 * @var PublisherInterface
 	 */
 	private $publisher;
 
@@ -21,11 +21,11 @@ class LobbyNotifier
 	private $id_generator;
 
 	/**
-	 * @param Publisher $publisher
+	 * @param PublisherInterface $publisher
 	 * @param SubscriberIdGenerator $id_generator
 	 */
 	public function __construct(
-		Publisher $publisher,
+		PublisherInterface $publisher,
 		SubscriberIdGenerator $id_generator
 	)
 	{
