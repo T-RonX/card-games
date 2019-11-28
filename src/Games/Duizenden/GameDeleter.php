@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden;
 
 use App\Games\Duizenden\Entity\Game;
@@ -8,20 +10,10 @@ use App\Games\Duizenden\Repository\GameRepository;
 
 class GameDeleter
 {
-	/**
-	 * @var GameRepository
-	 */
-	private $game_repository;
+	private GameRepository $game_repository;
 
-	/**
-	 * @var GameMetaRepository
-	 */
-	private $meta_repository;
+	private GameMetaRepository $meta_repository;
 
-	/**
-	 * @param GameRepository $game_repository
-	 * @param GameMetaRepository $meta_repository
-	 */
 	public function __construct(
 		GameRepository $game_repository,
 		GameMetaRepository $meta_repository
@@ -31,9 +23,6 @@ class GameDeleter
 		$this->meta_repository = $meta_repository;
 	}
 
-	/**
-	 * @param string $uuid
-	 */
 	public function delete(string $uuid): void
 	{
 		$game_meta = $this->meta_repository->findOneBy(['uuid' => $uuid]);

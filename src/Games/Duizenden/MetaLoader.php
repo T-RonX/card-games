@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden;
 
 use App\Game\Meta\GameMeta;
@@ -8,22 +10,13 @@ use App\Games\Duizenden\Repository\GameRepository;
 
 class MetaLoader implements MetaLoaderInterface
 {
-	/**
-	 * @var GameRepository
-	 */
-	private $game_repository;
+	private GameRepository $game_repository;
 
-	/**
-	 * @inheritDoc
-	 */
 	public function __construct(GameRepository $game_meta_repository)
 	{
 		$this->game_repository = $game_meta_repository;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function getAll(): array
 	{
 		$result = [];

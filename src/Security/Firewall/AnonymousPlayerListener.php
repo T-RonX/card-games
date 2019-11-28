@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Firewall;
 
 use App\Security\Authentication\Token\AnonymousPlayerToken;
@@ -15,45 +17,21 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AnonymousPlayerListener
 {
-	/**
-	 * @var TokenStorageInterface
-	 */
-	private $token_storage;
+	private TokenStorageInterface $token_storage;
 
-	/**
-	 * @var AuthenticationManagerInterface
-	 */
-	private $authentication_manager;
+	private AuthenticationManagerInterface $authentication_manager;
 
-	/**
-	 * @var string
-	 */
-	private $identification_path;
+	private string $identification_path;
 
-	/**
-	 * @var string
-	 */
-	private $validation_path;
+	private string $validation_path;
 
-	/**
-	 * @var string
-	 */
-	private $success_path;
+	private string $success_path;
 
-	/**
-	 * @var
-	 */
-	private $identification_form_type;
+	private string $identification_form_type;
 
-	/**
-	 * @var string
-	 */
-	private $identification_form_field;
+	private string $identification_form_field;
 
-	/**
-	 * @var FormFactoryInterface
-	 */
-	private $form_factory;
+	private FormFactoryInterface $form_factory;
 
 	public function __construct(
 		TokenStorageInterface $token_storage,
@@ -66,9 +44,6 @@ class AnonymousPlayerListener
 		$this->form_factory = $form_factory;
 	}
 
-	/**
-	 * @throws NonUniqueResultException
-	 */
 	public function __invoke(RequestEvent $event): void
 	{
 		$request = $event->getRequest();
@@ -173,7 +148,7 @@ class AnonymousPlayerListener
 		$this->success_path = $path;
 	}
 
-	public function setIdentificationFormType($identification_form_type): void
+	public function setIdentificationFormType(string $identification_form_type): void
 	{
 		$this->identification_form_type = $identification_form_type;
 	}

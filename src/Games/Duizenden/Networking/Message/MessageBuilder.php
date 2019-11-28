@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Networking\Message;
 
 use App\Mercure\SubscriberIdGenerator;
@@ -9,15 +11,9 @@ class MessageBuilder
 {
 	private const TOPIC_FORMAT = 'urn:%s:%s';
 
-	/**
-	 * @var SubscriberIdGenerator
-	 */
-	private $subscriber_id_generator;
+	private SubscriberIdGenerator $subscriber_id_generator;
 
-	/**
-	 * @var GameEventMessageCompiler
-	 */
-	private $compiler;
+	private GameEventMessageCompiler $compiler;
 
 	public function __construct(
 		SubscriberIdGenerator $subscriber_id_generator,
@@ -28,11 +24,6 @@ class MessageBuilder
 		$this->compiler = $compiler;
 	}
 
-	/**
-	 * @param GameEventData $message
-	 *
-	 * @return Update
-	 */
 	public function compile(GameEventData $message): Update
 	{
 		$topic = $this->createTopic($message);

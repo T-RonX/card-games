@@ -1,23 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\StateCompiler;
 
 class AbstractAction implements ActionInterface
 {
-	/**
-	 * @var ActionType
-	 */
-	private $type;
+	private ActionType $type;
 
-	/**
-	 * @var string
-	 */
-	private $title;
+	private string $title;
 
-	/**
-	 * @var string
-	 */
-	private $description;
+	private string $description;
 
 	public function __construct(ActionType $type, string $title, string $description)
 	{

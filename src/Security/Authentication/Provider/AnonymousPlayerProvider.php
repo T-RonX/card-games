@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Authentication\Provider;
 
 use App\Security\UserProvider\AnonymousPlayerProvider as UserProvider;
@@ -10,10 +12,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AnonymousPlayerProvider implements AuthenticationProviderInterface
 {
-	/**
-	 * @var UserProvider
-	 */
-	private $user_provider;
+	private UserProvider $user_provider;
 
 	public function __construct(UserProvider $user_provider)
 	{
@@ -34,7 +33,7 @@ class AnonymousPlayerProvider implements AuthenticationProviderInterface
 		return $auth_token;
 	}
 
-	public function supports(TokenInterface $token)
+	public function supports(TokenInterface $token): bool
 	{
 		return $token instanceof AnonymousPlayerToken;
 	}

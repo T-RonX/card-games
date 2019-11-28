@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 class Session
 {
-    private $id;
+    private ?int $id = null;
 
-    private $data;
+    private string $data;
 
-	private $time;
+	private int $time;
 
-	private $lifetime;
+	private int $lifetime;
 
-	private $Player;
+	private Player $Player;
 }

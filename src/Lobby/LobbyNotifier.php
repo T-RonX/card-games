@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Lobby;
 
 use App\Entity\Player;
@@ -10,20 +12,10 @@ use Symfony\Component\Mercure\Update;
 
 class LobbyNotifier
 {
-	/**
-	 * @var PublisherInterface
-	 */
-	private $publisher;
+	private PublisherInterface $publisher;
 
-	/**
-	 * @var SubscriberIdGenerator
-	 */
-	private $id_generator;
+	private SubscriberIdGenerator $id_generator;
 
-	/**
-	 * @param PublisherInterface $publisher
-	 * @param SubscriberIdGenerator $id_generator
-	 */
 	public function __construct(
 		PublisherInterface $publisher,
 		SubscriberIdGenerator $id_generator
@@ -33,20 +25,11 @@ class LobbyNotifier
 		$this->id_generator = $id_generator;
 	}
 
-	/**
-	 * @param Invitation $invitation
-	 */
 	public function publishInvitationAcceptedByAll(Invitation $invitation): void
 	{
 		($this->publisher)($this->createInvitationAcceptedByAllUpdate($invitation, $invitation->getInviter()->getPlayer()));
 	}
 
-	/**
-	 * @param Invitation $invitation
-	 * @param Player $inviter
-	 *
-	 * @return Update
-	 */
 	private function createInvitationAcceptedByAllUpdate(Invitation $invitation, Player $inviter): Update
 	{
 		$id = $this->id_generator->generate($inviter->getUuid());
@@ -55,8 +38,6 @@ class LobbyNotifier
 	}
 
 	/**
-	 * @param Invitation $invitation
-	 *
 	 * @return string[]
 	 */
 	private function createInvitationAcceptedByAllMessageData(Invitation $invitation): array
@@ -69,9 +50,6 @@ class LobbyNotifier
 		];
 	}
 
-	/**
-	 * @param Invitation $invitation
-	 */
 	public function publishInvitation(Invitation $invitation): void
 	{
 		foreach ($invitation->getInvitees() as $player_invite)
@@ -85,12 +63,6 @@ class LobbyNotifier
 		}
 	}
 
-	/**
-	 * @param Invitation $invitation
-	 * @param Player $invitee
-	 *
-	 * @return Update
-	 */
 	private function createPublishInvitationUpdate(Invitation $invitation, Player $invitee): Update
 	{
 		$id = $this->id_generator->generate($invitee->getUuid());
@@ -98,11 +70,6 @@ class LobbyNotifier
 		return new Update(sprintf('urn:player_event:%s', $id), json_encode($this->createPublishInvitationMessageData($invitation)));
 	}
 
-	/**
-	 * @param Invitation $invitation
-	 *
-	 * @return string[]
-	 */
 	private function createPublishInvitationMessageData(Invitation $invitation): array
 	{
 		return [
@@ -122,12 +89,6 @@ class LobbyNotifier
 		}
 	}
 
-	/**
-	 * @param Invitation $invitation
-	 * @param Player $invitee
-	 *
-	 * @return Update
-	 */
 	private function createGameStartedUpdate(Invitation $invitation, Player $invitee): Update
 	{
 		$id = $this->id_generator->generate($invitee->getUuid());
@@ -136,8 +97,6 @@ class LobbyNotifier
 	}
 
 	/**
-	 * @param Invitation $invitation
-	 *
 	 * @return string[]
 	 */
 	private function createGameStartedMessageData(Invitation $invitation): array

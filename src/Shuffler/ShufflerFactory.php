@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Shuffler;
 
 use App\Shufflers\ShufflerType;
@@ -10,7 +12,7 @@ class ShufflerFactory
 	/**
 	 * @var ShufflerInterface[]|ServiceLocator
 	 */
-	private $locator;
+	private ServiceLocator $locator;
 
 	/**
 	 * @param ServiceLocator $locator
@@ -20,11 +22,6 @@ class ShufflerFactory
 		$this->locator = $locator;
 	}
 
-	/**
-	 * @param ShufflerType $algorithm
-	 *
-	 * @return ShufflerInterface
-	 */
 	public function create(ShufflerType $algorithm): ShufflerInterface
 	{
 		return $this->locator->get($algorithm->getValue());

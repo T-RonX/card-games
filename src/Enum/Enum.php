@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enum;
 
 use App\Enum\Exception\EnumConstantsCouldNotBeResolvedException;
@@ -14,19 +16,16 @@ abstract class Enum
 	 *
 	 * @var Enum[][]
 	 */
-	private static $enum_instances = [];
+	private static array $enum_instances = [];
 
 	/**
 	 * Remembers the constants per enum type. Retrieving the constants is done by reflection, this could be considered expensive for the resources.
 	 *
 	 * @var string[][]
 	 */
-	private static $enum_constants = [];
+	private static array $enum_constants = [];
 
-	/**
-	 * @var string
-	 */
-	private $constant;
+	private string $constant;
 
 	/**
 	 * @var mixed
@@ -37,21 +36,17 @@ abstract class Enum
 	 * @param string $constant
 	 * @param mixed $value
 	 */
-	final private function __construct($constant, $value)
+	final private function __construct(string $constant, $value)
 	{
 		$this->constant = $constant;
 		$this->value = $value;
 	}
 
 	/**
-	 * @param $value
-	 *
-	 * @return $this
-	 *
 	 * @throws EnumNotDefinedException
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 */
-	public static function createEnum($value)
+	public static function createEnum($value): self
 	{
 		$constant_values = array_flip(self::getConstants());
 
@@ -67,14 +62,14 @@ abstract class Enum
 
 	/**
 	 * @param string $name
-	 * @param mixed $arguments
+	 * @param mixed[] $arguments
 	 *
-	 * @return $this
+	 * @return Enum
 	 *
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
 	 */
-	public static function __callStatic($name, $arguments)
+	public static function __callStatic(string $name, array $arguments): self
 	{
 		$constants = self::getConstants();
 
@@ -143,36 +138,22 @@ abstract class Enum
 		return self::$enum_instances[$class][$name];
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getConstant()
+	public function getConstant(): string
 	{
 		return $this->constant;
 	}
 
-	/**
-	 * @return mixed
-	 */
 	public function getValue()
 	{
 		return $this->value;
 	}
 
-	/**
-	 * @return mixed
-	 */
 	public function __toString()
 	{
 		return $this->value;
 	}
 
-	/**
-	 * @param Enum|null $enum
-	 *
-	 * @return bool
-	 */
-	public function equals(Enum $enum = null)
+	public function equals(Enum $enum = null): bool
 	{
 		return $enum !== null && get_class($enum) === get_class($this)
 			&& $enum->getValue() === $this->getValue()

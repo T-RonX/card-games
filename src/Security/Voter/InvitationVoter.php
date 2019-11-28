@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Voter;
 
 use App\Entity\Player;
 use App\Lobby\Entity\Invitation;
-use App\Lobby\Entity\Invitee;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -24,9 +25,13 @@ class InvitationVoter extends Voter
 	}
 
 	/**
+	 * @param string $permission
 	 * @param Invitation $invitation
+	 * @param TokenInterface $token
+	 *
+	 * @return bool
 	 */
-	protected function voteOnAttribute($permission, $invitation, TokenInterface $token): bool
+	protected function voteOnAttribute(string $permission, $invitation, TokenInterface $token): bool
 	{
 		$player = $token->getUser();
 

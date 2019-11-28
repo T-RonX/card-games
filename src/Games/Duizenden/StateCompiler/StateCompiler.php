@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\StateCompiler;
 
 use App\CardPool\CardPoolInterface;
@@ -7,23 +9,15 @@ use App\CardPool\Exception\EmptyCardPoolException;
 use App\Common\Meld\Meld;
 use App\Common\Meld\Melds;
 use App\Games\Duizenden\Initializer\DiscardedCardPool;
-use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
-use App\Games\Duizenden\Score\GameScore;
 use App\Games\Duizenden\Score\ScoreCalculator;
 
 class StateCompiler implements StateCompilerInterface
 {
-	/**
-	 * @var ActionFactory
-	 */
-	private $action_factory;
+	private ActionFactory $action_factory;
 
-	/**
-	 * @var ScoreCalculator
-	 */
-	private $score_calculator;
+	private ScoreCalculator $score_calculator;
 
 	public function __construct(
 		ActionFactory $action_factory,
@@ -35,13 +29,10 @@ class StateCompiler implements StateCompilerInterface
 	}
 
 	/**
-	 * @param StateData $state_data
-	 *
-	 * @return array
+	 * @return string[]
 	 *
 	 * @throws EmptyCardPoolException
 	 * @throws InvalidActionException
-	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
 	public function compile(StateData $state_data): array
@@ -66,12 +57,6 @@ class StateCompiler implements StateCompilerInterface
 		];
 	}
 
-	/**
-	 * @param CardPoolInterface $pool
-	 * @param bool $show_identifiers
-	 *
-	 * @return string[]
-	 */
 	private function createCardPoolData(CardPoolInterface $pool, bool $show_identifiers): array
 	{
 		$data = [
@@ -89,31 +74,17 @@ class StateCompiler implements StateCompilerInterface
 	}
 
 	/**
-	 * @param DiscardedCardPool $pool
-	 *
-	 * @return string[]
-	 *
 	 * @throws EmptyCardPoolException
 	 */
 	private function createDiscardedCardPoolData(DiscardedCardPool $pool): array
 	{
-		$data = [
+		return [
 			'count' => $pool->getCardCount(),
 			'top_card' => $pool->hasCards() ? strtolower($pool->getTopCard()->getIdentifier()) : null,
 			'is_first_card' => $pool->isFirstCard()
 		];
-
-		return $data;
 	}
 
-	/**
-	 * @param StateData $state_data
-	 *
-	 * @return string[]
-	 *
-	 * @throws PlayerNotFoundException
-	 * @throws UnmappedCardException
-	 */
 	private function createPlayersData(StateData $state_data): array
 	{
 		$data = [];
@@ -126,15 +97,6 @@ class StateCompiler implements StateCompilerInterface
 		return $data;
 	}
 
-	/**
-	 * @param PlayerInterface $player
-	 * @param StateData $state_data
-	 *
-	 * @return string[]
-	 *
-	 * @throws PlayerNotFoundException
-	 * @throws UnmappedCardException
-	 */
 	private function createPlayerData(PlayerInterface $player, StateData $state_data): array
 	{
 		return [
@@ -146,13 +108,9 @@ class StateCompiler implements StateCompilerInterface
 	}
 
 	/**
-	 * @param StateData $state_data
-	 *
-	 * @return array
-	 *
 	 * @throws UnmappedCardException
 	 */
-	private function createGameScoreData(StateData $state_data)
+	private function createGameScoreData(StateData $state_data): array
 	{
 		return [
 			'past_rounds' => $this->createRoundScoreData($state_data),
@@ -161,10 +119,6 @@ class StateCompiler implements StateCompilerInterface
 	}
 
 	/**
-	 * @param StateData $state_data
-	 *
-	 * @return array
-	 *
 	 * @throws UnmappedCardException
 	 */
 	private function createRoundScoreData(StateData $state_data): array
@@ -193,10 +147,6 @@ class StateCompiler implements StateCompilerInterface
 	}
 
 	/**
-	 * @param StateData $state_data
-	 *
-	 * @return array
-	 *
 	 * @throws UnmappedCardException
 	 */
 	private function createCurrentRoundData(StateData $state_data): array
@@ -213,11 +163,6 @@ class StateCompiler implements StateCompilerInterface
 		return $current;
 	}
 
-	/**
-	 * @param Melds $melds
-	 *
-	 * @return string[]
-	 */
 	private function createMeldsData(Melds $melds): array
 	{
 		$data = [];
@@ -230,11 +175,6 @@ class StateCompiler implements StateCompilerInterface
 		return $data;
 	}
 
-	/**
-	 * @param Meld $meld
-	 *
-	 * @return string[]
-	 */
 	private function createMeldData(Meld $meld): array
 	{
 		return [
@@ -243,11 +183,6 @@ class StateCompiler implements StateCompilerInterface
 		];
 	}
 
-	/**
-	 * @param PlayerInterface $player
-	 *
-	 * @return string[]
-	 */
 	public function createPlayerIdData(PlayerInterface $player): array
 	{
 		return [
@@ -275,10 +210,6 @@ class StateCompiler implements StateCompilerInterface
 	}
 
 	/**
-	 * @param ActionType $action
-	 *
-	 * @return string[]
-	 *
 	 * @throws InvalidActionException
 	 */
 	public function createActionData(ActionType $action): array

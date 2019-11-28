@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\UserProvider;
 
 use App\Entity\Player;
@@ -14,26 +16,12 @@ class AnonymousPlayerProvider implements UserProviderInterface
 {
 	private const SESSION_ANON_PLAYER_KEY = 'player_id';
 
-	/**
-	 * @var PlayerRepository
-	 */
-	private $repository;
+	private PlayerRepository $repository;
 
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entity_manager;
+	private EntityManagerInterface $entity_manager;
 
-	/**
-	 * @var SessionInterface
-	 */
-	private $session;
+	private SessionInterface $session;
 
-	/**
-	 * @param EntityManagerInterface $entity_manager
-	 * @param PlayerRepository $repository
-	 * @param SessionInterface $session
-	 */
 	public function __construct(
 		EntityManagerInterface $entity_manager,
 		PlayerRepository $repository,
@@ -45,11 +33,6 @@ class AnonymousPlayerProvider implements UserProviderInterface
 		$this->session = $session;
 	}
 
-	/**
-	 * @param string $name
-	 *
-	 * @return Player
-	 */
 	private function registerPlayer(string $name): Player
 	{
 		$player = $this->createPlayerEntity($name);
@@ -60,8 +43,6 @@ class AnonymousPlayerProvider implements UserProviderInterface
 	}
 
 	/**
-	 * @return Player|null
-	 *
 	 * @throws NonUniqueResultException
 	 */
 	private function getPlayer(): ?Player
@@ -71,19 +52,11 @@ class AnonymousPlayerProvider implements UserProviderInterface
 		return $id ? $this->repository->findAnonymousPlayer($id) : null;
 	}
 
-	/**
-	 * @param Player $player
-	 */
 	private function registerInSession(Player $player): void
 	{
 		$this->session->set(self::SESSION_ANON_PLAYER_KEY, $player->getUuid());
 	}
 
-	/**
-	 * @param string $name
-	 *
-	 * @return Player
-	 */
 	private function createPlayerEntity(string $name): Player
 	{
 		return (new Player())
@@ -91,9 +64,6 @@ class AnonymousPlayerProvider implements UserProviderInterface
 			->setIsRegistered(false);
 	}
 
-	/**
-	 * @param Player $player
-	 */
 	private function savePlayer(Player $player): void
 	{
 		$this->entity_manager->persist($player);
@@ -103,7 +73,7 @@ class AnonymousPlayerProvider implements UserProviderInterface
 	/**
 	 * @throws NonUniqueResultException
 	 */
-	public function getOrCreatePlayer(string $username)
+	public function getOrCreatePlayer(string $username): Player
 	{
 		$player = $this->getPlayer();
 
@@ -118,7 +88,7 @@ class AnonymousPlayerProvider implements UserProviderInterface
 	/**
 	 * @throws NonUniqueResultException
 	 */
-	public function loadUserByUsername($username)
+	public function loadUserByUsername(string $username): UserInterface
 	{
 		return $this->getOrCreatePlayer($username);
 	}
@@ -126,12 +96,12 @@ class AnonymousPlayerProvider implements UserProviderInterface
 	/**
 	 * @throws NonUniqueResultException
 	 */
-	public function refreshUser(UserInterface $user)
+	public function refreshUser(UserInterface $user): UserInterface
 	{
 		return $this->getOrCreatePlayer($user->getUsername());
 	}
 
-	public function supportsClass($class)
+	public function supportsClass($class): bool
 	{
 		return Player::class === $class;
 	}

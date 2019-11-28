@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden;
 
 use App\Games\Duizenden\Repository\GameRepository;
@@ -9,20 +11,10 @@ use Doctrine\ORM\ORMException;
 
 class GameManipulator
 {
-	/**
-	 * @var GameRepository
-	 */
-	private $game_repository;
+	private GameRepository $game_repository;
 
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entity_manager;
+	private EntityManagerInterface $entity_manager;
 
-	/**
-	 * @param GameRepository $game_repository
-	 * @param EntityManagerInterface $entity_manager
-	 */
 	public function __construct(
 		GameRepository $game_repository,
 		EntityManagerInterface $entity_manager
@@ -33,8 +25,6 @@ class GameManipulator
 	}
 
 	/**
-	 * @param string $uuid
-	 *
 	 * @throws NonUniqueResultExceptionAlias
 	 * @throws ORMException
 	 */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace  App\Games\Duizenden\Actions\Deal;
 
 use App\CardPool\Exception\EmptyCardPoolException;
@@ -16,15 +18,9 @@ use Symfony\Component\Workflow\StateMachine;
 
 class Deal extends StateChangeAction
 {
-	/**
-	 * @var int
-	 */
 	private const CARDS_PER_PLAYER = 13;
 
-	/**
-	 * @var DealerFinder
-	 */
-	private $dealer_finder;
+	private DealerFinder $dealer_finder;
 
 	public function __construct(
 		StateMachine $state_machine,
@@ -37,10 +33,6 @@ class Deal extends StateChangeAction
 	}
 
 	/**
-	 * @param Game $game
-	 *
-	 * @return PlayerInterface
-	 *
 	 * @throws EmptyCardPoolException
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
@@ -81,12 +73,10 @@ class Deal extends StateChangeAction
 
 	/**
 	 * Get all cards in the game and rebuild te deck.
-	 *
-	 * @param Game $game
 	 */
-	private function rebuildUndrawnPool(Game $game)
+	private function rebuildUndrawnPool(Game $game): void
 	{
-		$state  = $game->getState();
+		$state = $game->getState();
 
 		$hand_pools = [];
 		$meld_pools = [];
@@ -115,8 +105,6 @@ class Deal extends StateChangeAction
 	}
 
 	/**
-	 * @param State $state
-	 *
 	 * @throws EmptyCardPoolException
 	 */
 	private function giveCards(State $state): void

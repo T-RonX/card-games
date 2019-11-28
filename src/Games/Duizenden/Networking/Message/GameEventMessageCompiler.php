@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Networking\Message;
 
 use App\CardPool\Exception\EmptyCardPoolException;
@@ -13,10 +15,7 @@ use RuntimeException;
 
 class GameEventMessageCompiler implements StateCompilerInterface
 {
-	/**
-	 * @var StateCompiler
-	 */
-	private $state_compiler;
+	private StateCompiler $state_compiler;
 
 	public function __construct(StateCompiler $state_compiler)
 	{
@@ -24,10 +23,6 @@ class GameEventMessageCompiler implements StateCompilerInterface
 	}
 
 	/**
-	 * @param StateData $state_data
-	 *
-	 * @return array
-	 *
 	 * @throws EmptyCardPoolException
 	 * @throws InvalidActionException
 	 * @throws PlayerNotFoundException

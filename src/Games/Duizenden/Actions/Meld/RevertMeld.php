@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace  App\Games\Duizenden\Actions\Meld;
 
 use App\Deck\Card\CardInterface;
@@ -16,20 +18,10 @@ use Symfony\Component\Workflow\StateMachine;
 
 class RevertMeld
 {
-	/**
-	 * @var EntityManager
-	 */
-	private $entity_manager;
+	private EntityManagerInterface $entity_manager;
 
-	/**
-	 * @var GamePlayerRepository
-	 */
-	private $game_player_repository;
+	private GamePlayerRepository $game_player_repository;
 
-	/**
-	 * @param EntityManagerInterface $entity_manager
-	 * @param GamePlayerRepository $game_player_repository
-	 */
 	public function __construct(
 		EntityManagerInterface $entity_manager,
 		GamePlayerRepository $game_player_repository
@@ -40,13 +32,9 @@ class RevertMeld
 	}
 
 	/**
-	 * @param string $game_id
-	 * @param PlayerInterface $player
-	 *
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
 	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 */
 	public function revert(string $game_id, PlayerInterface $player): void
 	{

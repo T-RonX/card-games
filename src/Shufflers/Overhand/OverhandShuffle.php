@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Shufflers\Overhand;
 
 use App\Deck\Card\CardInterface;
@@ -9,38 +11,28 @@ class OverhandShuffle implements ShufflerInterface
 {
 	/**
 	 * Shuffle at least this many times.
-	 *
-	 * @var int
 	 */
-	private $shuffle_count_min = 3;
+	private int $shuffle_count_min = 3;
 
 	/**
 	 * Shuffle at most this many times.
-	 *
-	 * @var int
 	 */
-	private $shuffle_count_max = null;
+	private int $shuffle_count_max;
 
 	/**
 	 * Grab at at this percentage of cards from the pool.
-	 *
-	 * @var float
 	 */
-	private $grab_cards_min = .1;
+	private float $grab_cards_min = .1;
 
 	/**
 	 * Grab at most this percentage of cards from the pool.
-	 *
-	 * @var float
 	 */
-	private $grab_cards_max = .65;
+	private float $grab_cards_max = .65;
 
 	/**
 	 * Maximum number of slices to add the cards grabbed from the back of the pool back into the front of the pool.
-	 *
-	 * @var int
 	 */
-	private $max_inserts = null;
+	private int $max_inserts;
 
 	/**
 	 * Generate shuffling algorithm.
@@ -62,9 +54,6 @@ class OverhandShuffle implements ShufflerInterface
 		$this->max_inserts = rand(3, 5);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function shuffle(array $cards): array
 	{
 		$shuffle_count = rand($this->shuffle_count_min, $this->shuffle_count_max);
@@ -90,8 +79,8 @@ class OverhandShuffle implements ShufflerInterface
 	private function grabCards(array $cards): array
 	{
 		$num_cards = count($cards);
-		$range_min = ceil($num_cards * $this->grab_cards_min);
-		$range_max = ceil($num_cards * $this->grab_cards_max);
+		$range_min = (int)ceil($num_cards * $this->grab_cards_min);
+		$range_max = (int)ceil($num_cards * $this->grab_cards_max);
 
 		$range = $this->distributeRangeProbability($range_min, $range_max);
 		$grab = $this->getRandomCardCountFromProbabilityRange($range);
@@ -191,19 +180,11 @@ class OverhandShuffle implements ShufflerInterface
 		return $inserts;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getShuffleCountMin(): int
 	{
 		return $this->shuffle_count_min;
 	}
 
-	/**
-	 * @param int $shuffle_count_min
-	 *
-	 * @return self
-	 */
 	public function setShuffleCountMin(int $shuffle_count_min): self
 	{
 		$this->shuffle_count_min = $shuffle_count_min;
@@ -211,19 +192,11 @@ class OverhandShuffle implements ShufflerInterface
 		return $this;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getShuffleCountMax(): int
 	{
 		return $this->shuffle_count_max;
 	}
 
-	/**
-	 * @param int $shuffle_count_max
-	 *
-	 * @return self
-	 */
 	public function setShuffleCountMax(int $shuffle_count_max): self
 	{
 		$this->shuffle_count_max = $shuffle_count_max;
@@ -231,19 +204,11 @@ class OverhandShuffle implements ShufflerInterface
 		return $this;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getGrabCardsMin(): float
 	{
 		return $this->grab_cards_min;
 	}
 
-	/**
-	 * @param float $grab_cards_min
-	 *
-	 * @return self
-	 */
 	public function setGrabCardsMin(float $grab_cards_min): self
 	{
 		$this->grab_cards_min = $grab_cards_min;
@@ -251,19 +216,11 @@ class OverhandShuffle implements ShufflerInterface
 		return $this;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getGrabCardsMax(): float
 	{
 		return $this->grab_cards_max;
 	}
 
-	/**
-	 * @param float $grab_cards_max
-	 *
-	 * @return self
-	 */
 	public function setGrabCardsMax(float $grab_cards_max): self
 	{
 		$this->grab_cards_max = $grab_cards_max;
@@ -271,19 +228,11 @@ class OverhandShuffle implements ShufflerInterface
 		return $this;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getMaxInserts(): int
 	{
 		return $this->max_inserts;
 	}
 
-	/**
-	 * @param int $max_inserts
-	 *
-	 * @return self
-	 */
 	public function setMaxInserts(int $max_inserts): self
 	{
 		$this->max_inserts = $max_inserts;

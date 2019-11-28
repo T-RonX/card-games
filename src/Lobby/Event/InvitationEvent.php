@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Lobby\Event;
 
 use App\Lobby\Entity\Invitation;
@@ -9,22 +11,13 @@ class InvitationEvent extends Event
 {
 	public const EVENT_ALL_ACCEPTED = 'invitation.accepted_by_all';
 
-	/**
-	 * @var Invitation
-	 */
-	private $invitation;
+	private Invitation $invitation;
 
-	/**
-	 * @param Invitation $invitation
-	 */
 	public function __construct(Invitation $invitation)
 	{
 		$this->invitation = $invitation;
 	}
 
-	/**
-	 * @return Invitation
-	 */
 	public function getInvitation(): Invitation
 	{
 		return $this->invitation;

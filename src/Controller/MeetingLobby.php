@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Player;
@@ -23,38 +25,16 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 class MeetingLobby extends AbstractController
 {
-	/**
-	 * @var Lobby
-	 */
-	private $lobby;
+	private Lobby $lobby;
 
-	/**
-	 * @var Inviter
-	 */
-	private $inviter;
+	private Inviter $inviter;
 
-	/**
-	 * @var LobbyNotifier
-	 */
-	private $notifier;
+	private LobbyNotifier $notifier;
 
-	/**
-	 * @var SubscriberIdGenerator
-	 */
-	private $subscriber_id_generator;
+	private SubscriberIdGenerator $subscriber_id_generator;
 
-	/**
-	 * @var AuthorizationCheckerInterface
-	 */
-	private $authorization_checker;
+	private AuthorizationCheckerInterface $authorization_checker;
 
-	/**
-	 * @param Lobby $lobby
-	 * @param Inviter $inviter
-	 * @param LobbyNotifier $notifier
-	 * @param SubscriberIdGenerator $subscriber_id_generator
-	 * @param AuthorizationCheckerInterface $authorization_checker
-	 */
 	public function __construct(
 		Lobby $lobby,
 		Inviter $inviter,
@@ -70,9 +50,6 @@ class MeetingLobby extends AbstractController
 		$this->authorization_checker = $authorization_checker;
 	}
 
-	/**
-	 * @return Response
-	 */
 	public function show(): Response
 	{
 		$player = $this->getUser();
@@ -97,10 +74,6 @@ class MeetingLobby extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 *
-	 * @return Response
-	 *
 	 * @throws Exception
 	 */
 	public function invite(Request $request): Response
@@ -128,11 +101,6 @@ class MeetingLobby extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param Invitation $invitation
-	 *
-	 * @return Response
-	 *
 	 * @throws InvitationException
 	 */
 	public function acceptInvitation(Request $request, Invitation $invitation): Response
@@ -146,11 +114,6 @@ class MeetingLobby extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 * @param Invitation $invitation
-	 *
-	 * @return Response
-	 *
 	 * @throws InvitationException
 	 */
 	public function declineInvitation(Request $request, Invitation $invitation): Response
@@ -163,9 +126,6 @@ class MeetingLobby extends AbstractController
 		return $request->isXmlHttpRequest() ? new Response() : $this->redirectToRoute('lobby.invitations');
 	}
 
-	/**
-	 * @return Response
-	 */
 	public function invitations(): Response
 	{
 		$player = $this->getUser();
@@ -180,9 +140,6 @@ class MeetingLobby extends AbstractController
 		]);
 	}
 
-	/**
-	 * @return Response
-	 */
 	public function newAnonymousPlayer(): Response
 	{
 		$form = $this->createForm(NameType::class);
@@ -193,10 +150,6 @@ class MeetingLobby extends AbstractController
 	}
 
 	/**
-	 * @param string $message
-	 *
-	 * @return Response
-	 *
 	 * @throws Exception
 	 */
 	public function conveyMessage(string $message): Response
@@ -210,9 +163,6 @@ class MeetingLobby extends AbstractController
 		return new Response('');
 	}
 
-	/**
-	 * @return Lobby
-	 */
 	private function getLobby(): Lobby
 	{
 		$this->lobby->initialize();

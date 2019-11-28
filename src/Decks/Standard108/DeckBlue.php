@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Decks\Standard108;
 
 use App\Cards\Standard\Color\Blue;

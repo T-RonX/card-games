@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden;
 
 use App\DeckRebuilder\DeckRebuilderFactory;
@@ -31,32 +33,14 @@ use App\Games\Duizenden\Workflow\MarkingType;
 
 class GameLoader
 {
-	/**
-	 * @var GameRepository
-	 */
-	private $game_repository;
+	private GameRepository $game_repository;
 
-	/**
-	 * @var ShufflerFactory
-	 */
-	private $shuffler_factory;
+	private ShufflerFactory $shuffler_factory;
 
-	/**
-	 * @var PlayerFactory
-	 */
-	private $player_factory;
+	private PlayerFactory $player_factory;
 
-	/**
-	 * @var DeckRebuilderFactory
-	 */
-	private $deck_rebuilder_factory;
+	private DeckRebuilderFactory $deck_rebuilder_factory;
 
-	/**
-	 * @param GameRepository $game_repository
-	 * @param ShufflerFactory $shuffler_factory
-	 * @param PlayerFactory $player_factory
-	 * @param DeckRebuilderFactory $deck_rebuilder_factory
-	 */
 	public function __construct(
 		GameRepository $game_repository,
 		ShufflerFactory $shuffler_factory,
@@ -71,9 +55,6 @@ class GameLoader
 	}
 
 	/**
-	 * @param Duizenden\Game $game
-	 * @param string $uuid
-	 *
 	 * @throws GameNotFoundException
 	 * @throws InvalidCardIdException
 	 * @throws NonUniqueResultException
@@ -123,11 +104,7 @@ class GameLoader
 
 	/**
 	 * @param GamePlayer[] $game_players
-	 * @param int $dealing_player_id
-	 * @param int $current_player_id
-	 * @param PlayerInterface $dealing_player
-	 * @param PlayerInterface $current_player
-	 *
+
 	 * @return Players
 	 *
 	 * @throws InvalidCardIdException
@@ -162,10 +139,6 @@ class GameLoader
 	}
 
 	/**
-	 * @param GamePlayer $game_player
-	 *
-	 * @return PlayerInterface
-	 *
 	 * @throws InvalidCardIdException
 	 */
 	private function createPlayer(GamePlayer $game_player): PlayerInterface
@@ -184,10 +157,6 @@ class GameLoader
 	}
 
 	/**
-	 * @param Entity\Game $game
-	 *
-	 * @return CardPool
-	 *
 	 * @throws InvalidCardIdException
 	 */
 	private function createUndrawnPool(Entity\Game $game): CardPool
@@ -196,10 +165,6 @@ class GameLoader
 	}
 
 	/**
-	 * @param Entity\Game $game
-	 *
-	 * @return DiscardedCardPool
-	 *
 	 * @throws InvalidCardIdException
 	 */
 	private function createDiscardedPool(Entity\Game $game)
@@ -208,10 +173,6 @@ class GameLoader
 	}
 
 	/**
-	 * @param GamePlayer $player
-	 *
-	 * @return CardPool
-	 *
 	 * @throws InvalidCardIdException
 	 */
 	private function createHand(GamePlayer $player)
@@ -219,11 +180,6 @@ class GameLoader
 		return new CardPool($this->createCardPool($player->getHand()));
 	}
 
-	/**
-	 * @param GamePlayerMeta $player_meta
-	 *
-	 * @return OverhandShuffle
-	 */
 	private function createShuffler(GamePlayerMeta $player_meta): OverhandShuffle
 	{
 		/** @var OverhandShuffle $shuffler */

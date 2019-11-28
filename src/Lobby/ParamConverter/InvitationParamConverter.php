@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Lobby\ParamConverter;
 
 use App\Lobby\Entity\Invitation;
@@ -11,23 +13,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class InvitationParamConverter implements ParamConverterInterface
 {
-	/**
-	 * @var InvitationRepository
-	 */
-	private $repository;
+	private InvitationRepository $repository;
 
-	/**
-	 * @param InvitationRepository $repository
-	 */
 	public function __construct(InvitationRepository $repository)
 	{
 		$this->repository = $repository;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function apply(Request $request, ParamConverter $configuration)
+	public function apply(Request $request, ParamConverter $configuration): bool
 	{
 		$invitation = null;
 		$param = $configuration->getName();
@@ -54,8 +47,8 @@ class InvitationParamConverter implements ParamConverterInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function supports(ParamConverter $configuration)
+	public function supports(ParamConverter $configuration): bool
 	{
-		return $configuration->getClass() == Invitation::class;
+		return $configuration->getClass() === Invitation::class;
 	}
 }

@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Persistence;
 
 use App\CardPool\CardPool;
 use App\Common\Meld\Melds;
 use App\Entity\Player;
-use App\Games\Duizenden\Entity;
 use App\Games\Duizenden;
+use App\Games\Duizenden\Entity;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Player\Players;
-use App\Games\Duizenden\Workflow\MarkingType;
 use App\Games\Duizenden\Repository\GameRepository;
+use App\Games\Duizenden\Workflow\MarkingType;
 use App\Repository\PlayerRepository;
 use App\Shufflers\Overhand\OverhandShuffle;
 use DateTimeImmutable;
@@ -21,26 +23,12 @@ use Exception;
 
 class GamePersistence
 {
-	/**
-	 * @var GameRepository
-	 */
-	private $game_repository;
+	private GameRepository $game_repository;
 
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entity_manager;
+	private EntityManagerInterface $entity_manager;
 
-	/**
-	 * @var PlayerRepository
-	 */
-	private $player_repository;
+	private PlayerRepository $player_repository;
 
-	/**
-	 * @param EntityManagerInterface $entity_manager
-	 * @param GameRepository $game_repository
-	 * @param PlayerRepository $player_repository
-	 */
 	public function __construct(
 		EntityManagerInterface $entity_manager,
 		GameRepository $game_repository,
@@ -53,24 +41,16 @@ class GamePersistence
 	}
 
 	/**
-	 * @param Duizenden\Game $game
-	 *
-	 * @return string
-	 *
 	 * @throws NonUniqueResultException
 	 */
 	public function getMarking(Duizenden\Game $game): string
 	{
-		$marking = $game->getId()
+		return $game->getId()
 			? $this->game_repository->getLatestGameStateMarking($game->getId())
 			: MarkingType::CREATE()->getValue();
-
-		return $marking;
 	}
 
 	/**
-	 * @param Duizenden\Game $game
-	 * @param string $workflow_marking
 	 * @param array $context
 	 *
 	 * @throws GameNotFoundException
@@ -103,12 +83,7 @@ class GamePersistence
 	}
 
 	/**
-	 * @param Duizenden\Game $game
-	 * @param string $workflow_marking
-	 *
-	 * @return Entity\Game
-	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function createNewGame(Duizenden\Game $game, string $workflow_marking): Entity\Game
 	{
@@ -135,13 +110,10 @@ class GamePersistence
 	}
 
 	/**
-	 * @param Duizenden\Game $game
-	 * @param string $workflow_marking
-	 *
 	 * @throws GameNotFoundException
 	 * @throws NonUniqueResultException
 	 */
-	private function configureGame(Duizenden\Game $game, string $workflow_marking)
+	private function configureGame(Duizenden\Game $game, string $workflow_marking): void
 	{
 		$state = $game->getState();
 		$game_entity = $this->getLastGameState($game->getId());
@@ -197,14 +169,12 @@ class GamePersistence
 	}
 
 	/**
-	 * @param Duizenden\Game $game
-	 * @param string $workflow_marking
 	 * @param array $context
 	 *
 	 * @throws GameNotFoundException
 	 * @throws NonUniqueResultException
 	 */
-	private function updateState(Duizenden\Game $game, string $workflow_marking, array $context)
+	private function updateState(Duizenden\Game $game, string $workflow_marking, array $context): void
 	{
 		$state = $game->getState();
 		$game_entity = $this->getLastGameState($game->getId());
@@ -243,7 +213,6 @@ class GamePersistence
 	}
 
 	/**
-	 * @param PlayerInterface $player
 	 * @param Entity\GamePlayer[] $game_players
 	 *
 	 * @return Entity\GamePlayer|null
@@ -262,8 +231,6 @@ class GamePersistence
 	}
 
 	/**
-	 * @param CardPool $pool
-	 *
 	 * @return string[]
 	 */
 	private function createPersistableCardPool(CardPool $pool): array
@@ -272,8 +239,6 @@ class GamePersistence
 	}
 
 	/**
-	 * @param Melds $melds
-	 *
 	 * @return string[][]
 	 */
 	private function serializeMelds(Melds $melds): array
@@ -289,10 +254,6 @@ class GamePersistence
 	}
 
 	/**
-	 * @param string $uuid
-	 *
-	 * @return Entity\Game
-	 *
 	 * @throws GameNotFoundException
 	 * @throws NonUniqueResultException
 	 */
@@ -307,8 +268,6 @@ class GamePersistence
 	}
 
 	/**
-	 * @param Players $players
-	 *
 	 * @return Player[]
 	 */
 	private function loadPlayers(Players $players): array

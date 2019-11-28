@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Duizenden;
 
 use App\CardPool\Exception\EmptyCardPoolException;
@@ -15,17 +17,9 @@ use App\Games\Duizenden\StateCompiler\TopicType;
 
 trait NotifyPlayersTrait
 {
-	/**
-	 * @var GameNotifier
-	 */
-	private $game_notifier;
+	private GameNotifier $game_notifier;
 
 	/**
-	 * @param Game $game
-	 * @param PlayerInterface $source_player
-	 * @param ActionType $source_action
-	 * @param array|null $extras
-	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
@@ -37,15 +31,6 @@ trait NotifyPlayersTrait
 	}
 
 	/**
-	 * @param string $identifier
-	 * @param Game $game
-	 * @param PlayerInterface $source_player
-	 * @param ActionType $source_action
-	 * @param TopicType $topic_type
-	 * @param array|null $extras
-	 *
-	 * @return GameEventData
-	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */

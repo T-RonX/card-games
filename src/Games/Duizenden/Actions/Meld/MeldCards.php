@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace  App\Games\Duizenden\Actions\Meld;
 
 use App\CardPool\CardPool;
@@ -20,7 +22,6 @@ use App\Games\Duizenden\Workflow\TransitionType;
 class MeldCards extends StateChangeAction
 {
 	/**
-	 * @param Game $game
 	 * @param CardInterface[] $cards
 	 *
 	 * @throws CardNotFoundException
@@ -39,7 +40,6 @@ class MeldCards extends StateChangeAction
 	}
 
 	/**
-	 * @param PlayerInterface $player
 	 * @param CardInterface[] $cards
 	 *
 	 * @throws CardNotFoundException
@@ -59,7 +59,6 @@ class MeldCards extends StateChangeAction
 	}
 
 	/**
-	 * @param State $state
 	 * @param CardInterface[] $cards
 	 *
 	 * @throws InvalidMeldException

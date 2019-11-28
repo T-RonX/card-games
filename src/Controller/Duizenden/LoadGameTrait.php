@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Duizenden;
 
 use App\Cards\Standard\Exception\InvalidCardIdException;
@@ -15,26 +17,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 trait LoadGameTrait
 {
-	/**
-	 * @var GameFactory
-	 */
-	protected $game_factory;
+	protected GameFactory $game_factory;
+
+	protected GameLoader $game_loader;
+
+	protected SessionInterface $session;
 
 	/**
-	 * @var GameLoader
-	 */
-	protected $game_loader;
-
-	/**
-	 * @var SessionInterface
-	 */
-	protected $session;
-
-	/**
-	 * @param string|null $uuid
-	 *
-	 * @return Game
-	 *
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
 	 * @throws InvalidCardIdException

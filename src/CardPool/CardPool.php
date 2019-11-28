@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\CardPool;
 
 use App\CardPool\Exception\CardNotFoundException;
@@ -11,87 +13,55 @@ use Countable;
 class CardPool implements CardPoolInterface, Countable
 {
 	/**
-	 * @inheritDoc
+	 * @var CardInterface[]
 	 */
-	private $cards = [];
+	private array $cards = [];
 
-	/**
-	 * @var int
-	 */
-	private $pointer;
+	private int $pointer;
 
-	/**
-	 * @param array|null $cards
-	 * @param int $pointer
-	 */
 	public function __construct(array $cards = [], int $pointer = 0)
 	{
 		$this->cards = $cards;
 		$this->pointer = $pointer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function clear(): void
 	{
 		$this->cards = [];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function setCards(array $cards): void
 	{
 		$this->cards = $cards;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function addCards(array $cards): void
 	{
 		$this->cards = array_merge($this->cards, $cards);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function addCard(CardInterface $card, int $target = null): void
 	{
 		$index = null === $target ? $this->getCardCount() : $target;
 		array_splice($this->cards, $index, 0, [$card]);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function getCardCount(): int
 	{
 		return count($this->cards);
 	}
 
-	/**
-	 * @inheritDoc
-	 *
-	 * @return CardInterface[]
-	 */
 	function getCards(): array
 	{
 		return $this->cards;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function shuffle(ShufflerInterface $shuffler): void
 	{
 		$this->cards = $shuffler->shuffle($this->cards);
 	}
 
 	/**
-	 * @return CardInterface
-	 *
 	 * @throws EmptyCardPoolException
 	 */
 	public function drawTopCard(): CardInterface
@@ -105,8 +75,6 @@ class CardPool implements CardPoolInterface, Countable
 	}
 
 	/**
-	 * @inheritDoc
-	 *
 	 * @throws EmptyCardPoolException
 	 */
 	public function getTopCard(): CardInterface
@@ -121,9 +89,6 @@ class CardPool implements CardPoolInterface, Countable
 		return current($this->cards);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function drawAllCards(): array
 	{
 		$cards = $this->cards;
@@ -133,13 +98,10 @@ class CardPool implements CardPoolInterface, Countable
 	}
 
 	/**
-	 * @@inheritDoc
-	 *
 	 * @throws CardNotFoundException
 	 */
 	public function drawCard(CardInterface $card): CardInterface
 	{
-		/** @var CardInterface $own_card */
 		foreach ($this->cards as $index => $own_card)
 		{
 			if ($own_card->equals($card))
@@ -160,9 +122,6 @@ class CardPool implements CardPoolInterface, Countable
 		);
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function hasCards(): bool
 	{
 		return $this->count() > 0;
@@ -184,50 +143,32 @@ class CardPool implements CardPoolInterface, Countable
 		return $return;
 	}
 
-	/**
-	 * @inheritDoc
-	*/
-	public function current()
+	public function current(): CardInterface
 	{
 		return $this->cards[$this->pointer];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function next()
+	public function next(): void
 	{
 		++$this->pointer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function key()
+	public function key(): int
 	{
 		return $this->pointer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function valid()
+	public function valid(): bool
 	{
 		return array_key_exists($this->pointer, $this->cards);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function rewind()
+	public function rewind(): void
 	{
 		$this->pointer = 0;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function count()
+	public function count(): int
 	{
 		return count($this->cards);
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Chat;
 
 use App\Chat\Entity\ChatRoom as ChatRoomEntity;
@@ -10,26 +12,12 @@ use DateInterval;
 
 class ChatRoomFactory
 {
-	/**
-	 * @var ChatRoomRepository
-	 */
-	private $repository;
+	private ChatRoomRepository $repository;
 
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entity_manager;
+	private EntityManagerInterface $entity_manager;
 
-	/**
-	 * @var PublisherInterface
-	 */
-	private $publisher;
+	private PublisherInterface $publisher;
 
-	/**
-	 * @param ChatRoomRepository $repository
-	 * @param EntityManagerInterface $entity_manager
-	 * @param PublisherInterface $publisher
-	 */
 	public function __construct(
 		ChatRoomRepository $repository,
 		EntityManagerInterface $entity_manager,
@@ -41,11 +29,6 @@ class ChatRoomFactory
 		$this->publisher = $publisher;
 	}
 
-	/**
-	 * @param string|null $id
-	 *
-	 * @return ChatRoom
-	 */
 	public function create(string $id): ChatRoom
 	{
 		$chat_room_entity = $this->repository->findByReference($id, new DateInterval('PT1H'));
@@ -58,8 +41,6 @@ class ChatRoomFactory
 			$this->entity_manager->flush();
 		}
 
-		$chat_room = new ChatRoom($this->entity_manager, $chat_room_entity, $this->publisher);
-
-		return $chat_room;
+		return new ChatRoom($this->entity_manager, $chat_room_entity, $this->publisher);
 	}
 }

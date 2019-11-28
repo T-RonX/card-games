@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Lobby;
 
 use App\Entity\Player;
@@ -16,32 +18,14 @@ use Symfony\Component\Mercure\PublisherInterface;
 
 class Inviter
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entity_manager;
+	private EntityManagerInterface $entity_manager;
 
-	/**
-	 * @var PublisherInterface
-	 */
-	private $publisher;
+	private PublisherInterface $publisher;
 
-	/**
-	 * @var EventDispatcherInterface
-	 */
-	private $event_dispatcher;
+	private EventDispatcherInterface $event_dispatcher;
 
-	/**
-	 * @var InvitationRepository
-	 */
-	private $invitation_repository;
+	private InvitationRepository $invitation_repository;
 
-	/**
-	 * @param EntityManagerInterface $entity_manager
-	 * @param PublisherInterface $publisher
-	 * @param EventDispatcherInterface $event_dispatcher
-	 * @param InvitationRepository $invitation_repository
-	 */
 	public function __construct(
 		EntityManagerInterface $entity_manager,
 		PublisherInterface $publisher,
@@ -56,7 +40,6 @@ class Inviter
 	}
 
 	/**
-	 * @param Player $inviter
 	 * @param Player[] $invitees
 	 *
 	 * @return Invitation
@@ -99,10 +82,6 @@ class Inviter
 	}
 
 	/**
-	 * @param Invitee $inviter
-	 *
-	 * @return Invitation
-	 *
 	 * @throws Exception
 	 */
 	private function createInviteEntity(Invitee $inviter): Invitation
@@ -113,9 +92,6 @@ class Inviter
 	}
 
 	/**
-	 * @param Player $player
-	 * @param bool|null $accepted
-	 *
 	 * @return Invitee
 	 */
 	private function createPlayerInviteEntity(Player $player, ?bool $accepted): Invitee
@@ -126,9 +102,6 @@ class Inviter
 	}
 
 	/**
-	 * @param Player|null $invitee
-	 * @param Invitation $invitation
-	 *
 	 * @throws InvitationException
 	 */
 	public function acceptInvitation(?Player $invitee, Invitation $invitation): void
@@ -161,9 +134,6 @@ class Inviter
 	}
 
 	/**
-	 * @param Player|null $invitee
-	 * @param Invitation $invitation
-	 *
 	 * @throws InvitationException
 	 */
 	public function declineInvitation(?Player $invitee, Invitation $invitation): void
@@ -188,9 +158,6 @@ class Inviter
 			));
 	}
 
-	/**
-	 * @param Invitation $invitation
-	 */
 	private function checkAcceptedByAll(Invitation $invitation): void
 	{
 		foreach ($invitation->getInvitees() as $player_invite)
@@ -205,9 +172,6 @@ class Inviter
 		$this->event_dispatcher->dispatch($event, InvitationEvent::EVENT_ALL_ACCEPTED);
 	}
 
-	/**
-	 * @param Invitee $player_invite
-	 */
 	private function playerAcceptInvitation(Invitee $player_invite): void
 	{
 		$player_invite->setAccepted(true);
@@ -215,9 +179,6 @@ class Inviter
 		$this->entity_manager->flush();
 	}
 
-	/**
-	 * @param Invitee $player_invite
-	 */
 	private function playerDeclineInvitation(Invitee $player_invite): void
 	{
 		$player_invite->setAccepted(false);
@@ -226,8 +187,6 @@ class Inviter
 	}
 
 	/**
-	 * @param Player $player
-	 *
 	 * @return Invitation[]
 	 */
 	public function getInvitationsByInviter(Player $player): array
@@ -236,8 +195,6 @@ class Inviter
 	}
 
 	/**
-	 * @param Player $player
-	 *
 	 * @return Invitation[]
 	 */
 	public function getInvitationsByInvitee(Player $player): array

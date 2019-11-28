@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Decks\Standard108;
 
 use App\Cards\Standard\Card;
 use App\Cards\Standard\Color\Black;
-use App\Cards\Standard\Color\Blue;
 use App\Cards\Standard\Color\Red;
 use App\Cards\Standard\Rank\Ace;
 use App\Cards\Standard\Rank\Jack;
@@ -23,7 +24,6 @@ use App\Cards\Standard\Rank\Rank_9;
 use App\Cards\Standard\Suit\Clubs;
 use App\Cards\Standard\Suit\Diamonds;
 use App\Cards\Standard\Suit\Harts;
-use App\Cards\Standard\Suit\Joker;
 use App\Cards\Standard\Suit\JokerBlack;
 use App\Cards\Standard\Suit\JokerRed;
 use App\Cards\Standard\Suit\Spades;
@@ -36,16 +36,13 @@ class Deck implements DeckInterface
 	/**
 	 * @var CardInterface[]
 	 */
-	private $cards;
+	private array $cards;
 	
 	public function __construct(ColorInterface $back_color)
 	{
 		$this->initialize($back_color);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	private function initialize(ColorInterface $back): void
 	{
 		$this->clear();
@@ -136,16 +133,13 @@ class Deck implements DeckInterface
 	}
 
 	/**
-	 * @inheritDoc
+	 * @return CardInterface[]
 	 */
 	public function getCards(): array
 	{
 		return $this->cards;
 	}
 
-	/**
-	 * Clears the cards in the deck.
-	 */
 	private function clear(): void
 	{
 		$this->cards = [];

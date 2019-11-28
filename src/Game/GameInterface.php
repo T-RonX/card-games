@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Game;
 
 interface GameInterface
 {
-	/**
-	 * @return string|null
-	 */
 	function getId(): ?string;
 
-	/**
-	 * @return string
-	 */
 	function getName(): string;
 }

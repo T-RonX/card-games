@@ -1,22 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class GamePlayer
 {
-    private $hand;
+	private ?int $id = null;
 
-    private $melds;
+	private string $hand;
 
-    private $id;
+	private string $melds;
 
-    private $Game;
+    private Game $Game;
 
-    private $GamePlayerMeta;
+    private ?GamePlayerMeta $GamePlayerMeta = null;
 
-    private $CurrentPlayerGames;
+    private Collection $CurrentPlayerGames;
 
     public function __construct()
 	{

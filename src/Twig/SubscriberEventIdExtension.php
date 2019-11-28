@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig;
 
 use App\Entity\Player;
@@ -11,14 +13,9 @@ use Twig\TwigFunction;
 
 class SubscriberEventIdExtension extends AbstractExtension
 {
-	/**
-	 * @var SubscriberIdGenerator
-	 */
-	private $id_generator;
-	/**
-	 * @var TokenStorageInterface
-	 */
-	private $token_storage;
+	private SubscriberIdGenerator $id_generator;
+
+	private TokenStorageInterface $token_storage;
 
 	public function __construct(
 		SubscriberIdGenerator $id_generator,

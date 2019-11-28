@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Score;
 
 use App\CardPool\CardPool;
@@ -11,20 +13,10 @@ use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 
 class ScoreCalculator
 {
-	/**
-	 * @var GameRepository
-	 */
-	private $game_player_repository;
+	private GameRepository $game_repository;
 
-	/**
-	 * @var GameRepository
-	 */
-	private $game_repository;
+	private GamePlayerRepository $game_player_repository;
 
-	/**
-	 * @param GameRepository $game_repository
-	 * @param GamePlayerRepository $game_player_repository
-	 */
 	public function __construct(
 		GameRepository $game_repository,
 		GamePlayerRepository $game_player_repository
@@ -35,11 +27,6 @@ class ScoreCalculator
 	}
 
 	/**
-	 * @param string $game_id
-	 * @param int $round_finish_extra_points
-	 *
-	 * @return GameScore
-	 *
 	 * @throws UnmappedCardException
 	 */
 	public function calculateGameScore(string $game_id, int $round_finish_extra_points): GameScore
@@ -95,18 +82,10 @@ class ScoreCalculator
 			$sequences[] = $item['sequence'] - 1;
 		}
 
-		$finishers = $this->game_repository->getPlayersBySequences($game_id, $sequences);
-
-		return $finishers;
+		return $this->game_repository->getPlayersBySequences($game_id, $sequences);
 	}
 
 	/**
-	 * @param PlayerInterface $player
-	 * @param bool $is_round_finisher
-	 * @param int $round_finish_extra_points
-	 *
-	 * @return PlayerScore
-	 *
 	 * @throws UnmappedCardException
 	 */
 	public function calculatePlayerRoundScore(PlayerInterface $player, bool $is_round_finisher, int $round_finish_extra_points): PlayerScore
@@ -123,10 +102,6 @@ class ScoreCalculator
 	}
 
 	/**
-	 * @param PlayerInterface $player
-	 *
-	 * @return int
-	 *
 	 * @throws UnmappedCardException
 	 */
 	public function calculatePlayerMeldsScore(PlayerInterface $player): int
@@ -142,10 +117,6 @@ class ScoreCalculator
 	}
 
 	/**
-	 * @param CardPool $card_pool
-	 *
-	 * @return int
-	 *
 	 * @throws UnmappedCardException
 	 */
 	private function calculateCardPool(CardPool $card_pool): int

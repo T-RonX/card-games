@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Score;
 
 use App\Cards\Standard\CardHelper;
@@ -25,7 +27,7 @@ use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 
 class PointMapping
 {
-	private static $value_map = [
+	private static array $value_map = [
 		0 => ['X' => 25, 'Y' => 25],
 		2 => ['S' => 5, 'H' => 5, 'D' => 5, 'C' => 5],
 		3 => ['S' => 5, 'H' => 5, 'D' => 5, 'C' => 5],
@@ -43,7 +45,7 @@ class PointMapping
 		1 => ['S' => 20, 'H' => 20, 'D' => 20, 'C' => 20],
 	];
 
-	private static $name_map = [
+	private static array $name_map = [
 		0 => ['X' => 25, 'Y' => 25],
 		JokerRed::CODE => ['X' => 25, 'Y' => 25],
 		JokerBlack::CODE => ['X' => 25, 'Y' => 25],
@@ -63,22 +65,12 @@ class PointMapping
 		1 => ['S' => 20, 'H' => 20, 'D' => 20, 'C' => 20],
 	];
 
-	/**
-	 * @param SuitInterface $suit
-	 * @param int $rank_value
-	 *
-	 * @return int
-	 */
 	public static function getPointsBySuitAndRankValue(SuitInterface $suit, int $rank_value): int
 	{
 		return self::$value_map[$rank_value][$suit->getName()];
 	}
 
 	/**
-	 * @param CardInterface $card
-	 *
-	 * @return int
-	 *
 	 * @throws UnmappedCardException
 	 */
 	public static function getPointsByCard(CardInterface $card): int
@@ -94,10 +86,6 @@ class PointMapping
 	}
 
 	/**
-	 * @param string $id
-	 *
-	 * @return int
-	 *
 	 * @throws UnmappedCardException
 	 */
 	public static function getPointsByCardId(string $id): int

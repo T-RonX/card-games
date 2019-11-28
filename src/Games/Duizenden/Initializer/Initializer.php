@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Initializer;
 
 use App\CardPool\CardPool;
@@ -18,26 +20,12 @@ use App\Shuffler\ShufflerInterface;
 
 class Initializer
 {
-	/**
-	 * @var ShufflerFactory
-	 */
-	private $shuffler_factory;
+	private ShufflerFactory $shuffler_factory;
 
-	/**
-	 * @var DeckFactory
-	 */
-	private $deck_factory;
+	private DeckFactory $deck_factory;
 
-	/**
-	 * @var DeckRebuilderFactory
-	 */
-	private $deck_rebuilder_factory;
+	private DeckRebuilderFactory $deck_rebuilder_factory;
 
-	/**
-	 * @param ShufflerFactory $shuffling_factory
-	 * @param DeckFactory $deck_factory
-	 * @param DeckRebuilderFactory $deck_rebuilder_factory
-	 */
 	public function __construct(
 		ShufflerFactory $shuffling_factory,
 		DeckFactory $deck_factory,
@@ -50,10 +38,6 @@ class Initializer
 	}
 
 	/**
-	 * @param Configurator $config
-	 *
-	 * @return State
-	 *
 	 * @throws EmptyPlayerSetException
 	 * @throws InvalidDealerPlayerException
 	 */
@@ -73,12 +57,7 @@ class Initializer
 	}
 
 	/**
-	 * @param Configurator $config
-	 *
-	 * @return PlayerInterface
-	 *
 	 * @throws InvalidDealerPlayerException
-	 *
 	 * @throws EmptyPlayerSetException
 	 */
 	private function getDealingPlayerFromConfigurator(Configurator $config): PlayerInterface
@@ -99,31 +78,16 @@ class Initializer
 		return $config->getPlayers()->getFirstPlayer();
 	}
 
-	/**
-	 * @param Configurator $config
-	 *
-	 * @return ShufflerInterface|null
-	 */
 	private function getShufflerFromConfigurator(Configurator $config): ?ShufflerInterface
 	{
 		return $config->getDoInitialShuffle() ? $this->shuffler_factory->create($config->getInitialShuffleAlgorithm()) : null;
 	}
 
-	/**
-	 * @param Configurator $config
-	 *
-	 * @return DeckRebuilderInterface|null
-	 */
 	public function getDeckRebuilderFromConfig(Configurator $config): ?DeckRebuilderInterface
 	{
 		return $this->deck_rebuilder_factory->create($config->getDeckRebuilderAlgorithm());
 	}
 
-	/**
-	 * @param ShufflerInterface|null $shuffler
-	 *
-	 * @return CardPool
-	 */
 	private function createInitialPack(?ShufflerInterface $shuffler = null): CardPool
 	{
 		$deck1 = $this->deck_factory->create(DeckType::STANDARD108_BLUE());

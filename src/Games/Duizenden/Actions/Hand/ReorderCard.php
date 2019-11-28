@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace  App\Games\Duizenden\Actions\Hand;
 
 use App\Games\Duizenden\Actions\StateChangeAction;
@@ -17,20 +19,10 @@ use Symfony\Component\Workflow\StateMachine;
 
 class ReorderCard
 {
-	/**
-	 * @var EntityManager
-	 */
-	private $entity_manager;
+	private EntityManagerInterface $entity_manager;
 
-	/**
-	 * @var GamePlayerRepository
-	 */
-	private $game_player_repository;
+	private GamePlayerRepository $game_player_repository;
 
-	/**
-	 * @param EntityManagerInterface $entity_manager
-	 * @param GamePlayerRepository $game_player_repository
-	 */
 	public function __construct(
 		EntityManagerInterface $entity_manager,
 		GamePlayerRepository $game_player_repository
@@ -41,14 +33,8 @@ class ReorderCard
 	}
 
 	/**
-	 * @param Game $game
-	 * @param PlayerInterface $player
-	 * @param int $source
-	 * @param int $target
-	 *
 	 * @throws NonUniqueResultException
 	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @throws PlayerNotFoundException
 	 */
 	public function reorder(Game $game, PlayerInterface $player, int $source, int $target): void

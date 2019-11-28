@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Player\Iterator;
 
 use App\Games\Duizenden\Player\PlayerInterface;
@@ -10,12 +12,9 @@ class InfiniteLoopIterator implements Iterator
 	/**
 	 * @var PlayerInterface[]
 	 */
-	private $players;
+	private array $players;
 
-	/**
-	 * @var int
-	 */
-	private $pointer = 0;
+	private int $pointer = 0;
 
 	/**
 	 * @param PlayerInterface[] $players
@@ -26,42 +25,27 @@ class InfiniteLoopIterator implements Iterator
 		$this->pointer = $pointer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function current()
+	public function current(): PlayerInterface
 	{
 		return $this->players[$this->pointer];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function next()
+	public function next(): void
 	{
 		$this->pointer = array_key_exists($this->pointer + 1, $this->players) ? $this->pointer + 1 : 0;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function key()
+	public function key(): int
 	{
 		return $this->pointer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function valid()
+	public function valid(): bool
 	{
 		return true;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function rewind()
+	public function rewind(): void
 	{
 		$this->pointer = 0;
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Uuid;
 
 use Exception;
@@ -12,85 +14,62 @@ class Uuid
 
 	/**
 	 * 00001111  Clears all bits of version byte with AND
-	 * @var int
 	 */
 	private const CLEAR_VER = 15;
 
 	/**
 	 * 00111111  Clears all relevant bits of variant byte with AND
-	 * @var int
 	 */
 	private const CLEAR_VAR = 63;
 
 	/**
 	 * 11100000  Variant reserved for future use
-	 * @var int
 	 */
 	private const VAR_RES = 224;
 
 	/**
 	 * 11000000  Microsoft UUID variant
-	 * @var int
 	 */
 	private const VAR_MS = 192;
 
 	/**
 	 * 10000000  The RFC 4122 variant (this variant)
-	 * @var int
 	 */
 	private const VAR_RFC = 128;
 
 	/**
 	 * 00010000
-	 * @var int
 	 */
 	private const VERSION_1 = 16;
 
 	/**
 	 * 00110000
-	 * @var int
 	 */
 	private const VERSION_3 = 48;
 
 	/**
 	 * 01000000
-	 * @var int
 	 */
 	private const VERSION_4 = 64;
 
 	/**
 	 * 01010000
-	 * @var int
 	 */
 	private const VERSION_5 = 80;
 
 	/**
 	 * Time (in 100ns steps) between the start of the UTC and Unix epochs
-	 * @var int
 	 */
 	private const INTERVAL = 0x01b21dd213814000;
 
-	protected $bytes;
+	protected string $bytes;
 
-	protected $hex;
-
-	protected $string;
-
-	protected $urn;
-
-	protected $version;
-
-	protected $variant;
-
-	protected $node;
-
-	protected $time;
+	protected string $string;
 
 	/**
-	 * @param string $uuid
 	 * @throws Exception
 	 */
-	protected function __construct($uuid)
+	protected function __construct(string $uuid)
 	{
 		if (!empty($uuid) && strlen($uuid) !== 16)
 		{
@@ -108,12 +87,6 @@ class Uuid
 	}
 
 	/**
-	 * @param int $ver
-	 * @param string $node
-	 * @param string $ns
-	 *
-	 * @return Uuid
-	 *
 	 * @throws Exception
 	 */
 	public static function generate(int $ver = 1, string $node = null, string $ns = null): self
@@ -145,10 +118,6 @@ class Uuid
 	/**
 	 * Generates a Version 1 UUID.
 	 * These are derived from the time at which they were generated.
-	 *
-	 * @param string $node
-	 *
-	 * @return string
 	 *
 	 * @throws Exception
 	 */
@@ -205,13 +174,9 @@ class Uuid
 	/**
 	 * Randomness is returned as a string of bytes
 	 *
-	 * @param $bytes
-	 *
-	 * @return string
-	 *
 	 * @throws Exception
 	 */
-	public static function randomBytes($bytes)
+	public static function randomBytes(int $bytes)
 	{
 		return random_bytes($bytes);
 	}
@@ -219,13 +184,8 @@ class Uuid
 	/**
 	 * Insure that an input string is either binary or hexadecimal.
 	 * Returns binary representation, or false on failure.
-	 *
-	 * @param string $str
-	 * @param integer $len
-	 *
-	 * @return string|null
 	 */
-	protected static function makeBin(string $str, int $len): string
+	protected static function makeBin(string $str, int $len): ?string
 	{
 		if ($str instanceof self)
 		{
@@ -259,12 +219,6 @@ class Uuid
 	 * Generates a Version 3 or Version 5 UUID.
 	 * These are derived from a hash of a name and its namespace, in binary form.
 	 *
-	 * @param int $ver
-	 * @param string $node
-	 * @param string $ns
-	 *
-	 * @return string
-	 *
 	 * @throws Exception
 	 */
 	protected static function mintName(int $ver, string $node, string $ns): string
@@ -289,12 +243,12 @@ class Uuid
 		{
 			case static::MD5:
 				$version = static::VERSION_3;
-				$uuid = md5($ns . $node, 1);
+				$uuid = md5($ns . $node, true);
 				break;
 
 			case static::SHA1:
 				$version = static::VERSION_5;
-				$uuid = substr(sha1($ns . $node, 1), 0, 16);
+				$uuid = substr(sha1($ns . $node, true), 0, 16);
 				break;
 
 			default:
@@ -315,8 +269,6 @@ class Uuid
 	 * These are derived solely from random numbers.
 	 * generate random fields
 	 *
-	 * @return string
-	 *
 	 * @throws Exception
 	 */
 	protected static function mintRand(): string
@@ -335,13 +287,9 @@ class Uuid
 	/**
 	 * Import an existing UUID
 	 *
-	 * @param string $uuid
-	 *
-	 * @return Uuid
-	 *
 	 * @throws Exception
 	 */
-	public static function import($uuid): self
+	public static function import(string $uuid): self
 	{
 		return new static(static::makeBin($uuid, 16));
 	}
@@ -351,12 +299,8 @@ class Uuid
 	 * The comparison will return true if they are bit-exact,
 	 * or if neither is valid.
 	 *
-	 * @param string $a
-	 * @param string $b
-	 *
-	 * @return bool
 	 */
-	public static function compare($a, $b): bool
+	public static function compare(string $a, string $b): bool
 	{
 		if (static::makeBin($a, 16) == static::makeBin($b, 16))
 		{
@@ -368,61 +312,7 @@ class Uuid
 		}
 	}
 
-	/**
-	 * Get the specified number of random bytes, using random_bytes().
-	 * Randomness is returned as a string of bytes
-	 *
-	 * Requires Php 7, or random_compact polyfill
-	 *
-	 * @param $bytes
-	 *
-	 * @return mixed
-	 *
-	 * @throws Exception
-	 */
-	protected static function randomPhp7($bytes)
-	{
-		return random_bytes($bytes);
-	}
-
-	/**
-	 * Get the specified number of random bytes, using openssl_random_pseudo_bytes().
-	 * Randomness is returned as a string of bytes.
-	 *
-	 * @param $bytes
-	 *
-	 * @return mixed
-	 */
-	protected static function randomOpenSSL($bytes)
-	{
-		return openssl_random_pseudo_bytes($bytes);
-	}
-
-	/**
-	 * Get the specified number of random bytes, using mt_rand().
-	 * Randomness is returned as a string of bytes.
-	 *
-	 * @param integer $bytes
-	 * @return string
-	 */
-	protected static function randomTwister($bytes)
-	{
-		$rand = "";
-
-		for ($a = 0; $a < $bytes; $a++)
-		{
-			$rand .= chr(mt_rand(0, 255));
-		}
-
-		return $rand;
-	}
-
-	/**
-	 * @param string $var
-	 *
-	 * @return string|string|number|number|number|number|number|NULL|number|NULL|NULL
-	 */
-	public function __get($var)
+	public function __get(string $var)
 	{
 		switch ($var)
 		{
@@ -468,7 +358,7 @@ class Uuid
 				}
 				else
 				{
-					return null;	
+					return null;
 				}
 			// no break
 			case "time":
@@ -495,11 +385,9 @@ class Uuid
 
 	/**
 	 * Return the UUID
-	 *
-	 * @return string
 	 */
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->string;
 	}
-}   
+}

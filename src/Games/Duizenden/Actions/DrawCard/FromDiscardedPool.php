@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace  App\Games\Duizenden\Actions\DrawCard;
 
 use App\CardPool\Exception\CardNotFoundException;
@@ -18,10 +20,7 @@ use Symfony\Component\Workflow\StateMachine;
 
 class FromDiscardedPool extends StateChangeAction
 {
-	/**
-	 * @var MeldCards
-	 */
-	private $meld_cards;
+	private MeldCards $meld_cards;
 
 	public function __construct(
 		StateMachine $state_machine,
@@ -34,8 +33,6 @@ class FromDiscardedPool extends StateChangeAction
 	}
 
 	/**
-	 * @param Game $game
-	 *
 	 * @throws DrawCardException
 	 * @throws EmptyCardPoolException
 	 */
@@ -55,14 +52,12 @@ class FromDiscardedPool extends StateChangeAction
 	}
 
 	/**
-	 * @param Game $game
 	 * @param CardInterface[] $meld_with
 	 *
 	 * @throws CardNotFoundException
 	 * @throws EmptyCardPoolException
 	 * @throws InvalidMeldException
 	 * @throws MeldException
-	 * @throws HandException
 	 */
 	public function drawAndMeld(Game $game, array $meld_with): void
 	{
@@ -86,10 +81,6 @@ class FromDiscardedPool extends StateChangeAction
 	}
 
 	/**
-	 * @inheritDoc
-	 *
-	 * @param State $state
-	 *
 	 * @throws EmptyCardPoolException
 	 */
 	private function drawCard(State $state, int $target = null): void

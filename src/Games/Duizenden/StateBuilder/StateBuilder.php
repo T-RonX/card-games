@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\StateBuilder;
 
 use App\Games\Duizenden\Game;
@@ -13,15 +15,9 @@ use Symfony\Component\Workflow\StateMachine;
 
 class StateBuilder
 {
-	/**
-	 * @var StateCompiler
-	 */
-	private $state_compiler;
+	private StateCompiler $state_compiler;
 
-	/**
-	 * @var StateMachine
-	 */
-	private $state_machine;
+	private StateMachine $state_machine;
 
 	public function __construct(
 		StateCompiler $state_compiler,
@@ -33,10 +29,6 @@ class StateBuilder
 	}
 
 	/**
-	 * @param Game $game
-	 *
-	 * @return StateData
-	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
@@ -49,13 +41,10 @@ class StateBuilder
 	}
 
 	/**
-	 * @param StateData $state_data
-	 * @param Game $game
-	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	public function fillStateData(StateData $state_data, Game $game)
+	public function fillStateData(StateData $state_data, Game $game): void
 	{
 		$state = $game->getState();
 
@@ -78,9 +67,6 @@ class StateBuilder
 	}
 
 	/**
-	 * @param StateData $state_data
-	 * @param Game $game
-	 *
 	 * @throws UnmappedCardException
 	 * @throws PlayerNotFoundException
 	 */
@@ -95,8 +81,6 @@ class StateBuilder
 	}
 
 	/**
-	 * @param Game $game
-	 *
 	 * @return ActionType[]
 	 */
 	private function createAllowedActions(Game $game): array

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Lobby\Repository;
 
 use App\Entity\Player;
@@ -12,19 +14,12 @@ use Doctrine\ORM\Query\Expr\Join;
 
 final class InvitationRepository extends ServiceEntityRepository
 {
-	/**
-	 * @inheritDoc
-	 */
 	public function __construct(ManagerRegistry $registry)
 	{
 		parent::__construct($registry, Invitation::class);
 	}
 
 	/**
-	 * @param string $uuid
-	 *
-	 * @return Invitation|null
-	 *
 	 * @throws NonUniqueResultException
 	 */
 	public function getInvitation(string $uuid): ?Invitation
@@ -40,8 +35,6 @@ final class InvitationRepository extends ServiceEntityRepository
 	}
 
 	/**
-	 * @param Player $inviter
-	 *s
 	 * @return Invitee[]|iterable
 	 */
 	public function getInvitationsByInviter(Player $inviter): iterable
@@ -60,8 +53,6 @@ final class InvitationRepository extends ServiceEntityRepository
 	}
 
 	/**
-	 * @param Player $invitee
-	 *s
 	 * @return Invitee[]|iterable
 	 */
 	public function getInvitationsByInvitee(Player $invitee): iterable

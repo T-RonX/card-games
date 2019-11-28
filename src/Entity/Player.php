@@ -1,23 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Games\Duizenden\Entity\GamePlayerMeta;
 use App\Uuid\UuidableInterface;
 use App\Uuid\UuidTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class Player implements UuidableInterface, UserInterface
 {
     use UuidTrait;
 
-    private $name;
+	private ?int $id = null;
 
-    private $id;
+	private string $name;
 
-    private $is_registered;
+    private bool $is_registered;
 
-    private $GamePlayerMetas;
+	/**
+	 * @var GamePlayerMeta[]|Collection
+	 */
+    private Collection $GamePlayerMetas;
 
     public function __construct()
 	{
@@ -48,27 +55,27 @@ class Player implements UuidableInterface, UserInterface
 		return $this;
 	}
 
-	public function getRoles()
+	public function getRoles(): array
 	{
 		return [];
 	}
 
-	public function getPassword()
+	public function getPassword(): ?string
 	{
 		return null;
 	}
 
-	public function getSalt()
+	public function getSalt(): ?string
 	{
 		return null;
 	}
 
-	public function getUsername()
+	public function getUsername(): string
 	{
 		return $this->name;
 	}
 
-	public function eraseCredentials()
+	public function eraseCredentials(): void
 	{
 
 	}

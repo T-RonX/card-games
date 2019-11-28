@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Voter\Duizenden;
 
 use App\Entity\Player;
@@ -22,25 +24,13 @@ class GameVoter extends Voter
 	public const DISCARD = 'discard';
 	public const REORDER_CARDS = 'reorder_cards';
 
-	/**
-	 * @var StateMachine
-	 */
-	private $state_machine;
+	private StateMachine $state_machine;
 
-	/**
-	 * @var Player
-	 */
-	private $player;
-	
-	/**
-	 * @var Game
-	 */
-	private $game;
+	private Player $player;
 
-	/**
-	 * @var DealerFinder
-	 */
-	private $dealer_finder;
+	private Game $game;
+
+	private DealerFinder $dealer_finder;
 
 	public function __construct(
 		StateMachine $state_machine,
@@ -51,7 +41,7 @@ class GameVoter extends Voter
 		$this->dealer_finder = $dealer_finder;
 	}
 
-	protected function supports($attribute, $subject): bool
+	protected function supports(string $attribute, $subject): bool
 	{
 		return $subject instanceof Game && in_array($attribute, [
 				self::ENTER_GAME,
@@ -66,7 +56,13 @@ class GameVoter extends Voter
 	}
 
 	/**
-	 * @param Game $game
+	 * @param string $permission
+	 * @param $game $game
+	 * @param TokenInterface $token
+	 *
+	 * @return bool
+	 *
+	 * @throws NonUniqueResultException
 	 */
 	protected function voteOnAttribute($permission, $game, TokenInterface $token): bool
 	{
@@ -118,6 +114,9 @@ class GameVoter extends Voter
 		return $this->isPlayerOfGame();
 	}
 
+	/**
+	 * @throws NonUniqueResultException
+	 */
 	private function canDeal(): bool
 	{
 		return $this->isDealingPlayer() && $this->canTransitionTo(TransitionType::DEAL());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cards\Standard;
 
 use App\Cards\Standard\Color\Black;
@@ -27,6 +29,7 @@ use App\Cards\Standard\Suit\Harts;
 use App\Cards\Standard\Suit\JokerBlack;
 use App\Cards\Standard\Suit\JokerRed;
 use App\Cards\Standard\Suit\Spades;
+use App\Deck\Card\CardInterface;
 use App\Deck\Card\Color\ColorInterface;
 use App\Deck\Card\Rank\RankInterface;
 use App\Deck\Card\Suit\SuitInterface;
@@ -34,13 +37,9 @@ use App\Deck\Card\Suit\SuitInterface;
 class CardHelper
 {
 	/**
-	 * @param string $id
-	 *
-	 * @return Card
-	 *
 	 * @throws InvalidCardIdException
 	 */
-	public static function createCardFromId(string $id)
+	public static function createCardFromId(string $id): CardInterface
 	{
 		$matches = [];
 
@@ -62,10 +61,6 @@ class CardHelper
 	}
 
 	/**
-	 * @param string $code
-	 *
-	 * @return ColorInterface
-	 *
 	 * @throws InvalidCardIdException
 	 */
 	private static function createBackByCode(string $code): ColorInterface
@@ -86,10 +81,6 @@ class CardHelper
 	}
 
 	/**
-	 * @param string $code
-	 *
-	 * @return RankInterface
-	 *
 	 * @throws InvalidCardIdException
 	 */
 	private static function createRankByValue(string $code): RankInterface
@@ -146,10 +137,6 @@ class CardHelper
 	}
 
 	/**
-	 * @param string $code
-	 *
-	 * @return SuitInterface
-	 *
 	 * @throws InvalidCardIdException
 	 */
 	private static function createSuitByCode(string $code): SuitInterface
@@ -178,10 +165,6 @@ class CardHelper
 		throw new InvalidCardIdException(sprintf("Suit with code '%s' is not recognised.", $code));
 	}
 
-
-	/**
-	 * @return Rank_0
-	 */
 	private static function createRank0(): Rank_0
 	{
 		static $rank = null;
@@ -194,9 +177,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_1
-	 */
 	private static function createRank1(): Rank_1
 	{
 		static $rank = null;
@@ -209,9 +189,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_2
-	 */
 	private static function createRank2(): Rank_2
 	{
 		static $rank = null;
@@ -224,9 +201,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_3
-	 */
 	private static function createRank3(): Rank_3
 	{
 		static $rank = null;
@@ -239,9 +213,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_4
-	 */
 	private static function createRank4(): Rank_4
 	{
 		static $rank = null;
@@ -254,9 +225,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_5
-	 */
 	private static function createRank5(): Rank_5
 	{
 		static $rank = null;
@@ -269,9 +237,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_6
-	 */
 	private static function createRank6(): Rank_6
 	{
 		static $rank = null;
@@ -284,9 +249,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_7
-	 */
 	private static function createRank7(): Rank_7
 	{
 		static $rank = null;
@@ -299,9 +261,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_8
-	 */
 	private static function createRank8(): Rank_8
 	{
 		static $rank = null;
@@ -314,9 +273,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_9
-	 */
 	private static function createRank9(): Rank_9
 	{
 		static $rank = null;
@@ -329,9 +285,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Rank_10
-	 */
 	private static function createRank10(): Rank_10
 	{
 		static $rank = null;
@@ -344,9 +297,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Jack
-	 */
 	private static function createRankJack(): Jack
 	{
 		static $rank = null;
@@ -359,9 +309,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Queen
-	 */
 	private static function createRankQueen(): Queen
 	{
 		static $rank = null;
@@ -374,9 +321,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return King
-	 */
 	private static function createRankKing(): King
 	{
 		static $rank = null;
@@ -389,9 +333,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Ace
-	 */
 	private static function createRankAce(): Ace
 	{
 		static $rank = null;
@@ -404,9 +345,6 @@ class CardHelper
 		return $rank;
 	}
 
-	/**
-	 * @return Spades
-	 */
 	private static function createSpadesSuit(): Spades
 	{
 		static $suit = null;
@@ -419,9 +357,6 @@ class CardHelper
 		return $suit;
 	}
 
-	/**
-	 * @return Harts
-	 */
 	private static function createHartsSuit(): Harts
 	{
 		static $suit = null;
@@ -434,9 +369,6 @@ class CardHelper
 		return $suit;
 	}
 
-	/**
-	 * @return Diamonds
-	 */
 	private static function createDiamondsSuit(): Diamonds
 	{
 		static $suit = null;
@@ -449,9 +381,6 @@ class CardHelper
 		return $suit;
 	}
 
-	/**
-	 * @return Clubs
-	 */
 	private static function createClubsSuit(): Clubs
 	{
 		static $suit = null;
@@ -464,9 +393,6 @@ class CardHelper
 		return $suit;
 	}
 
-	/**
-	 * @return JokerBlack
-	 */
 	private static function createJokerBlackSuit(): JokerBlack
 	{
 		static $suit = null;
@@ -479,9 +405,6 @@ class CardHelper
 		return $suit;
 	}
 
-	/**
-	 * @return JokerRed
-	 */
 	private static function createJokerRedSuit(): JokerRed
 	{
 		static $suit = null;
@@ -494,9 +417,6 @@ class CardHelper
 		return $suit;
 	}
 
-	/**
-	 * @return Red
-	 */
 	private static function createRedColor(): Red
 	{
 		static $color = null;
@@ -509,9 +429,6 @@ class CardHelper
 		return $color;
 	}
 
-	/**
-	 * @return Blue
-	 */
 	private static function createBlueColor(): Blue
 	{
 		static $color = null;
@@ -524,9 +441,6 @@ class CardHelper
 		return $color;
 	}
 
-	/**
-	 * @return Black
-	 */
 	private static function createBlackColor(): Black
 	{
 		static $color = null;

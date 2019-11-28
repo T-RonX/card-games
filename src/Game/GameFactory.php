@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Game;
 
 use Symfony\Component\DependencyInjection\ServiceLocator;
@@ -7,27 +9,17 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 class GameFactory
 {
 	/**
-	 * @var GameInterface[]
+	 * @var ServiceLocator|GameInterface[]
 	 */
-	private $locator;
+	private ServiceLocator $locator;
 
-	/**
-	 * @param ServiceLocator $locator
-	 */
 	public function __construct(ServiceLocator $locator)
 	{
 		$this->locator = $locator;
 	}
-	/**
-	 * @param string $name
-	 *
-	 * @return GameInterface
-	 */
+
 	public function create(string $name): GameInterface
 	{
-		/** @var GameInterface $game */
-		$game = $this->locator->get($name);
-
-		return $game;
+		return $this->locator->get($name);
 	}
 }

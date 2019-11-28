@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Repository;
 
 use App\Games\Duizenden\Entity\Game;
@@ -7,25 +9,19 @@ use App\Games\Duizenden\Workflow\MarkingType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
 final class GameRepository extends ServiceEntityRepository
 {
-	/**
-	 * @inheritDoc
-	 */
 	public function __construct(ManagerRegistry $registry)
 	{
 		parent::__construct($registry, Game::class);
 	}
 
 	/**
-	 * @param string $uuid
-	 *
-	 * @return Game|null
-	 *
 	 * @throws NonUniqueResultException
 	 */
 	public function loadLastGameState(string $uuid): ?Game
@@ -42,11 +38,8 @@ final class GameRepository extends ServiceEntityRepository
 	}
 
 	/**
-	 * @param string $uuid
-	 *
-	 * @return string|null
-	 *
 	 * @throws NonUniqueResultException
+	 * @throws NoResultException
 	 */
 	public function getLatestGameStateMarking(string $uuid): ?string
 	{
@@ -59,7 +52,7 @@ final class GameRepository extends ServiceEntityRepository
 	/**
 	 * @return Game[]
 	 */
-	public function getAllLatestGames()
+	public function getAllLatestGames(): array
 	{
 		return $this->getLatestGamesQueryBuilder()
 			->getQuery()
@@ -67,30 +60,21 @@ final class GameRepository extends ServiceEntityRepository
 	}
 
 	/**
-	 * @param string $uuid
-	 *
-	 * @return int
-	 *
+	 * @throws NoResultException
 	 * @throws NonUniqueResultException
 	 */
 	public function getRoundsPlayed(string $uuid): int
 	{
-		return (int) $this->createQueryBuilder('g')
+		return (int)$this->createQueryBuilder('g')
 			->select('MAX(g.round) as rounds')
 			->join('g.GameMeta', 'gm', Join::WITH, 'gm.uuid = :uuid')
 			->where('g.workflow_marking NOT IN (:markings)')
 			->setParameter('uuid', $uuid)
 			->setParameter('markings', MarkingType::CONFIGURED()->getValue())
 			->getQuery()
-			->getSingleScalarResult()
-		;
+			->getSingleScalarResult();
 	}
-	/**
-	 * @param string $uuid
-	 * @param string $alias
-	 *
-	 * @return QueryBuilder
-	 */
+
 	private function getLatestGameQueryBuilder(string $uuid, string $alias = 'g'): QueryBuilder
 	{
 		return $this->createQueryBuilder($alias)
@@ -100,12 +84,6 @@ final class GameRepository extends ServiceEntityRepository
 			->where(sprintf('%s_latest.id IS NULL', $alias));
 	}
 
-	/**
-	 * @param string $uuid
-	 * @param string $alias
-	 *
-	 * @return QueryBuilder
-	 */
 	private function getLatestRoundQueryBuilder(string $uuid, string $alias = 'g'): QueryBuilder
 	{
 		return $this->createQueryBuilder($alias)
@@ -115,11 +93,6 @@ final class GameRepository extends ServiceEntityRepository
 			->where(sprintf('%1$s_latest.id IS NULL AND %1$s.round IS NOT NULL', $alias));
 	}
 
-	/**
-	 * @param string $alias
-	 *
-	 * @return QueryBuilder
-	 */
 	private function getLatestGamesQueryBuilder(string $alias = 'g'): QueryBuilder
 	{
 		return $this->createQueryBuilder($alias)
@@ -128,10 +101,6 @@ final class GameRepository extends ServiceEntityRepository
 			->where(sprintf('%s_latest.id IS NULL', $alias));
 	}
 
-
-	/**
-	 * @return array
-	 */
 	public function getPlayersBySequences(string $game_id, array $sequences): array
 	{
 		return $this->createQueryBuilder('g', 'g.round')

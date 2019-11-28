@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cards\Standard\Suit;
 
 use App\Deck\Card\Color\ColorInterface;
@@ -7,25 +9,12 @@ use App\Deck\Card\Suit\SuitInterface;
 
 class Suit implements SuitInterface
 {
-	/**
-	 * @var ColorInterface
-	 */
-	private $color;
-	/**
-	 * @var string
-	 */
-	private $symbol;
+	private ColorInterface $color;
 
-	/**
-	 * @var string
-	 */
-	private $name;
+	private string $symbol;
 
-	/**
-	 * @param ColorInterface $color
-	 * @param string $symbol
-	 * @param string $name
-	 */
+	private string $name;
+
 	public function __construct(ColorInterface $color, string $symbol, string $name)
 	{
 		$this->color = $color;
@@ -33,25 +22,16 @@ class Suit implements SuitInterface
 		$this->name = $name;
 	}
 
-	/**
-	 * @return string
-	 */
 	function getSymbol(): string
 	{
 		return $this->symbol;
 	}
 
-	/**
-	 * @return string
-	 */
 	function getName(): string
 	{
 		return $this->name;
 	}
 
-	/**
-	 * @return ColorInterface
-	 */
 	function getColor(): ColorInterface
 	{
 		return $this->color;

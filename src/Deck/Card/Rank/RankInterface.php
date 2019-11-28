@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Deck\Card\Rank;
 
 interface RankInterface
 {
-	/**
-	 * @return int
-	 */
 	function getValue(): int;
 
-	/**
-	 * @return string
-	 */
 	function getName(): string;
 }

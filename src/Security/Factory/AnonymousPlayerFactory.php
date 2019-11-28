@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Factory;
 
 use App\Security\Authentication\Provider\AnonymousPlayerProvider;
@@ -12,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class AnonymousPlayerFactory implements SecurityFactoryInterface
 {
-	public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint): array
+	public function create(ContainerBuilder $container, string $id, array $config, string $user_provider, ?string $default_entry_point): array
 	{
 		$provider_id = 'security.authentication.provider.anonymous_player.' . $id;
 		$container->setDefinition($provider_id, new ChildDefinition(AnonymousPlayerProvider::class));
@@ -25,7 +27,7 @@ class AnonymousPlayerFactory implements SecurityFactoryInterface
 			->addMethodCall('setIdentificationFormType', [$config['identification_form_type']])
 			->addMethodCall('setIdentificationFormField', [$config['identification_form_field']]);
 
-		return [$provider_id, $listener_id, $defaultEntryPoint];
+		return [$provider_id, $listener_id, $default_entry_point];
 	}
 
 	public function getPosition(): string
@@ -39,7 +41,7 @@ class AnonymousPlayerFactory implements SecurityFactoryInterface
 	}
 
 	/**
-	 * @param ArrayNodeDefinition $builder
+	 * @param ArrayNodeDefinition|NodeDefinition $builder
 	 */
 	public function addConfiguration(NodeDefinition $builder): void
 	{

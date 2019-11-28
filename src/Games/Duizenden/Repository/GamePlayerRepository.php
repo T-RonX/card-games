@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Repository;
 
 use App\Games\Duizenden\Entity\Game;
@@ -13,17 +15,12 @@ use Doctrine\ORM\Query\Expr\Join;
 
 final class GamePlayerRepository extends ServiceEntityRepository
 {
-	/**
-	 * @inheritDoc
-	 */
 	public function __construct(ManagerRegistry $registry)
 	{
 		parent::__construct($registry, GamePlayer::class);
 	}
 
 	/**
-	 * @param string $game_id
-	 *
 	 * @return array
 	 */
 	public function getGameScoreData(string $game_id): array
@@ -43,11 +40,6 @@ final class GamePlayerRepository extends ServiceEntityRepository
 	}
 
 	/**
-	 * @param string $game_id
-	 * @param string $player_id
-	 *
-	 * @return mixed
-	 *
 	 * @throws NonUniqueResultException
 	 */
 	public function getLatestPlayer(string $game_id, string $player_id): ?GamePlayer

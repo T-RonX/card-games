@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Lobby\Entity;
 
 use App\Entity\Player;
@@ -8,40 +10,24 @@ use App\Uuid\UuidableInterface;
 use App\Uuid\UuidTrait;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class Invitation implements UuidableInterface
 {
 	use UuidTrait;
 
-	/**
-	 * @var string
-	 */
-	private $id;
+	private ?int $id = null;
+
+	private DateTimeInterface $created_at;
 
 	/**
-	 * @var string
+	 * @var Invitee[]|Collection
 	 */
-	private $uuid;
+	private ?Collection $Invitees = null;
 
-	/**
-	 * @var DateTimeInterface
-	 */
-	private $created_at;
+	private Invitee $Inviter;
 
-	/**
-	 * @var Invitee[]|ArrayCollection
-	 */
-	private $Invitees;
-
-	/**
-	 * @var Invitee
-	 */
-	private $Inviter;
-
-	/**
-	 * @var GameMeta|null
-	 */
-	private $game_id;
+	private ?string $game_id = null;
 
 	public function __construct()
 	{
@@ -72,13 +58,16 @@ class Invitation implements UuidableInterface
 	}
 
 	/**
-	 * @return Invitee[]|iterable
+	 * @return Invitee[]
 	 */
 	public function getInvitees(): iterable
 	{
 		return $this->Invitees;
 	}
 
+	/**
+	 * @return Player[]
+	 */
 	public function getAllPlayers(?bool $accepted = null): array
 	{
 		$players = [];
@@ -147,17 +136,11 @@ class Invitation implements UuidableInterface
 		return $this->uuid;
 	}
 
-	/**
-	 * @return Invitee
-	 */
 	public function getInviter(): Invitee
 	{
 		return $this->Inviter;
 	}
 
-	/**
-	 * @return DateTimeInterface
-	 */
 	public function getCreatedAt(): DateTimeInterface
 	{
 		return $this->created_at;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Score;
 
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
@@ -9,11 +11,8 @@ class RoundScore
 	/**
 	 * @var PlayerScore[]
 	 */
-	private $player_scores = [];
+	private array $player_scores = [];
 
-	/**
-	 * @param PlayerScore $player_score
-	 */
 	public function addPlayerScore(PlayerScore $player_score): void
 	{
 		$this->player_scores[$player_score->getPlayerId()] = $player_score;
@@ -28,10 +27,6 @@ class RoundScore
 	}
 
 	/**
-	 * @param string $id
-	 *
-	 * @return PlayerScore
-	 *
 	 * @throws PlayerNotFoundException
 	 */
 	public function getByPlayerId(string $id): PlayerScore

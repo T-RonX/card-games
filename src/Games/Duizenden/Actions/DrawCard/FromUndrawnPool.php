@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace  App\Games\Duizenden\Actions\DrawCard;
 
 use App\CardPool\Exception\EmptyCardPoolException;
@@ -13,10 +15,6 @@ use App\Games\Duizenden\Workflow\TransitionType;
 class FromUndrawnPool extends StateChangeAction
 {
 	/**
-	 * @param Game $game
-	 *
-	 * @return CardInterface
-	 *
 	 * @throws EmptyCardPoolException
 	 * @throws OutOfCardsException
 	 */
@@ -46,10 +44,6 @@ class FromUndrawnPool extends StateChangeAction
 	}
 
 	/**
-	 * @param State $state
-	 *
-	 * @return CardInterface
-	 *
 	 * @throws EmptyCardPoolException
 	 */
 	private function drawCard(State $state, int $target = null): CardInterface
@@ -60,9 +54,6 @@ class FromUndrawnPool extends StateChangeAction
 		return $card;
 	}
 
-	/**
-	 * @param State $state
-	 */
 	private function recreate(State $state): void
 	{
 		$cards = $state->getDiscardedPool()->drawAllCards();

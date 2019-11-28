@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Game\Meta\GameMetaLoader;
@@ -11,20 +13,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Main extends AbstractController
 {
-	/**
-	 * @var GameMetaLoader
-	 */
-	private $game_meta_loader;
+	private GameMetaLoader $game_meta_loader;
 
-	/**
-	 * @var SessionInterface
-	 */
-	private $session;
+	private SessionInterface $session;
 
-	/**
-	 * @param GameMetaLoader $game_meta_loader
-	 * @param SessionInterface $session
-	 */
 	public function __construct(
 		GameMetaLoader $game_meta_loader,
 		SessionInterface $session
@@ -34,9 +26,6 @@ class Main extends AbstractController
 		$this->session = $session;
 	}
 
-	/**
-	 * @return Response
-	 */
 	public function saved(): Response
 	{
 		$player = $this->getUser();
@@ -47,11 +36,6 @@ class Main extends AbstractController
 	}
 
 	/**
-	 * @param string $game_name
-	 * @param string $uuid
-	 *
-	 * @return Response
-	 *
 	 * @throws Exception
 	 */
 	public function load(string $game_name, string $uuid): Response

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Duizenden;
 
 use App\CardPool\Exception\EmptyCardPoolException;
@@ -8,13 +10,12 @@ use App\Enum\Exception\EnumConstantsCouldNotBeResolvedException;
 use App\Enum\Exception\EnumNotDefinedException;
 use App\Games\Duizenden\Actions\Deal\Deal;
 use App\Games\Duizenden\Game;
-use App\Games\Duizenden\StateCompiler\ActionType;
-use App\Games\Duizenden\StateCompiler\InvalidActionException;
-use App\Games\Duizenden\StateCompiler\TopicType;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
+use App\Games\Duizenden\StateCompiler\ActionType;
+use App\Games\Duizenden\StateCompiler\TopicType;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,14 +26,8 @@ class DealCardsController extends AbstractController
 	use LoadGameTrait;
 	use NotifyPlayersTrait;
 
-	/**
-	 * @var Deal
-	 */
-	private $deal;
+	private Deal $deal;
 
-	/**
-	 * @param Deal $deal
-	 */
 	public function __construct(Deal $deal)
 	{
 		$this->deal = $deal;
@@ -45,7 +40,6 @@ class DealCardsController extends AbstractController
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
 	 * @throws GameNotFoundException
-	 * @throws InvalidActionException
 	 * @throws InvalidCardIdException
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
@@ -64,15 +58,10 @@ class DealCardsController extends AbstractController
 	}
 
 	/**
-	 * @param Game $game
-	 * @param PlayerInterface $current_player
-	 *
-	 * @throws EmptyCardPoolException
-	 * @throws InvalidActionException
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	private function notifyPlayers(Game $game, PlayerInterface $current_player)
+	private function notifyPlayers(Game $game, PlayerInterface $current_player): void
 	{
 		foreach ($game->getState()->getPlayers()->getFreshLoopIterator() as $player)
 		{

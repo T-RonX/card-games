@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Dealer;
 
 use App\Games\Duizenden\Game;
@@ -9,10 +11,7 @@ use Doctrine\ORM\NonUniqueResultException;
 
 class DealerFinder
 {
-	/**
-	 * @var GameRepository
-	 */
-	private $repository;
+	private GameRepository $repository;
 
 	public function __construct(GameRepository $repository)
 	{
@@ -20,10 +19,6 @@ class DealerFinder
 	}
 
 	/**
-	 * @param Game $game
-	 *
-	 * @return Player
-	 *
 	 * @throws NonUniqueResultException
 	 */
 	public function findNextDealer(Game $game): ?Player

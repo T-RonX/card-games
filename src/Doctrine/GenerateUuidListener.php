@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Doctrine;
 
 use App\Uuid\Uuid;
@@ -10,8 +12,6 @@ use Exception;
 class GenerateUuidListener
 {
 	/**
-	 * @param LifecycleEventArgs $event
-	 *
 	 * @throws Exception
 	 */
 	public function prePersist(LifecycleEventArgs $event): void
@@ -23,19 +23,12 @@ class GenerateUuidListener
 		}
 	}
 
-	/**
-	 * @param mixed $object
-	 *
-	 * @return bool
-	 */
 	private function isSetUuidRequired($object): bool
 	{
 		return $object instanceof UuidableInterface && !$object->hasUuid();
 	}
 
 	/**
-	 * @param UuidableInterface $entity
-	 *
 	 * @throws Exception
 	 */
 	private function setObjectUuid(UuidableInterface $entity): void

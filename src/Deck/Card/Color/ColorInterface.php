@@ -1,17 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Deck\Card\Color;
 
 interface ColorInterface
 {
-	/**
-	 * @return string
-	 */
 	function getHex(): string;
 
-	/**
-	 * @return string
-	 */
 	function getName(): string;
 
 	function getNameShort(): string;

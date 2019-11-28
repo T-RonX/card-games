@@ -1,19 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mercure;
 
 use Ahc\Jwt\JWT;
 
 class JwtProvider
 {
-	/**
-	 * @var JWT
-	 */
-	private $jwt;
+	private JWT $jwt;
 
-	/**
-	 * @param JWT $jwt
-	 */
 	public function __construct(JWT $jwt)
 	{
 		$this->jwt = $jwt;
@@ -22,9 +18,8 @@ class JwtProvider
 	public function __invoke(): string
 	{
 		$payload = $this->generatePayload(['publish' => '*']);
-		$jwt = $this->jwt->encode($payload);
 
-		return $jwt;
+		return $this->jwt->encode($payload);
 	}
 
 	private function generatePayload(array $payload): array

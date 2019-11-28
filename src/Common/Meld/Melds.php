@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Common\Meld;
 
 use App\Deck\Card\CardInterface;
 use Countable;
+use Exception;
 use Iterator;
 
 class Melds implements Iterator, Countable
@@ -11,47 +14,33 @@ class Melds implements Iterator, Countable
 	/**
 	 * @var Meld[]
 	 */
-	private $melds = [];
+	private array $melds = [];
 
-	/**
-	 * @var int
-	 */
-	private $pointer = 0;
+	private int $pointer = 0;
 
-	/**
-	 * @param Meld $meld
-	 */
 	public function addMeld(Meld $meld): void
 	{
 		$this->melds[] = $meld;
 	}
 
-	/**
-	 * @param Meld[] $melds
-	 */
 	public function setMelds(array $melds): void
 	{
 		$this->melds = $melds;
 	}
 
 	/**
-	 * @param int $index
-	 *
-	 * @return Meld
+	 * @throws Exception
 	 */
 	public function get(int $index): Meld
 	{
 		if (!array_key_exists($index, $this->melds))
 		{
-			throw new \Exception("no such meld");
+			throw new Exception("no such meld");
 		}
 
 		return $this->melds[$index];
 	}
 
-	/**
-	 * Clears all melds.
-	 */
 	public function clear(): void
 	{
 		$this->melds = [];
@@ -74,50 +63,32 @@ class Melds implements Iterator, Countable
 		return $cards;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function current()
+	public function current(): Meld
 	{
 		return $this->melds[$this->pointer];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function next()
+	public function next(): void
 	{
 		++$this->pointer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function key()
+	public function key(): int
 	{
 		return $this->pointer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function valid()
+	public function valid(): bool
 	{
 		return array_key_exists($this->pointer, $this->melds);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function rewind()
+	public function rewind(): void
 	{
 		$this->pointer = 0;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function count()
+	public function count(): int
 	{
 		return count($this->melds);
 	}

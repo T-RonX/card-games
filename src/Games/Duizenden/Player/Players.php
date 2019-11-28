@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Player;
 
 use App\Games\Duizenden\Player\Exception\EmptyPlayerSetException;
@@ -15,12 +17,9 @@ class Players implements Iterator, Countable
 	/**
 	 * @var PlayerInterface[]
 	 */
-	private $players = [];
+	private array $players = [];
 
-	/**
-	 * @var int
-	 */
-	private $pointer = 0;
+	private int $pointer = 0;
 
 	/**
 	 * @return PlayerInterface[]
@@ -31,8 +30,6 @@ class Players implements Iterator, Countable
 	}
 
 	/**
-	 * @return PlayerInterface
-	 *
 	 * @throws EmptyPlayerSetException
 	 */
 	public function getFirstPlayer(): PlayerInterface
@@ -46,8 +43,6 @@ class Players implements Iterator, Countable
 	}
 
 	/**
-	 * @param PlayerInterface $player
-	 *
 	 * @throws PlayerNotFoundException
 	 */
 	public function setCurrentPlayer(PlayerInterface $player): void
@@ -64,9 +59,6 @@ class Players implements Iterator, Countable
 		throw new PlayerNotFoundException(sprintf("Player with id '%s' was not found.", $player->getId()));
 	}
 
-	/**
-	 * @return PlayerInterface|null
-	 */
 	public function getCurrentPlayer(): ?PlayerInterface
 	{
 		if (!$this->valid())
@@ -77,11 +69,6 @@ class Players implements Iterator, Countable
 		return $this->current();
 	}
 
-	/**
-	 * @param string $id
-	 *
-	 * @return PlayerInterface|null
-	 */
 	public function getPlayerById(string $id): ?PlayerInterface
 	{
 		foreach ($this->players as $player)
@@ -95,9 +82,6 @@ class Players implements Iterator, Countable
 		return null;
 	}
 
-	/**
-	 * @return PlayerInterface|null
-	 */
 	public function getRandomPlayer(): ?PlayerInterface
 	{
 		$key = max(0, rand(0, $this->count() - 1));
@@ -105,19 +89,11 @@ class Players implements Iterator, Countable
 		return array_key_exists($key, $this->players) ? $this->players[$key] : null;
 	}
 
-	/**
-	 * Sets the next player.
-	 */
 	public function nextPayer(): void
 	{
 		$this->pointer = $this->getNextPointer();
 	}
 
-	/**
-	 * @param PlayerInterface $player
-	 *
-	 * @return bool
-	 */
 	public function has(PlayerInterface $player): bool
 	{
 		foreach ($this->players as $p)
@@ -145,8 +121,6 @@ class Players implements Iterator, Countable
 	}
 
 	/**
-	 * @param bool $start_at_next_player
-	 *
 	 * @return Iterator|PlayerInterface[]
 	 */
 	public function getContinueLoopIterator(bool $start_at_next_player = false): Iterator
@@ -155,8 +129,6 @@ class Players implements Iterator, Countable
 	}
 
 	/**
-	 * @param PlayerInterface|null $starting_player
-	 *
 	 * @return Iterator|PlayerInterface[]
 	 */
 	public function getInfiniteLoopIterator(PlayerInterface $starting_player = null): Iterator
@@ -186,18 +158,12 @@ class Players implements Iterator, Countable
 		return new FreshLoopIterator($this->players);
 	}
 
-	/**
-	 * @return int
-	 */
 	private function getNextPointer(): int
 	{
 		return array_key_exists($this->pointer + 1, $this->players) ? $this->pointer + 1 : 0;
 	}
 
-	/**
-	 * @param PlayerInterface $player
-	 */
-	public function addPlayer(PlayerInterface $player)
+	public function addPlayer(PlayerInterface $player): void
 	{
 		$this->players[] = $player;
 	}
@@ -205,15 +171,12 @@ class Players implements Iterator, Countable
 	/**
 	 * @param PlayerInterface[] $players
 	 */
-	public function setPlayers(array $players)
+	public function setPlayers(array $players): void
 	{
 		$this->players = array_values($players);
 	}
 
-	/**
-	 * @inheritDoc
-	*/
-	public function current()
+	public function current(): PlayerInterface
 	{
 		return $this->players[$this->pointer];
 	}
@@ -230,50 +193,32 @@ class Players implements Iterator, Countable
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function next()
+	public function next(): void
 	{
 		++$this->pointer;
 	}
 
-	/**
-	 * Previous player
-	 */
-	public function prev()
+	public function prev(): void
 	{
 		--$this->pointer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function key()
+	public function key(): int
 	{
 		return $this->pointer;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function valid()
+	public function valid(): bool
 	{
 		return array_key_exists($this->pointer, $this->players);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function rewind()
+	public function rewind(): void
 	{
 		$this->pointer = 0;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function count()
+	public function count(): int
 	{
 		return count($this->players);
 	}

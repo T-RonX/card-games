@@ -1,22 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cards\Standard\ParamConverter;
 
 use App\CardPool\CardPool;
-use App\Cards\Standard\Card;
 use App\Cards\Standard\CardHelper;
 use App\Cards\Standard\Exception\InvalidCardIdException;
-use App\Deck\Card\CardInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class CardPoolParamConverter implements ParamConverterInterface
 {
-	/**
-	 * @inheritDoc
-	 */
-	public function apply(Request $request, ParamConverter $configuration)
+	public function apply(Request $request, ParamConverter $configuration): bool
 	{
 		$cards = [];
 		$param = $configuration->getName();
@@ -44,10 +41,7 @@ class CardPoolParamConverter implements ParamConverterInterface
 		return true;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function supports(ParamConverter $configuration)
+	public function supports(ParamConverter $configuration): bool
 	{
 		return $configuration->getClass() == CardPool::class;
 	}

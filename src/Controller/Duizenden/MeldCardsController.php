@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Duizenden;
 
 use App\CardPool\CardPool;
 use App\CardPool\Exception\CardNotFoundException;
-use App\CardPool\Exception\EmptyCardPoolException;
 use App\Cards\Standard\Card;
-use App\Cards\Standard\CardHelper;
 use App\Cards\Standard\Exception\InvalidCardIdException;
 use App\Common\Meld\Exception\InvalidMeldException;
 use App\Enum\Exception\EnumConstantsCouldNotBeResolvedException;
@@ -19,7 +19,6 @@ use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Games\Duizenden\StateCompiler\ActionType;
-use App\Games\Duizenden\StateCompiler\InvalidActionException;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,20 +29,10 @@ class MeldCardsController extends AbstractController
 	use LoadGameTrait;
 	use NotifyPlayersTrait;
 
-	/**
-	 * @var MeldCards
-	 */
-	private $meld_cards;
+	private MeldCards $meld_cards;
 
-	/**
-	 * @var ExtendMeld
-	 */
-	private $extend_meld;
+	private ExtendMeld $extend_meld;
 
-	/**
-	 * @param MeldCards $meld_cards
-	 * @param ExtendMeld $extend_meld
-	 */
 	public function __construct(
 		MeldCards $meld_cards,
 		ExtendMeld $extend_meld
@@ -54,10 +43,6 @@ class MeldCardsController extends AbstractController
 	}
 
 	/**
-	 * @param CardPool $cards
-	 *
-	 * @return Response
-	 *
 	 * @throws CardNotFoundException
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
@@ -86,11 +71,6 @@ class MeldCardsController extends AbstractController
 	}
 
 	/**
-	 * @param Card $card
-	 * @param int $meld_id
-	 *
-	 * @return Response
-	 *
 	 * @throws CardNotFoundException
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException

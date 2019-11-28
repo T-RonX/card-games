@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cards\Standard;
 
 use App\Deck\Card\CardInterface;
@@ -9,36 +11,16 @@ use App\Deck\Card\Suit\SuitInterface;
 
 class Card implements CardInterface
 {
-	/**
-	 * @var string
-	 */
-	private $identifier;
+	private ?string $identifier = null;
 
-	/**
-	 * @var string
-	 */
-	private $identifier_value;
+	private ?string $identifier_value = null;
 
-	/**
-	 * @var SuitInterface
-	 */
-	private $suit;
+	private SuitInterface $suit;
 
-	/**
-	 * @var RankInterface
-	 */
-	private $rank;
+	private RankInterface $rank;
 
-	/**
-	 * @var ColorInterface
-	 */
-	private $back_color;
+	private ColorInterface $back_color;
 
-	/**
-	 * @param ColorInterface $back_color
-	 * @param SuitInterface $suit
-	 * @param RankInterface $rank
-	 */
 	public function __construct(ColorInterface $back_color, SuitInterface $suit, RankInterface $rank)
 	{
 		$this->suit = $suit;
@@ -71,17 +53,11 @@ class Card implements CardInterface
 		return strtolower(($with_back_color ? $this->back_color->getNameShort()[0] : '').$this->suit->getName().$this->rank->getName());
 	}
 
-	/**
-	 * @return SuitInterface
-	 */
 	public function getSuit(): SuitInterface
 	{
 		return $this->suit;
 	}
 
-	/**
-	 * @return RankInterface
-	 */
 	public function getRank(): RankInterface
 	{
 		return $this->rank;
@@ -92,9 +68,6 @@ class Card implements CardInterface
 		return $this->back_color;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function equals(CardInterface $card): bool
 	{
 		return

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Notifier;
 
 use App\Games\Duizenden\Game;
@@ -15,25 +17,13 @@ use Symfony\Component\Mercure\PublisherInterface;
 
 class GameNotifier
 {
-	/**
-	 * @var PublisherInterface
-	 */
-	private $publisher;
+	private PublisherInterface $publisher;
 
-	/**
-	 * @var StateBuilder
-	 */
-	private $state_builder;
+	private StateBuilder $state_builder;
 
-	/**
-	 * @var MessageBuilder
-	 */
-	private $message_builder;
+	private MessageBuilder $message_builder;
 
-	/**
-	 * @var GameEventMessageCompiler
-	 */
-	private $message_compiler;
+	private GameEventMessageCompiler $message_compiler;
 
 	public function __construct(
 		PublisherInterface $publisher,
@@ -49,13 +39,6 @@ class GameNotifier
 	}
 
 	/**
-	 * @param string $identifier
-	 * @param Game $game
-	 * @param TopicType $topic
-	 * @param StatusType|null $status
-	 *
-	 * @return GameEventData
-	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
@@ -72,9 +55,6 @@ class GameNotifier
 		return new GameEventData($this->message_compiler, $topic, $identifier, $status ?? StatusType::OK());
 	}
 
-	/**
-	 * @param GameEventData $message
-	 */
 	public function notifyMessage(GameEventData $message): void
 	{
 		($this->publisher)($this->message_builder->compile($message));

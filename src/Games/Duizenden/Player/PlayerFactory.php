@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Player;
 
 use App\CardPool\CardPool;
@@ -11,20 +13,10 @@ use App\Shufflers\ShufflerType;
 
 class PlayerFactory
 {
-	/**
-	 * @var ShufflerFactory
-	 */
-	private $shuffler_factory;
+	private ShufflerFactory $shuffler_factory;
 
-	/**
-	 * @var PlayerRepository
-	 */
-	private $player_repository;
+	private PlayerRepository $player_repository;
 
-	/**
-	 * @param ShufflerFactory $shuffler_factory
-	 * @param PlayerRepository $player_repository
-	 */
 	public function __construct(
 		ShufflerFactory $shuffler_factory,
 		PlayerRepository $player_repository
@@ -34,14 +26,6 @@ class PlayerFactory
 		$this->player_repository = $player_repository;
 	}
 
-	/**
-	 * @param string $uuid
-	 * @param CardPool|null $hand
-	 * @param Melds $melds
-	 * @param ShufflerInterface|null $shuffler
-	 *
-	 * @return Player
-	 */
 	public function create(
 		string $uuid,
 		CardPool $hand = null,
@@ -59,9 +43,6 @@ class PlayerFactory
 			->setShuffler($shuffler ?? $this->shuffler_factory->create(ShufflerType::OVERHAND()));
 	}
 
-	/**
-	 * @return int
-	 */
 	private function generateId(): int
 	{
 		static $id = 0;

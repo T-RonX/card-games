@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Workflow;
 
 use App\Games\Duizenden\Game;
@@ -11,19 +13,10 @@ use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface;
 
 class PersistingMarkingStore implements MarkingStoreInterface
 {
-	/**
-	 * @var GamePersistence
-	 */
-	private $game_persistence;
+	private GamePersistence $game_persistence;
 
-	/**
-	 * @var Marking|null
-	 */
-	private $current_marking;
+	private ?Marking $current_marking = null;
 
-	/**
-	 * @param GamePersistence $game_persistence
-	 */
 	public function __construct(GamePersistence $game_persistence)
 	{
 		$this->game_persistence = $game_persistence;
@@ -34,26 +27,21 @@ class PersistingMarkingStore implements MarkingStoreInterface
 	 *
 	 * @param Game $game
 	 *
-	 * @return Marking
-	 * 
 	 * @throws NonUniqueResultException
 	 */
-	public function getMarking($game)
+	public function getMarking($game): Marking
 	{
 		return $this->current_marking ?? $this->current_marking = new Marking([$this->game_persistence->getMarking($game) => 1]);
 	}
 
 	/**
-	 * @inheritDoc
-	 *
 	 * @param Game $game
-	 * @param Marking $marking
 	 * @param array $context
 	 *
 	 * @throws GameNotFoundException
 	 * @throws NonUniqueResultException
 	 */
-	public function setMarking($game, Marking $marking, array $context = [])
+	public function setMarking($game, Marking $marking, array $context = []): void
 	{
 		$this->current_marking = $marking;
 

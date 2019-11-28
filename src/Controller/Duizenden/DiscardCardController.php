@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Duizenden;
 
 use App\CardPool\Exception\CardNotFoundException;
@@ -28,24 +30,14 @@ class DiscardCardController extends AbstractController
 	use LoadGameTrait;
 	use NotifyPlayersTrait;
 
-	/**
-	 * @var DiscardCard
-	 */
-	private $discard_card;
+	private DiscardCard $discard_card;
 
-	/**
-	 * @param DiscardCard $discard_card
-	 */
 	public function __construct(DiscardCard $discard_card)
 	{
 		$this->discard_card = $discard_card;
 	}
 
 	/**
-	 * @param Card $card
-	 *
-	 * @return Response
-	 *
 	 * @throws CardNotFoundException
 	 * @throws DiscardCardException
 	 * @throws EnumConstantsCouldNotBeResolvedException
@@ -87,10 +79,6 @@ class DiscardCardController extends AbstractController
 	}
 
 	/**
-	 * @param Game $game
-	 * @param PlayerInterface $source_player
-	 * @param ActionType $source_action
-	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */

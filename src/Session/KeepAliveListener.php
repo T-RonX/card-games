@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Session;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -12,9 +14,6 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
  */
 class KeepAliveListener
 {
-	/**
-	 * @param RequestEvent $event
-	 */
 	public function __invoke(ResponseEvent $event): void
 	{
 		// todo

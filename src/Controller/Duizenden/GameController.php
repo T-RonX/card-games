@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Duizenden;
 
 use App\Cards\Standard\Exception\InvalidCardIdException;
@@ -40,56 +42,22 @@ class GameController extends AbstractController
 {
 	use LoadGameTrait;
 
-	/**
-	 * @var PlayerFactory
-	 */
-	private $player_factory;
+	private PlayerFactory $player_factory;
 
-	/**
-	 * @var PlayerRepository
-	 */
-	private $player_repository;
+	private PlayerRepository $player_repository;
 
-	/**
-	 * @var GameDeleter
-	 */
-	private $game_deleter;
+	private GameDeleter $game_deleter;
 
-	/**
-	 * @var Inviter
-	 */
-	private $inviter;
+	private Inviter $inviter;
 
-	/**
-	 * @var LobbyNotifier
-	 */
-	private $lobby_notifier;
+	private LobbyNotifier $lobby_notifier;
 
-	/**
-	 * @var StateBuilder
-	 */
-	private $state_builder;
+	private StateBuilder $state_builder;
 
-	/**
-	 * @var GameManipulator
-	 */
-	private $game_manipulator;
+	private GameManipulator $game_manipulator;
 
-	/**
-	 * @var GameNotifier
-	 */
-	private $game_notifier;
+	private GameNotifier $game_notifier;
 
-	/**
-	 * @param PlayerRepository $player_repository
-	 * @param PlayerFactory $player_factory
-	 * @param GameDeleter $game_deleter
-	 * @param GameManipulator $game_manipulator
-	 * @param Inviter $inviter
-	 * @param LobbyNotifier $notifier
-	 * @param StateBuilder $state_builder
-	 * @param GameNotifier $game_notifier
-	 */
 	public function __construct(
 		PlayerRepository $player_repository,
 		PlayerFactory $player_factory,
@@ -111,11 +79,6 @@ class GameController extends AbstractController
 		$this->game_notifier = $game_notifier;
 	}
 
-	/**
-	 * @param Invitation|null $invitation
-	 *
-	 * @return Response
-	 */
 	public function newGame(?Invitation $invitation = null): Response
 	{
 		$form = $this->createForm(CreateGameType::class, null, [
@@ -130,11 +93,6 @@ class GameController extends AbstractController
 	}
 
 	/**
-	 * @param Request $request
-	 *
-	 * @param Invitation|null $invitation
-	 * @return Response
-	 *
 	 * @throws EmptyPlayerSetException
 	 * @throws InvalidDealerPlayerException
 	 */
@@ -197,10 +155,6 @@ class GameController extends AbstractController
 	}
 
 	/**
-	 * @param Configurator $configurator
-	 *
-	 * @return Game
-	 *
 	 * @throws EmptyPlayerSetException
 	 * @throws InvalidDealerPlayerException
 	 */
@@ -215,10 +169,6 @@ class GameController extends AbstractController
 	}
 
 	/**
-	 * @param string $uuid
-	 *
-	 * @return Response
-	 *
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
 	 * @throws GameNotFoundException
@@ -242,6 +192,15 @@ class GameController extends AbstractController
 		]);
 	}
 
+	/**
+	 * @throws EnumConstantsCouldNotBeResolvedException
+	 * @throws EnumNotDefinedException
+	 * @throws GameNotFoundException
+	 * @throws InvalidCardIdException
+	 * @throws NonUniqueResultException
+	 * @throws PlayerNotFoundException
+	 * @throws UnmappedCardException
+	 */
 	public function playGame(string $uuid): Response
 	{
 		$this->session->set('game_id', $uuid);
@@ -257,10 +216,6 @@ class GameController extends AbstractController
 		]);
 	}
 
-	/**
-	 * @param Game $game
-	 * @param StateData $state_data
-	 */
 	private function complementStateData(Game $game, StateData $state_data): void
 	{
 		if (
@@ -275,11 +230,6 @@ class GameController extends AbstractController
 		}
 	}
 
-	/**
-	 * @param string $uuid
-	 *
-	 * @return Response
-	 */
 	public function deleteGame(string $uuid): Response
 	{
 		$this->game_deleter->delete($uuid);
@@ -288,8 +238,6 @@ class GameController extends AbstractController
 	}
 
 	/**
-	 * @param Invitation|null $invitation
-	 *
 	 * @return PlayerInterface[]
 	 */
 	private function getAvailablePlayers(?Invitation $invitation): array
@@ -304,10 +252,6 @@ class GameController extends AbstractController
 	}
 
 	/**
-	 * @param string $uuid
-	 *
-	 * @return Response
-	 *
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
 	 * @throws GameNotFoundException
@@ -317,7 +261,7 @@ class GameController extends AbstractController
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
-	public function undoLastAction(string $uuid)
+	public function undoLastAction(string $uuid): Response
 	{
 		$game = $this->loadGame($uuid);
 
@@ -327,6 +271,7 @@ class GameController extends AbstractController
 		$message->setSourcePlayer($game->getGamePlayerById($this->getUser()->getUuid()));
 
 		$this->game_notifier->notifyMessage($message);
+
 		return new Response();
 	}
 }

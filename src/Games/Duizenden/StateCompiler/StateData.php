@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\StateCompiler;
 
 use App\CardPool\CardPoolInterface;
@@ -9,81 +11,47 @@ use App\Games\Duizenden\Player\PlayerInterface;
 
 class StateData
 {
-	/**
-	 * @var StateCompilerInterface
-	 */
-	private $compiler;
+	private StateCompilerInterface $compiler;
 
+	private PlayerInterface $source_player;
 
-	/**
-	 * @var PlayerInterface
-	 */
-	private $source_player;
+	private ActionType $source_action;
 
-	/**
-	 * @var ActionType
-	 */
-	private $source_action;
-
-	/**
-	 * @var PlayerInterface
-	 */
-	private $current_player;
+	private PlayerInterface $current_player;
 
 	/**
 	 * @var ActionType[]
 	 */
-	private $allowed_actions;
+	private array $allowed_actions;
 
-	/**
-	 * @var CardPoolInterface
-	 */
-	private $undrawn_pool;
+	private CardPoolInterface $undrawn_pool;
 
-	/**
-	 * @var DiscardedCardPool
-	 */
-	private $discarded_pool;
+	private DiscardedCardPool $discarded_pool;
 
 	/**
 	 * @var Player[]
 	 */
-	private $players;
+	private iterable $players;
 
 	/**
 	 * @var int[]
 	 */
-	private $player_scores;
+	private array $player_scores;
 
 	/**
 	 * @var string[]
 	 */
-	private $players_full_card_pool = [];
+	private array $players_full_card_pool = [];
 
-	/**
-	 * @var string
-	 */
-	private $game_id;
+	private string $game_id;
 
-	/**
-	 * @var int
-	 */
-	private $target_score;
+	private int $target_score;
 
-	/**
-	 * @var int
-	 */
-	private $first_meld_minimum_points;
+	private int $first_meld_minimum_points;
 
-	/**
-	 * @var int
-	 */
-	private $round_finish_extra_points;
+	private int $round_finish_extra_points;
 
-	/**
-	 * @var array|null
-	 */
-	private $extra;
+	private array $extra;
 
 	public function __construct(StateCompilerInterface $compiler)
 	{

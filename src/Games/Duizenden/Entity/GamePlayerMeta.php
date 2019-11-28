@@ -1,29 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Entity;
 
 use App\Entity\Player;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class GamePlayerMeta
 {
-    private $shuffle_count_min;
+	private ?int $id = null;
 
-    private $shuffle_count_max;
+	private int $shuffle_count_min;
 
-    private $grab_cards_min;
+	private int $shuffle_count_max;
 
-    private $grab_cards_max;
+	private float $grab_cards_min;
 
-    private $max_inserts;
+	private float $grab_cards_max;
 
-    private $id;
+	private int $max_inserts;
 
-    private $Player;
+    private ?Player $Player = null;
 
-    private $GameMeta;
+    private GameMeta $GameMeta;
 
-    private $GamePlayers;
+    private Collection $GamePlayers;
 
     public function __construct()
 	{
@@ -54,24 +57,24 @@ class GamePlayerMeta
         return $this;
     }
 
-    public function getGrabCardsMin()
+    public function getGrabCardsMin(): float
     {
         return $this->grab_cards_min;
     }
 
-    public function setGrabCardsMin($grab_cards_min): self
+    public function setGrabCardsMin(float $grab_cards_min): self
     {
         $this->grab_cards_min = $grab_cards_min;
 
         return $this;
     }
 
-    public function getGrabCardsMax()
+    public function getGrabCardsMax(): float
     {
         return $this->grab_cards_max;
     }
 
-    public function setGrabCardsMax($grab_cards_max): self
+    public function setGrabCardsMax(float $grab_cards_max): self
     {
         $this->grab_cards_max = $grab_cards_max;
 

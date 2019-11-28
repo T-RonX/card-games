@@ -1,32 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Chat\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Entity\Player;
-use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\Collection;
 
 class ChatRoom
 {
-	/**
-	 * @var int
-	 */
-	private $id;
+	private ?int $id = null;
+
+	private string $reference;
 
 	/**
-	 * @var string
+	 * @var ChatMessage[]|Collection
 	 */
-	private $reference;
+	private ?Collection $ChatMessages = null;
 
 	/**
-	 * @var ChatMessage[]|ArrayCollection
+	 * @var ChatRoomPlayer[]|Collection
 	 */
-	private $ChatMessages;
-
-	/**
-	 * @var ArrayCollection|ChatRoomPlayer[]
-	 */
-	private $ChatRoomPlayers;
+	private ?Collection $ChatRoomPlayers = null;
 
 	public function __construct()
 	{
@@ -42,21 +37,21 @@ class ChatRoom
 	}
 
 	/**
-	 * @return ChatMessage[]|ArrayCollection
+	 * @return ChatMessage[]|Collection
 	 */
 	public function getChatMessages(): iterable
 	{
 		return $this->ChatMessages;
 	}
 
-	public function addChatRoomPlayer(ChatRoomPlayer $chat_room_player)
+	public function addChatRoomPlayer(ChatRoomPlayer $chat_room_player): void
 	{
 		$chat_room_player->setChatRoom($this);
 		$this->ChatRoomPlayers->add($chat_room_player);
 	}
 
 	/**
-	 * @return PersistentCollection|ChatRoomPlayer[]
+	 * @return ChatRoomPlayer[]|Collection
 	 */
 	public function getChatRoomPlayers(): iterable
 	{

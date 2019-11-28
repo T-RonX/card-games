@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\StateCompiler;
 
 use App\Games\Duizenden\StateCompiler\Action\DealAction;
@@ -18,10 +20,6 @@ use App\Games\Duizenden\StateCompiler\Action\UndoLastActionAction;
 class ActionFactory
 {
 	/**
-	 * @param ActionType $type
-	 *
-	 * @return ActionInterface
-	 *
 	 * @throws InvalidActionException
 	 */
 	public function create(ActionType $type): ActionInterface

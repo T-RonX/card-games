@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Game\Meta;
 
 class GameMetaLoader
 {
 	/**
-	 * @var iterable|MetaLoaderInterface[]
+	 * @var MetaLoaderInterface[]
 	 */
-	private $meta_loaders;
+	private iterable $meta_loaders;
 
 	/**
-	 * @param iterable|MetaLoaderInterface[] $meta_loaders
+	 * @param MetaLoaderInterface[] $meta_loaders
 	 */
 	public function __construct(iterable $meta_loaders)
 	{
@@ -20,7 +22,7 @@ class GameMetaLoader
 	/**
 	 * @return GameMeta[]
 	 */
-	public function getAll()
+	public function getAll(): array
 	{
 		$result = [];
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Chat;
 
 use App\Chat\Entity\ChatMessage;
@@ -16,26 +18,12 @@ use Symfony\Component\Mercure\Update;
 
 class ChatRoom
 {
-	/**
-	 * @var ChatRoomEntity
-	 */
-	private $chat_room_entity;
+	private ChatRoomEntity $chat_room_entity;
 
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entity_manager;
+	private EntityManagerInterface $entity_manager;
 
-	/**
-	 * @var PublisherInterface
-	 */
-	private $publisher;
+	private PublisherInterface $publisher;
 
-	/**
-	 * @param EntityManagerInterface $entity_manager
-	 * @param ChatRoomEntity $chat_room_entity
-	 * @param PublisherInterface $publisher
-	 */
 	public function __construct(
 		EntityManagerInterface $entity_manager,
 		ChatRoomEntity $chat_room_entity,
@@ -47,21 +35,16 @@ class ChatRoom
 		$this->publisher = $publisher;
 	}
 
-	public function playerEntered(Player $player)
+	public function playerEntered(Player $player): void
 	{
 		$this->publishPlayerEntered($player);
 	}
 
-	private function publishPlayerEntered(Player $player)
+	private function publishPlayerEntered(Player $player): void
 	{
 		($this->publisher)($this->createPlayerEnteredLobbyUpdate($player));
 	}
 
-	/**
-	 * @param Player $player
-	 *
-	 * @return Update
-	 */
 	private function createPlayerEnteredLobbyUpdate(Player $player): Update
 	{
 		$data = [
@@ -70,12 +53,9 @@ class ChatRoom
 		];
 
 		return new Update(sprintf('urn:lobby:%s', Lobby::ID), json_encode($data));
-
 	}
 
 	/**
-	 * @param Player $player
-	 *
 	 * @return string[]
 	 */
 	private function createPlayerEnteredLobbyMessageData(Player $player): array
@@ -87,9 +67,6 @@ class ChatRoom
 	}
 
 	/**
-	 * @param string $message
-	 * @param Player|null $player
-	 *
 	 * @throws Exception
 	 */
 	public function addMessage(string $message, Player $player): void
@@ -102,11 +79,6 @@ class ChatRoom
 	}
 
 	/**
-	 * @param string $message
-	 * @param Player|null $player
-	 *
-	 * @return ChatMessage
-	 *
 	 * @throws Exception
 	 */
 	private function createMessage(string $message, Player $player): ChatMessage
@@ -120,9 +92,6 @@ class ChatRoom
 		return $message;
 	}
 
-	/**
-	 * @param ChatMessage $message
-	 */
 	private function saveMessage(ChatMessage $message): void
 	{
 		$this->chat_room_entity->getChatMessages()->add($message);
@@ -131,9 +100,6 @@ class ChatRoom
 		$this->entity_manager->flush();
 	}
 
-	/**
-	 * @param ChatMessage $message
-	 */
 	private function publishMessage(ChatMessage $message): void
 	{
 
@@ -151,8 +117,6 @@ class ChatRoom
 	}
 
 	/**
-	 * @param ChatMessage $message
-	 *
 	 * @return string[]
 	 */
 	private function createMessageData(ChatMessage $message): array
@@ -178,24 +142,14 @@ class ChatRoom
 		return mb_strcut(trim($message), 0, 1000);
 	}
 
-	/**
-	 * @param ChatMessage $message
-	 *
-	 * @return string
-	 */
 	private function getPlayerNameFromMessage(ChatMessage $message): string
 	{
 		return null == $message->getPlayer() ? 'Anonymous' : $message->getPlayer()->getName();
 	}
 
-	/**
-	 * @param ChatMessage $message
-	 *
-	 * @return string
-	 */
 	private function getPlayerIdFromMessage(ChatMessage $message): string
 	{
-		return null == $message->getPlayer() ? '' : $message->getPlayer()->getId();
+		return null == $message->getPlayer() ? '' : (string) $message->getPlayer()->getId();
 	}
 
 	/**

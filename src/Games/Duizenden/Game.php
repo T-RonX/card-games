@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden;
 
 use App\DeckRebuilder\DeckRebuilderInterface;
@@ -15,46 +17,20 @@ use Symfony\Component\Workflow\StateMachine;
 
 class Game implements GameInterface
 {
-	/**
-	 * @var string
-	 */
 	public const NAME = 'duizenden';
 
-	/**
-	 * @var State
-	 */
-	private $state;
+	private ?string $id = null;
 
-	/**
-	 * @var DeckRebuilderInterface
-	 */
-	private $deck_rebuilder;
+	private State $state;
 
-	/**
-	 * @var string
-	 */
-	private $id;
+	private DeckRebuilderInterface $deck_rebuilder;
 
-	/**
-	 * @var Initializer
-	 */
-	private $initializer;
+	private Initializer $initializer;
 
-	/**
-	 * @var ScoreCalculator
-	 */
-	private $score_calculator;
+	private ScoreCalculator $score_calculator;
 
-	/**
-	 * @var StateMachine
-	 */
-	private $state_machine;
+	private StateMachine $state_machine;
 
-	/**
-	 * @param Initializer $initializer
-	 * @param ScoreCalculator $score_calculator
-	 * @param StateMachine $state_machine
-	 */
 	public function __construct(
 		Initializer $initializer,
 		ScoreCalculator $score_calculator,
@@ -67,8 +43,6 @@ class Game implements GameInterface
 	}
 
 	/**
-	 * @param Configurator $configurator
-	 *
 	 * @throws InvalidDealerPlayerException
 	 * @throws EmptyPlayerSetException
 	 */
@@ -85,57 +59,36 @@ class Game implements GameInterface
 		return $this->state->getPlayers()->getPlayerById($id);
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getId(): ?string
 	{
 		return $this->id;
 	}
 
-	/**
-	 * @param string $id
-	 */
 	public function setId(string $id): void
 	{
 		$this->id = $id;
 	}
 
-	/**
-	 * @return ScoreCalculator
-	 */
 	public function getScoreCalculator(): ScoreCalculator
 	{
 		return $this->score_calculator;
 	}
 
-	/**
-	 * @param State $state
-	 */
 	public function setState(State $state): void
 	{
 		$this->state = $state;
 	}
 
-	/**
-	 * @return State
-	 */
 	public function getState(): State
 	{
 		return $this->state;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getName(): string
 	{
 		return self::NAME;
 	}
 
-	/**
-	 * @return void
-	 */
 	public function setCreatedMarking(): void
 	{
 		$this->state_machine->getMarkingStore()->setMarking($this, $this->getMarking());
@@ -146,17 +99,11 @@ class Game implements GameInterface
 		return $this->state_machine->getMarking($this);
 	}
 
-	/**
-	 * @return DeckRebuilderInterface
-	 */
 	public function getDeckRebuilder(): DeckRebuilderInterface
 	{
 		return $this->deck_rebuilder;
 	}
 
-	/**
-	 * @param DeckRebuilderInterface $deck_rebuilder
-	 */
 	public function setDeckRebuilder(DeckRebuilderInterface $deck_rebuilder): void
 	{
 		$this->deck_rebuilder = $deck_rebuilder;

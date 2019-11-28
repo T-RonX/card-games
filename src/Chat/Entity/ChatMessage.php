@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Chat\Entity;
 
 use App\Entity\Player;
@@ -7,30 +9,15 @@ use DateTimeInterface;
 
 class ChatMessage
 {
-	/**
-	 * @var int
-	 */
-	private $id;
+	private ?int $id = null;
 
-	/**
-	 * @var ChatRoom
-	 */
-	private $ChatRoom;
+	private ChatRoom $ChatRoom;
 
-	/**
-	 * @var Player
-	 */
-	private $Player;
+	private ?Player $Player = null;
 
-	/**
-	 * @var DateTimeInterface
-	 */
-	private $created_at;
+	private DateTimeInterface $created_at;
 
-	/**
-	 * @var string
-	 */
-	private $message;
+	private string $message;
 
 	public function setChatRoom(ChatRoom $ChatRoom): self
 	{

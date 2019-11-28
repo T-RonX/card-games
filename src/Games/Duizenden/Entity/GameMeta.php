@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Entity;
 
 use App\Uuid\UuidTrait;
@@ -9,17 +11,17 @@ class GameMeta implements UuidableInterface
 {
 	use UuidTrait;
 
-    private $id;
+    private ?int $id = null;
 
-    private $DealingPlayerMeta;
+    private ?GamePlayerMeta $DealingPlayerMeta = null;
 
-    private $target_score;
+    private ?int $target_score = null;
 
-    private $deck_rebuilder;
+    private ?string $deck_rebuilder = null;
 
-	private $first_meld_minimum_points;
+	private ?int $first_meld_minimum_points = null;
 
-	private $round_finish_extra_points;
+	private ?int $round_finish_extra_points = null;
 
     public function getId(): ?int
     {

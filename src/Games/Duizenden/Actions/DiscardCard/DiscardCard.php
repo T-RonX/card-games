@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace  App\Games\Duizenden\Actions\DiscardCard;
 
 use App\CardPool\Exception\CardNotFoundException;
@@ -25,21 +27,11 @@ use Symfony\Component\Workflow\StateMachine;
 
 class DiscardCard extends StateChangeAction
 {
-	/**
-	 * @var RevertMeld
-	 */
-	private $revert_meld;
+	private RevertMeld $revert_meld;
 
-	/**
-	 * @var ScoreCalculator
-	 */
-	private $score_calculator;
+	private ScoreCalculator $score_calculator;
 
-
-	/**
-	 * @var DealerFinder
-	 */
-	private $dealer_finder;
+	private DealerFinder $dealer_finder;
 
 	public function __construct(
 		StateMachine $state_machine,
@@ -56,11 +48,6 @@ class DiscardCard extends StateChangeAction
 	}
 
 	/**
-	 * @param Game $game
-	 * @param CardInterface $card
-	 *
-	 * @return DiscardCardResultType|null
-	 *
 	 * @throws CardNotFoundException
 	 * @throws DiscardCardException
 	 * @throws NonUniqueResultException
@@ -120,10 +107,6 @@ class DiscardCard extends StateChangeAction
 	}
 
 	/**
-	 * @param Game $game
-	 *
-	 * @return DiscardCardResultType
-	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
@@ -164,9 +147,6 @@ class DiscardCard extends StateChangeAction
 	}
 
 	/**
-	 * @param State $state
-	 * @param CardInterface $card
-	 *
 	 * @throws CardNotFoundException
 	 */
 	private function discardCard(State $state, CardInterface $card): void
@@ -176,12 +156,6 @@ class DiscardCard extends StateChangeAction
 	}
 
 	/**
-	 * @param Game $game
-	 * @param PlayerInterface $player
-	 * @param bool $include_current_round
-	 *
-	 * @return int
-	 *
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
@@ -199,11 +173,6 @@ class DiscardCard extends StateChangeAction
 		return $score;
 	}
 
-	/**
-	 * @param CardInterface $card
-	 *
-	 * @return bool
-	 */
 	private function isCardQueenOfSpades(CardInterface $card): bool
 	{
 		return $card->getRank() instanceof Queen && $card->getSuit() instanceof Spades;

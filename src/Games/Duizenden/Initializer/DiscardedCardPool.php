@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Initializer;
 
 use App\CardPool\CardPool;
@@ -7,16 +9,8 @@ use App\Deck\Card\CardInterface;
 
 class DiscardedCardPool extends CardPool
 {
-	/**
-	 * @var bool
-	 */
-	private $is_first_card = false;
+	private bool $is_first_card = false;
 
-	/**
-	 * @param bool|null $is_first_card
-	 *
-	 * @return bool
-	 */
 	public function isFirstCard(bool $is_first_card = null): bool
 	{
 		if (null !== $is_first_card)
@@ -27,9 +21,6 @@ class DiscardedCardPool extends CardPool
 		return $this->is_first_card;
 	}
 
-	/**
-	 * @param CardInterface $card
-	 */
 	public function addCard(CardInterface $card, int $target = null): void
 	{
 		if (count($this) >= 1)
@@ -40,9 +31,6 @@ class DiscardedCardPool extends CardPool
 		parent::addCard($card, $target);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function clear(): void
 	{
 		$this->is_first_card = false;

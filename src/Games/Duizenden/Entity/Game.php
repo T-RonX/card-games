@@ -1,37 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Entity;
 
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 class Game
 {
-    private $sequence;
+	private ?int $id = null;
 
-    private $workflow_marking;
+	private int $sequence;
 
-    private $created_at;
+	private string $workflow_marking;
 
-    private $undrawn_pool;
+	private DateTimeImmutable $created_at;
 
-    private $discarded_pool;
+	private string $undrawn_pool;
 
-    private $id;
+	private string $discarded_pool;
 
-    private $GamePlayers;
+    private ?Collection $GamePlayers = null;
 
-    private $GameStates;
+    private Collection $GameStates;
 
-    private $Game;
+    private ?Game $Game = null;
 
-    private $GameMeta;
+    private ?GameMeta $GameMeta = null;
 
-    private $CurrentPlayer;
+    private ?GamePlayer $CurrentPlayer = null;
 
-	private $is_first_card;
+	private bool $is_first_card;
 
-	private $round;
+	private ?int $round = null;
 
     public function __construct()
     {
@@ -63,12 +66,12 @@ class Game
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
 
@@ -114,7 +117,8 @@ class Game
 
     public function addGamePlayer(GamePlayer $gamePlayer): self
     {
-        if (!$this->GamePlayers->contains($gamePlayer)) {
+        if (!$this->GamePlayers->contains($gamePlayer))
+        {
             $this->GamePlayers[] = $gamePlayer;
             $gamePlayer->setGame($this);
         }
@@ -124,10 +128,12 @@ class Game
 
     public function removeGamePlayer(GamePlayer $gamePlayer): self
     {
-        if ($this->GamePlayers->contains($gamePlayer)) {
+        if ($this->GamePlayers->contains($gamePlayer))
+        {
             $this->GamePlayers->removeElement($gamePlayer);
-            // set the owning side to null (unless already changed)
-            if ($gamePlayer->getGame() === $this) {
+
+            if ($gamePlayer->getGame() === $this)
+            {
                 $gamePlayer->setGame(null);
             }
         }
@@ -145,7 +151,8 @@ class Game
 
     public function addGameState(Game $gameState): self
     {
-        if (!$this->GameStates->contains($gameState)) {
+        if (!$this->GameStates->contains($gameState))
+        {
             $this->GameStates[] = $gameState;
             $gameState->setGame($this);
         }
@@ -155,10 +162,12 @@ class Game
 
     public function removeGameState(Game $gameState): self
     {
-        if ($this->GameStates->contains($gameState)) {
+        if ($this->GameStates->contains($gameState))
+        {
             $this->GameStates->removeElement($gameState);
-            // set the owning side to null (unless already changed)
-            if ($gameState->getGame() === $this) {
+
+            if ($gameState->getGame() === $this)
+            {
                 $gameState->setGame(null);
             }
         }

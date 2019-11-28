@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Lobby;
 
 use App\Chat\ChatRoom;
@@ -12,19 +14,10 @@ class Lobby
 {
 	public const ID = 'lobby';
 
-	/**
-	 * @var ChatRoomFactory
-	 */
-	private $chat_room_factory;
+	private ChatRoomFactory $chat_room_factory;
 
-	/**
-	 * @var ChatRoom
-	 */
-	private $chat_room;
+	private ChatRoom $chat_room;
 
-	/**
-	 * @param ChatRoomFactory $chat_room_factory
-	 */
 	public function __construct(ChatRoomFactory $chat_room_factory)
 	{
 		$this->chat_room_factory = $chat_room_factory;
@@ -42,10 +35,6 @@ class Lobby
 	}
 
 	/**
-	 * @param string $message
-	 *
-	 * @param Player $player
-	 *
 	 * @throws Exception
 	 */
 	public function addMessage(string $message, Player $player): void

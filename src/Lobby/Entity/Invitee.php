@@ -1,30 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Lobby\Entity;
 
 use App\Entity\Player;
 
 class Invitee
 {
-	/**
-	 * @var string
-	 */
-	private $id;
+	private ?int $id = null;
 
-	/**
-	 * @var bool|null
-	 */
-	private $accepted;
+	private ?bool $accepted;
 
-	/**
-	 * @var Player
-	 */
-	private $Player;
+	private ?Player $Player = null;
 
-	/**
-	 * @var Invitation
-	 */
-	private $Invitation;
+	private Invitation $Invitation;
 
 	public function setInvitation(Invitation $invite): self
 	{

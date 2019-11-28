@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Uuid;
 
 trait UuidTrait
 {
-	/**
-	 * @var string
-	 */
-	private $uuid;
+	private ?string $uuid = null;
 
 	public function getUuid(): string
 	{

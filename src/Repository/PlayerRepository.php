@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Player;
@@ -28,10 +30,6 @@ final class PlayerRepository extends EntityRepository
 	}
 
 	/**
-	 * @param string $uuid
-	 *
-	 * @return Player|null
-	 *
 	 * @throws NonUniqueResultException
 	 */
 	public function findAnonymousPlayer(string $uuid): ?Player
@@ -44,13 +42,6 @@ final class PlayerRepository extends EntityRepository
 			->getOneOrNullResult();
 	}
 
-	/**
-	 * @param string $game_id
-	 *
-	 * @return Player|null
-	 *
-	 * @throws NonUniqueResultException
-	 */
 	public function findCurrentRoundDealer(string $game_id): ?Player
 	{
 		return $this->createQueryBuilder('p, gpms, gps, g, g_latest')

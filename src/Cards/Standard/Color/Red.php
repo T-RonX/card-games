@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cards\Standard\Color;
 
 use App\Deck\Card\Color\ColorInterface;
@@ -8,17 +10,11 @@ class Red implements ColorInterface
 {
 	const CODE = 'R';
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getHex(): string
 	{
 		return 'ff0000';
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function getName(): string
 	{
 		return 'red';

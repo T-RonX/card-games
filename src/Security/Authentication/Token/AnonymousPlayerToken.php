@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Authentication\Token;
 
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
@@ -16,7 +18,10 @@ class AnonymousPlayerToken extends AbstractToken
 		parent::__construct([]);
 	}
 
-	public function getCredentials()
+	/**
+	 * @return string[]
+	 */
+	public function getCredentials(): array
 	{
 		return [];
 	}

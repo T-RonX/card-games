@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Duizenden\Networking\Message;
 
 use App\Games\Duizenden\StateCompiler\StateCompilerInterface;
@@ -9,25 +11,16 @@ use App\Games\Duizenden\StateCompiler\TopicType;
 
 class GameEventData extends StateData
 {
-	/**
-	 * @var TopicType
-	 */
-	private $topic_type;
+	private TopicType $topic_type;
 
-	/**
-	 * @var StatusType
-	 */
-	private $status;
+	private StatusType $status;
 
-	/**
-	 * @var string
-	 */
-	private $identifier;
+	private string$identifier;
 
 	/**
 	 * @var string[]
 	 */
-	private $log_messages = [];
+	private array $log_messages = [];
 
 	public function __construct(StateCompilerInterface $builder, TopicType $topic, string $identifier, StatusType $status)
 	{
