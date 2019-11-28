@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Games\Duizenden;
 
-use App\Games\Duizenden\Entity\Game;
 use App\Games\Duizenden\Repository\GameMetaRepository;
 use App\Games\Duizenden\Repository\GameRepository;
 

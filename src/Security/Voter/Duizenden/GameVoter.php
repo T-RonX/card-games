@@ -9,6 +9,7 @@ use App\Games\Duizenden\Dealer\DealerFinder;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Workflow\TransitionType;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Workflow\StateMachine;
@@ -63,6 +64,7 @@ class GameVoter extends Voter
 	 * @return bool
 	 *
 	 * @throws NonUniqueResultException
+	 * @throws NoResultException
 	 */
 	protected function voteOnAttribute($permission, $game, TokenInterface $token): bool
 	{
@@ -71,7 +73,9 @@ class GameVoter extends Voter
 			return false;
 		}
 
-		$this->player = $token->getUser();
+		/** @var Player $user */
+		$user = $token->getUser();
+		$this->player = $user;
 		$this->game = $game;
 
 		switch ($permission)
@@ -116,6 +120,7 @@ class GameVoter extends Voter
 
 	/**
 	 * @throws NonUniqueResultException
+	 * @throws NoResultException
 	 */
 	private function canDeal(): bool
 	{
@@ -159,6 +164,7 @@ class GameVoter extends Voter
 
 	/**
 	 * @throws NonUniqueResultException
+	 * @throws NoResultException
 	 */
 	private function isDealingPlayer(): bool
 	{

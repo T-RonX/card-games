@@ -8,7 +8,6 @@ use App\CardPool\CardPool;
 use App\Deck\DeckFactory;
 use App\DeckRebuilder\DeckRebuilderFactory;
 use App\DeckRebuilder\DeckRebuilderInterface;
-use App\DeckRebuilders\DeckRebuilderType;
 use App\Decks\DeckType;
 use App\Games\Duizenden\Configurator;
 use App\Games\Duizenden\Initializer\Exception\InvalidDealerPlayerException;

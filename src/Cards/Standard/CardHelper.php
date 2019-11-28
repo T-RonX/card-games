@@ -57,7 +57,7 @@ class CardHelper
 
 	public static function matchIdentifier(string $identifier, array &$matches)
 	{
-		return preg_match('/^([a-z\d]{1})([SHDCXY]{1})([0-9]{1,2}|[JQKA]{1})$/i', $identifier, $matches);
+		return preg_match('/^([a-z\d])([SHDCXY])([0-9]{1,2}|[JQKA])$/i', $identifier, $matches);
 	}
 
 	/**

@@ -6,7 +6,6 @@ namespace App\Lobby;
 
 use App\Chat\ChatRoom;
 use App\Chat\ChatRoomFactory;
-use App\Chat\Entity\ChatMessage;
 use App\Entity\Player;
 use Exception;
 

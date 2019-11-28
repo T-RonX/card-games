@@ -6,8 +6,8 @@ namespace App\Games\Duizenden\Player;
 
 use App\Games\Duizenden\Player\Exception\EmptyPlayerSetException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
-use App\Games\Duizenden\Player\Iterator\FreshLoopIterator;
 use App\Games\Duizenden\Player\Iterator\ContinueLoopIterator;
+use App\Games\Duizenden\Player\Iterator\FreshLoopIterator;
 use App\Games\Duizenden\Player\Iterator\InfiniteLoopIterator;
 use Countable;
 use Iterator;

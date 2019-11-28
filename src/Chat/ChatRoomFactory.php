@@ -6,9 +6,9 @@ namespace App\Chat;
 
 use App\Chat\Entity\ChatRoom as ChatRoomEntity;
 use App\Chat\Repository\ChatRoomRepository;
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mercure\PublisherInterface;
-use DateInterval;
 
 class ChatRoomFactory
 {

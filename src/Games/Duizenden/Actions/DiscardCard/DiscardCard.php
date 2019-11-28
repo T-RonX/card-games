@@ -8,8 +8,8 @@ use App\CardPool\Exception\CardNotFoundException;
 use App\Cards\Standard\Rank\Queen;
 use App\Cards\Standard\Suit\Spades;
 use App\Deck\Card\CardInterface;
-use App\Games\Duizenden\Actions\StateChangeAction;
 use App\Games\Duizenden\Actions\Meld\RevertMeld;
+use App\Games\Duizenden\Actions\StateChangeAction;
 use App\Games\Duizenden\Dealer\DealerFinder;
 use App\Games\Duizenden\DiscardCardResultType;
 use App\Games\Duizenden\Exception\DiscardCardException;
@@ -21,7 +21,6 @@ use App\Games\Duizenden\Score\ScoreCalculator;
 use App\Games\Duizenden\State;
 use App\Games\Duizenden\Workflow\TransitionType;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\Workflow\StateMachine;
 
@@ -52,7 +51,6 @@ class DiscardCard extends StateChangeAction
 	 * @throws DiscardCardException
 	 * @throws NonUniqueResultException
 	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */

@@ -6,7 +6,6 @@ namespace App\Games\Duizenden;
 
 use App\CardPool\CardPool;
 use App\Games\Duizenden\Initializer\DiscardedCardPool;
-use App\Games\Duizenden\Player\Player;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Player\Players;
 

@@ -8,6 +8,7 @@ use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Player\Player;
 use App\Games\Duizenden\Repository\GameRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 class DealerFinder
 {
@@ -20,6 +21,7 @@ class DealerFinder
 
 	/**
 	 * @throws NonUniqueResultException
+	 * @throws NoResultException
 	 */
 	public function findNextDealer(Game $game): ?Player
 	{

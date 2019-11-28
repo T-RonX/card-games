@@ -8,6 +8,7 @@ use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Persistence\GamePersistence;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface;
 
@@ -28,6 +29,7 @@ class PersistingMarkingStore implements MarkingStoreInterface
 	 * @param Game $game
 	 *
 	 * @throws NonUniqueResultException
+	 * @throws NoResultException
 	 */
 	public function getMarking($game): Marking
 	{

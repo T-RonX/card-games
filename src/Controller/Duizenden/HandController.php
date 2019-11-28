@@ -17,7 +17,6 @@ use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Games\Duizenden\StateCompiler\ActionType;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,7 +41,6 @@ class HandController extends AbstractController
 	 * @throws InvalidCardIdException
 	 * @throws NonUniqueResultException
 	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */

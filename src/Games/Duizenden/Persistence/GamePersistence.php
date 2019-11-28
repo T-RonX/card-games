@@ -19,6 +19,7 @@ use App\Shufflers\Overhand\OverhandShuffle;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Exception;
 
 class GamePersistence
@@ -42,6 +43,7 @@ class GamePersistence
 
 	/**
 	 * @throws NonUniqueResultException
+	 * @throws NoResultException
 	 */
 	public function getMarking(Duizenden\Game $game): string
 	{

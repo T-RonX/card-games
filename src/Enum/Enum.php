@@ -46,7 +46,7 @@ abstract class Enum
 	 * @throws EnumNotDefinedException
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 */
-	public static function createEnum($value): self
+	public static function createEnum(string $value): self
 	{
 		$constant_values = array_flip(self::getConstants());
 
@@ -113,9 +113,7 @@ abstract class Enum
 	 */
 	public static function getValues()
 	{
-		return array_map(function($name) {
-			return self::$name();
-		}, array_flip(self::getConstants()));
+		return array_map(fn (string $name) => self::$name(), array_flip(self::getConstants()));
 	}
 
 	/**

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Lobby\Entity;
 
 use App\Entity\Player;
-use App\Games\Duizenden\Entity\GameMeta;
 use App\Uuid\UuidableInterface;
 use App\Uuid\UuidTrait;
 use DateTimeInterface;

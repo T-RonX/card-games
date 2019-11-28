@@ -18,6 +18,7 @@ use App\Games\Duizenden\StateCompiler\ActionType;
 use App\Games\Duizenden\StateCompiler\TopicType;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -44,6 +45,7 @@ class DealCardsController extends AbstractController
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
+	 * @throws NoResultException
 	 */
 	public function deal(): Response
 	{

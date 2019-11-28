@@ -11,9 +11,6 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class NameType extends AbstractType
 {
-	/**
-	 * @inheritdoc
-	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
@@ -23,9 +20,6 @@ class NameType extends AbstractType
 			]);
 	}
 
-	/**
-	 * @inheritdoc
-	 */
 	public function getBlockPrefix()
 	{
 		return 'lobby_name';

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Games\Duizenden\Networking\Message;
 
 use App\CardPool\Exception\EmptyCardPoolException;
-use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Games\Duizenden\StateCompiler\InvalidActionException;
 use App\Games\Duizenden\StateCompiler\StateCompiler;
@@ -25,7 +24,6 @@ class GameEventMessageCompiler implements StateCompilerInterface
 	/**
 	 * @throws EmptyCardPoolException
 	 * @throws InvalidActionException
-	 * @throws PlayerNotFoundException
 	 * @throws UnmappedCardException
 	 */
 	public function compile(StateData $state_data): array

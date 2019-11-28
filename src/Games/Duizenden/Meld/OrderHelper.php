@@ -233,7 +233,7 @@ class OrderHelper
 
 		$prev_value = $cards[0]->getRank()->getValue() - 1;
 		$card_count = count($cards);
-		$indexs = [];
+		$indexes = [];
 
 		for ($i = 0; $i < $card_count; ++$i)
 		{
@@ -244,7 +244,7 @@ class OrderHelper
 
 				do
 				{
-					$indexs[] = $i;
+					$indexes[] = $i;
 				}
 				while(++$value_prev < $value_current);
 			}
@@ -252,7 +252,7 @@ class OrderHelper
 			$prev_value = $cards[$i]->getRank()->getValue();
 		}
 
-		return array_reverse($indexs);
+		return array_reverse($indexes);
 	}
 
 	/**
@@ -270,7 +270,7 @@ class OrderHelper
 		}
 
 		$card_count = count($cards);
-		$indexs = [];
+		$indexes = [];
 		$ace_replaced = false;
 		$ace = null;
 
@@ -292,7 +292,7 @@ class OrderHelper
 
 				do
 				{
-					$indexs[] = $i + 1;
+					$indexes[] = $i + 1;
 				}
 				while(--$value_prev > $value_current);
 			}
@@ -306,7 +306,7 @@ class OrderHelper
 			array_push($cards, $ace);
 		}
 
-		return $indexs;
+		return $indexes;
 	}
 
 	/**

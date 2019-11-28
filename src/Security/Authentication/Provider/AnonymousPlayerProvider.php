@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Security\Authentication\Provider;
 
-use App\Security\UserProvider\AnonymousPlayerProvider as UserProvider;
 use App\Security\Authentication\Token\AnonymousPlayerToken;
+use App\Security\UserProvider\AnonymousPlayerProvider as UserProvider;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;

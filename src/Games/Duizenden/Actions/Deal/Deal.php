@@ -14,6 +14,7 @@ use App\Games\Duizenden\State;
 use App\Games\Duizenden\Workflow\MarkingType;
 use App\Games\Duizenden\Workflow\TransitionType;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\Workflow\StateMachine;
 
 class Deal extends StateChangeAction
@@ -36,6 +37,7 @@ class Deal extends StateChangeAction
 	 * @throws EmptyCardPoolException
 	 * @throws NonUniqueResultException
 	 * @throws PlayerNotFoundException
+	 * @throws NoResultException
 	 */
 	public function deal(Game $game): PlayerInterface
 	{

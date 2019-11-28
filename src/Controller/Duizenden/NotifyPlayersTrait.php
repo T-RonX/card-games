@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller\Duizenden;
 
-use App\CardPool\Exception\EmptyCardPoolException;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Networking\Message\GameEventData;
 use App\Games\Duizenden\Notifier\GameNotifier;
@@ -12,7 +11,6 @@ use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Games\Duizenden\StateCompiler\ActionType;
-use App\Games\Duizenden\StateCompiler\InvalidActionException;
 use App\Games\Duizenden\StateCompiler\TopicType;
 
 trait NotifyPlayersTrait

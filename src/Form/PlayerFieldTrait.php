@@ -9,22 +9,21 @@ use Closure;
 
 trait PlayerFieldTrait
 {
-	private $field_ids = [];
+	/**
+	 * @var int[]
+	 */
+	private array $field_ids = [];
 
 	private function getPlayerLabelCallback(): Closure
 	{
 		$unique = $this->createUnique();
 
-		return function (Player $player) use ($unique): string {
-			return $this->createUniqueName($player, $unique);
-		};
+		return fn (Player $player) => $this->createUniqueName($player, $unique);
 	}
 
 	private function getPlayerValueCallback(): Closure
 	{
-		return static function (?Player $player): string { // @TODO: Why is $player null sometimes?
-			return $player ? $player->getUuid() : '';
-		};
+		return static fn (?Player $player) => $player ? $player->getUuid() : '';
 	}
 
 	private function createUnique(): int

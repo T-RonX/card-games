@@ -18,7 +18,6 @@ use App\Cards\Standard\Rank\Rank_6;
 use App\Cards\Standard\Rank\Rank_7;
 use App\Cards\Standard\Rank\Rank_8;
 use App\Cards\Standard\Rank\Rank_9;
-use App\Cards\Standard\Suit\Joker;
 use App\Cards\Standard\Suit\JokerBlack;
 use App\Cards\Standard\Suit\JokerRed;
 use App\Deck\Card\CardInterface;

@@ -16,14 +16,8 @@ class InvitePlayersType extends AbstractType
 {
 	use PlayerFieldTrait;
 
-	/**
-	 * @var string
-	 */
-	private $current_player_id;
+	private string $current_player_id;
 
-	/**
-	 * @inheritdoc
-	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$this->current_player_id = $options['current_player_id'];

@@ -14,7 +14,6 @@ use App\Enum\Exception\EnumNotDefinedException;
 use App\Games\Duizenden\Actions\DrawCard\FromDiscardedPool;
 use App\Games\Duizenden\Actions\DrawCard\FromUndrawnPool;
 use App\Games\Duizenden\Exception\DrawCardException;
-use App\Games\Duizenden\Exception\HandException;
 use App\Games\Duizenden\Exception\OutOfCardsException;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Meld\Exception\MeldException;
@@ -76,7 +75,6 @@ class DrawCardController extends AbstractController
 	 * @throws EnumConstantsCouldNotBeResolvedException
 	 * @throws EnumNotDefinedException
 	 * @throws GameNotFoundException
-	 * @throws HandException
 	 * @throws InvalidCardIdException
 	 * @throws InvalidMeldException
 	 * @throws MeldException

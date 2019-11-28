@@ -94,7 +94,7 @@ class MeetingLobby extends AbstractController
 		}
 		else
 		{
-			$request->getSession()->getFlashBag()->add('error', $form->getErrors(true)[0]->getMessage());
+			$this->addFlash('error', $form->getErrors(true)[0]->getMessage());
 		}
 
 		return $this->redirect($this->generateUrl('lobby.show'));

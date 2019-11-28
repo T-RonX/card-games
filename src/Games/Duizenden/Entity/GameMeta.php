@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Games\Duizenden\Entity;
 
-use App\Uuid\UuidTrait;
 use App\Uuid\UuidableInterface;
+use App\Uuid\UuidTrait;
 
 class GameMeta implements UuidableInterface
 {
