@@ -49,7 +49,7 @@ class RevertMeld
 
 		$storable_cards = $this->createStorableCardArray($cards);
 
-		$game_player->setHand(array_merge($game_player->getHand(), $storable_cards));
+		$game_player->setHand([...$game_player->getHand(), ...$storable_cards]);
 		$game_player->setMelds([]);
 
 		$this->entity_manager->persist($game_player);

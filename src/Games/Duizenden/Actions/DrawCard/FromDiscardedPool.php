@@ -63,7 +63,7 @@ class FromDiscardedPool extends StateChangeAction
 		$state = $game->getState();
 
 		$card = $state->getDiscardedPool()->drawTopCard();
-		$cards = array_merge($meld_with, [$card]);
+		$cards = [...$meld_with, $card];
 
 		foreach ($meld_with as $card)
 		{

@@ -55,7 +55,7 @@ class Melds implements Iterator, Countable
 
 		foreach ($this as $meld)
 		{
-			$cards = array_merge($cards, $meld->getCards()->drawAllCards());
+			$cards = [...$cards, ...$meld->getCards()->drawAllCards()];
 		}
 
 		$this->clear();

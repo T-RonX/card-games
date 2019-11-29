@@ -150,7 +150,7 @@ class OverhandShuffle implements ShufflerInterface
 		foreach ($inserts as $insert_index)
 		{
 			$insert_in_cards = array_splice($grab, $insert_index);
-			$cards = array_merge($cards, $insert_in_cards);
+			$cards = [...$cards, ...$insert_in_cards];
 		}
 
 		return $cards;

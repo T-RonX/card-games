@@ -18,16 +18,16 @@ class DistinctDeckRebuilder implements DeckRebuilderInterface
 
 		foreach($hand_pools as $hand_pool)
 		{
-			$cards = array_merge($cards, $hand_pool->drawAllCards());
+			$cards = [...$cards, ...$hand_pool->drawAllCards()];
 		}
 
 		foreach($meld_pools as $meld_pool)
 		{
-			$cards = array_merge($cards, $meld_pool->drawAllCards());
+			$cards = [...$cards, $meld_pool->drawAllCards()];
 		}
 
-		$cards = array_merge($cards, $discarded_pool->drawAllCards());
-		$cards = array_merge($cards, $deck_remainder->drawAllCards());
+		$cards = [...$cards, ...$discarded_pool->drawAllCards()];
+		$cards = [...$cards, ...$deck_remainder->drawAllCards()];
 
 		return (new CardPool($cards));
 	}

@@ -37,7 +37,7 @@ class CardPool implements CardPoolInterface, Countable
 
 	function addCards(array $cards): void
 	{
-		$this->cards = array_merge($this->cards, $cards);
+		$this->cards = [...$this->cards, ...$cards];
 	}
 
 	function addCard(CardInterface $card, int $target = null): void
