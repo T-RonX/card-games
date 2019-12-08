@@ -1,0 +1,70 @@
+/*
+EmojiSymbols Font (c)blockworks - Kenichi Kaneko
+http://emojisymbols.com/
+*/
+
+@font-face {
+    font-family: EmojiSymbols;
+    src: url('/EmojiSymbols-Regular.woff');
+}
+
+#reporting {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    order: 2;
+}
+
+#action-tabs {
+    display: flex;
+    order: 1;
+    flex: 1;
+}
+
+.tab-space {
+    flex: 1;
+    width: calc(20vh / 3);
+    position: relative;
+}
+
+.tab-space .action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: #d5d3cf;
+}
+
+.tab-space .action-button:hover {
+    background: #B2A7A1;
+    cursor: pointer;
+}
+
+.tab-space .action-button.active {
+    background: #B2A7A1;
+}
+
+.tab-space .action-button .icon {
+    font-size: 5.3vh;
+    font-family: "Times", "Times New Roman", "serif", "sans-serif", "EmojiSymbols";
+    color: #413e3f
+}
+
+.tab-content {
+    flex: 1;
+    background-color: rgba(2, 2, 2, .08);
+    border: .2vmin solid rgba(2, 2, 2, .08);
+    border-radius: .48vmin 0 0 .48vmin;
+    padding: 1vmin;
+}
+
+.tab-content.hidden {
+    display: none;
+}

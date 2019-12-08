@@ -1,0 +1,22 @@
+<div id="action-buttons">
+    <div class="tab-space">
+        <div data-tab="actions" class="action-button active"><span class="icon">👈</span></div>
+    </div>
+    <div class="tab-space">
+        <div data-tab="chat" class="action-button"><span class="icon">💬</span></div>
+    </div>
+    <div class="tab-space">
+        <div data-tab="scoreboard" class="action-button"><span class="icon">🏆</span></div>
+    </div>
+</div>
+<div id="action-tabs">
+    <div class="tab-content" data-name="actions">
+        {% include 'Duizenden/Play/Partials/actions.html.twig'%}
+    </div>
+    <div class="tab-content hidden" data-name="chat">
+        {% include 'Duizenden/Play/Partials/chat.html.twig'%}
+    </div>
+    <div class="tab-content hidden" data-name="scoreboard">
+        {% include 'Duizenden/Play/Partials/scoreboard.html.twig'%}
+    </div>
+</div>
