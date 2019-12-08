@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Games\Duizenden\Repository;
 
+use App\Entity\Player;
 use App\Games\Duizenden\Entity\Game;
 use App\Games\Duizenden\Workflow\MarkingType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -55,6 +56,19 @@ final class GameRepository extends ServiceEntityRepository
 	public function getAllLatestGames(): array
 	{
 		return $this->getLatestGamesQueryBuilder()
+			->getQuery()
+			->execute();
+	}
+
+	/**
+	 * @return Game[]
+	 */
+	public function getAllLatestGamesByPlayer(Player $player): array
+	{
+		return $this->getLatestGamesQueryBuilder('g')
+			->join('g.GamePlayers', 'gps')
+			->join('gps.GamePlayerMeta', 'gpm', Join::WITH, 'IDENTITY(gpm.Player) = :player_id')
+			->setParameter('player_id', $player->getId())
 			->getQuery()
 			->execute();
 	}

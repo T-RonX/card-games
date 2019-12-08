@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Game\Meta;
 
+use App\Entity\Player;
+
 class GameMetaLoader
 {
 	/**
@@ -22,13 +24,13 @@ class GameMetaLoader
 	/**
 	 * @return GameMeta[]
 	 */
-	public function getAll(): array
+	public function getAll(Player $player): array
 	{
 		$result = [];
 
 		foreach ($this->meta_loaders as $loader)
 		{
-			foreach ($loader->getAll() as $game)
+			foreach ($loader->getAllByPlayer($player) as $game)
 			{
 				$result[$game->getGame()][] = $game;
 			}
