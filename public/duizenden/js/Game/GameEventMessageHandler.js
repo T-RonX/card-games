@@ -131,7 +131,7 @@ class GameEventMessageHandler {
         const card = this.game.getHand().getCardElementAt(state.getExtra('target') + 1);
 
         if (do_outline) {
-            this.outlineAddedCard(card);
+            this.outlineCard(card);
         }
     }
 
@@ -163,7 +163,7 @@ class GameEventMessageHandler {
         }
     }
 
-    outlineAddedCard(card) {
+    outlineCard(card) {
         card.addClass('add-in add-out');
         setTimeout(() => { card.removeClass('add-in'); }, 1000);
         setTimeout(() => { card.removeClass('add-out'); }, 2500);
@@ -176,6 +176,10 @@ class GameEventMessageHandler {
             this.manageDiscardedCard(state);
         } else {
             this.manageDraggableDiscardedCard(state);
+        }
+
+        if (state.isLocalPlayerCurrentPlayer()) {
+            this.outlineCard($('#card-undrawn-pool'));
         }
 
         UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());

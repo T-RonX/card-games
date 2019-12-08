@@ -68,18 +68,38 @@ body {
 
 #card-stacks {
     display: flex;
-    justify-content: space-evenly;
+    align-items: center;
+}
+
+#card-stacks .pool {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1.6vmin;
+    height: calc(15.42vmin + calc(2 * 1.6vmin));
+    width: calc(9.45vmin + calc(2 * 1.6vmin));
+    border: .2vmin solid rgba(2, 2, 2, .08);
+    border-radius: .48vmin;
+    background-color: rgba(2, 2, 2, .08);
+    transition: background-color 300ms;
+}
+
+#card-stacks .pool.droppable {
+    background-color: rgba(170 , 0 , 0, 1);
+    transition: background-color 300ms;
 }
 
 #hand-local {
     display: flex;
-    flex-basis: 40%;
+    flex-basis: 60%;
     justify-content: center;
+    align-items: center;
 }
 
 #hand-local-container {
     display: none;
     position: relative;
+    margin-bottom: calc(17.46vmin + 2.5vmin);
     width: 1px;
     height: 1px;
 }

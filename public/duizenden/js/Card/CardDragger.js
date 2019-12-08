@@ -13,7 +13,7 @@ class CardDragger {
             card.css('z-index', this.z_fighter.up());
             drag_source = card.parent().attr('id');
 
-            $('#discarded-pool').addClass('highlighted');
+            $('#discarded-pool').closest('.pool').addClass('droppable');
             card.parent().find('.card-hand-dropper').css('display', 'block');
         }
     }
@@ -25,7 +25,7 @@ class CardDragger {
 
             card.css('z-index', this.z_fighter.down());
 
-            $('#discarded-pool').removeClass('highlighted');
+            $('#discarded-pool').closest('.pool').removeClass('droppable');
             card.parent().find('.card-hand-dropper').css('display', 'none');
         }
     }
