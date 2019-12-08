@@ -51,7 +51,7 @@ class StateData
 
 	private int $round_finish_extra_points;
 
-	private array $extra;
+	private array $extra = [];
 
 	public function __construct(StateCompilerInterface $compiler)
 	{
