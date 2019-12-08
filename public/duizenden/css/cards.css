@@ -42,6 +42,7 @@
     background-size: 98.8vmin;
     width: 7.60vmin;
     height: 12.40vmin;
+    box-shadow: 0 1.2vmin 2vmin rgba(0, 0, 0, .06);
 }
 
 .card.draggable {
