@@ -63,7 +63,8 @@ body {
 }
 
 #card-stacks, #reporting {
-    flex-basis: 20%;
+    min-width: 20%;
+    flex: 1;
 }
 
 #card-stacks {
@@ -91,7 +92,8 @@ body {
 
 #hand-local {
     display: flex;
-    flex-basis: 60%;
+    max-width: 60%;
+    min-width: 64.6vmin;
     justify-content: center;
     align-items: center;
 }

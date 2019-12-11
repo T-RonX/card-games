@@ -2,6 +2,8 @@ class Hand {
     constructor(z_fighter, selector, hand_cards, path_draw_from_discarded, path_draw_from_undrawn, card_width, card_height, card_separation) {
         this.z_fighter = z_fighter;
         this.selector = selector;
+        this.card_width = card_width;
+        this.card_separation = card_separation;
         this.hand_container = new HandContainer(hand_cards, selector, this.createCardElement);
        // this.cards = $(selector);
         this.card_fan = new Fan(this.hand_container, card_separation, card_width, card_height, .013, -Math.ceil(card_height * .03), Math.ceil(card_width / 2), true, 0, z_fighter, false, true);
@@ -18,8 +20,10 @@ class Hand {
     }
 
     redraw(card_width, card_height) {
+        this.card_width = card_width;
         this.card_fan.redraw(card_width, card_height, -Math.ceil(card_height * .03), Math.ceil(card_width / 2));
         this.hover_animator.setParameters(card_width, card_height, Math.ceil(card_height * .175));
+        this.resizeLocalHandContainer();
     }
 
     initializeCards() {
@@ -33,6 +37,7 @@ class Hand {
         this.dropable_hand.makeDropable();
         this.makeCardsSelectable();
         this.makeCardsDraggable();
+        this.resizeLocalHandContainer();
         this.hand_container.show();
     }
 
@@ -79,9 +84,22 @@ class Hand {
         return this.hand_container.getCardElementAt(index);
     }
 
+    resizeLocalHandContainer() {
+        if (this.hand_container.getCards().length) {
+            let width = ((((this.hand_container.getCards().length - 1) * this.card_width) * this.card_separation) + this.card_width) * 1.3;
+            const vmin = this.vmin(64.6);
+
+            if (width < vmin) {
+                width = vmin;
+            }
+            $('#hand-local').css('min-width', width + 'px');
+        }
+    }
+
     redrawCards() {
         this.hand_container.createCards();
         this.initializeCards();
+        this.resizeLocalHandContainer();
     }
 
     reorderCards(from, to) {
@@ -99,5 +117,19 @@ class Hand {
             this.hand_container.removeCard(id);
         }
         this.redrawCards();
+    }
+
+    vh(v) {
+        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        return (v * h) / 100;
+    }
+
+    vw(v) {
+        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        return (v * w) / 100;
+    }
+
+    vmin(v) {
+        return Math.min(this.vh(v), this.vw(v));
     }
 }
