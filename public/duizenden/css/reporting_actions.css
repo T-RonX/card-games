@@ -24,6 +24,9 @@
     padding-left: 2vmin;
 }
 
+.allowed-action {
+    white-space: nowrap;
+}
 .allowed-action-text {
     display: inline-block;
     color: #D5D3CF;

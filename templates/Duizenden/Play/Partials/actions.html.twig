@@ -13,15 +13,15 @@
             </div>
         </div>
         <div id="actions-description">
-            {% if player.id == current_player_id %}
             <div id="allowed-actions">
+            {% if player.id == current_player_id %}
                 {% for action in state_data.allowed_actions %}
-                    <div class="allowed-action"><span class="allowed-action-bullet">●</span>&nbsp;<span class="allowed-action-text">{{ action.description }}</span></div>
+                    <div class="allowed-action"><span class="allowed-action-bullet">●</span> <span class="allowed-action-text">{{ action.description }}</span></div>
                 {% endfor %}
-            </div>
             {% else %}
                Please wait for your turn.
             {% endif %}
+            </div>
         </div>
     </div>
 </div>
