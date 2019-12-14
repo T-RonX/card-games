@@ -1,9 +1,9 @@
 class DealButton {
     static show() {
-        $('#deal').show();
+        $('#deal').removeClass('hidden');
     }
 
     static hide() {
-        $('#deal').hide();
+        $('#deal').addClass('hidden');
     }
 }

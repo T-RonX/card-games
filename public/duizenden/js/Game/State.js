@@ -95,6 +95,10 @@ class State {
         return this.getGameState().current_player.id;
     }
 
+    getCurrentPlayerName() {
+        return  this.getPlayer(this.getCurrentPlayerId()).name;
+    }
+
     getCurrentPlayer() {
         return this.getPlayer(this.getCurrentPlayerId());
     }

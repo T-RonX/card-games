@@ -78,6 +78,7 @@ class GameEventMessageHandler {
         this.game.initializeOpponentHands();
 
         UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
+        UpdateCurrentPlayer.setCurrentPlayer(state.getCurrentPlayerName(), state.isLocalPlayerCurrentPlayer());
         UndrawnCard.updateColor(state.getUndrawnPoolColor());
         AllowedActions.update(state.getAllowedActions());
 
@@ -183,6 +184,7 @@ class GameEventMessageHandler {
         }
 
         UpdateCurrentPlayer.setActivePlayer(state.getCurrentPlayerId());
+        UpdateCurrentPlayer.setCurrentPlayer(state.getCurrentPlayerName(), state.isLocalPlayerCurrentPlayer());
         AllowedActions.update(state.getAllowedActions());
 
         this.manageMeldButton(state);

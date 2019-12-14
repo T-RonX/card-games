@@ -1,9 +1,9 @@
 class RestartButton {
     static show() {
-        $('#restart').show();
+        $('#restart').removeClass('hidden');
     }
 
     static hide() {
-        $('#restart').hide();
+        $('#restart').addClass('hidden');
     }
 }
