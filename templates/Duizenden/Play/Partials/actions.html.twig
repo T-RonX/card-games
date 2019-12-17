@@ -8,7 +8,7 @@
             <div id=actions-buttons>
                 <div><a class="button hidden" id="deal"><span class="deal"></span> <span>Deal cards</span></a></div>
                 <div><a class="button hidden" id="restart" href="{{ path('duizenden.new') }}"><span class="restart"></span> <span>Restart</span></a></div>
-                <div><a class="button hidden" onclick="undoLastAction(); return false;"><span class="undo"></span> <span>Undo</span></a></div>
+                <div><a class="button" onclick="undoLastAction(); return false;"><span class="undo"></span> <span>Undo</span></a></div>
                 <div><a class="button hidden" id="meld-button" onclick="meld()"><span class="meld"></span> <span>Meld cards</span></a></div>
             </div>
         </div>
