@@ -23,7 +23,7 @@ class DistinctDeckRebuilder implements DeckRebuilderInterface
 
 		foreach($meld_pools as $meld_pool)
 		{
-			$cards = [...$cards, $meld_pool->drawAllCards()];
+			$cards = [...$cards, ...$meld_pool->drawAllCards()];
 		}
 
 		$cards = [...$cards, ...$discarded_pool->drawAllCards()];
