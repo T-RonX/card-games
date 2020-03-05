@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace  App\Games\Duizenden\Actions\DiscardCard;
 
 use App\CardPool\Exception\CardNotFoundException;
-use App\Cards\Standard\Rank\Queen;
-use App\Cards\Standard\Suit\Spades;
 use App\Deck\Card\CardInterface;
 use App\Games\Duizenden\Actions\Meld\RevertMeld;
+use App\Games\Duizenden\Actions\QueenOfSpadesTrait;
 use App\Games\Duizenden\Actions\StateChangeAction;
 use App\Games\Duizenden\Dealer\DealerFinder;
 use App\Games\Duizenden\DiscardCardResultType;
@@ -26,6 +25,8 @@ use Symfony\Component\Workflow\StateMachine;
 
 class DiscardCard extends StateChangeAction
 {
+    use QueenOfSpadesTrait;
+
 	private RevertMeld $revert_meld;
 
 	private ScoreCalculator $score_calculator;
@@ -187,10 +188,5 @@ class DiscardCard extends StateChangeAction
 		}
 
 		return $score;
-	}
-
-	private function isCardQueenOfSpades(CardInterface $card): bool
-	{
-		return $card->getRank() instanceof Queen && $card->getSuit() instanceof Spades;
 	}
 }

@@ -5,15 +5,20 @@ declare(strict_types=1);
 namespace  App\Games\Duizenden\Actions\DrawCard;
 
 use App\CardPool\Exception\EmptyCardPoolException;
+use App\Common\Meld\Melds;
 use App\Deck\Card\CardInterface;
+use App\Games\Duizenden\Actions\QueenOfSpadesTrait;
 use App\Games\Duizenden\Actions\StateChangeAction;
 use App\Games\Duizenden\Exception\OutOfCardsException;
 use App\Games\Duizenden\Game;
+use App\Games\Duizenden\Meld\TypeHelper;
 use App\Games\Duizenden\State;
 use App\Games\Duizenden\Workflow\TransitionType;
 
 class FromUndrawnPool extends StateChangeAction
 {
+    use QueenOfSpadesTrait;
+
 	/**
 	 * @throws EmptyCardPoolException
 	 * @throws OutOfCardsException
@@ -49,7 +54,21 @@ class FromUndrawnPool extends StateChangeAction
 	private function drawCard(State $state, int $target = null): CardInterface
 	{
 		$card = $state->getUndrawnPool()->drawTopCard();
-		$state->getPlayers()->getCurrentPlayer()->getHand()->addCard($card, $target);
+		$player = $state->getPlayers()->getCurrentPlayer();
+		$hand = $player->getHand();
+
+		if (
+		    $hand->getCardCount() === 1 &&
+            $this->isCardQueenOfSpades($card) &&
+            $this->isCardQueenOfSpades($hand->getTopCard()) &&
+            !$this->canExtendMeldWithCard($player->getMelds(), $card)
+        )
+        {
+            // @TODO: Handle this exception. Perhaps allow this case and allow discard of queen of spades.
+            throw new \Exception('Game can not be finished. Two Queen of Spades in hand and can not be used to extend a meld. Unable to throw a card away.');
+        }
+
+		$hand->addCard($card, $target);
 
 		return $card;
 	}
@@ -62,4 +81,19 @@ class FromUndrawnPool extends StateChangeAction
 		$shuffler = $state->getPlayers()->getCurrentPlayer()->getShuffler();
 		$state->getUndrawnPool()->shuffle($shuffler);
 	}
+
+	private function canExtendMeldWithCard(Melds $melds, CardInterface $card): bool
+    {
+        foreach ($melds as $meld)
+        {
+            $cards = [...$meld->getCards()->getCards(), $card];
+
+            if (null !== TypeHelper::detectMeldType($cards))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
