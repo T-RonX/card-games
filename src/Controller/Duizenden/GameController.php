@@ -117,6 +117,7 @@ class GameController extends AbstractController
 			$target_score = $form['target_score']->getData();
 			$first_meld_minimum_points = $form['first_meld_minimum_points']->getData();
 			$round_finish_extra_points = $form['round_finish_extra_points']->getData();
+			$allow_first_turn_round_end = $form['allow_first_turn_round_end']->getData();
 			$game_players = [];
 
 			foreach ($players as $player)
@@ -132,7 +133,8 @@ class GameController extends AbstractController
 				->setIsDealerRandom($is_dealer_random)
 				->setTargetScore($target_score)
 				->setFirstMeldMinimumPoints($first_meld_minimum_points)
-				->setRoundFinishExtraPoints($round_finish_extra_points);
+				->setRoundFinishExtraPoints($round_finish_extra_points)
+				->setAllowFirstTurnRoundEnd($allow_first_turn_round_end);
 
 			$game = $this->create($configurator);
 			$this->session->set('game_id', $game->getId());

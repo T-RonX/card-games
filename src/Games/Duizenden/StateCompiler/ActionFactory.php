@@ -13,6 +13,7 @@ use App\Games\Duizenden\StateCompiler\Action\DrawFromUndrawnAction;
 use App\Games\Duizenden\StateCompiler\Action\DrawFromUndrawnAndMeldAction;
 use App\Games\Duizenden\StateCompiler\Action\ExtendMeldAction;
 use App\Games\Duizenden\StateCompiler\Action\InvalidFirstMeldAction;
+use App\Games\Duizenden\StateCompiler\Action\InvalidRoundEndAction;
 use App\Games\Duizenden\StateCompiler\Action\MeldCardsAction;
 use App\Games\Duizenden\StateCompiler\Action\ReorderCardsAction;
 use App\Games\Duizenden\StateCompiler\Action\UndoLastActionAction;
@@ -61,6 +62,9 @@ class ActionFactory
 
 			case ActionType::INVALID_FIRST_MELD:
 				return new InvalidFirstMeldAction();
+
+			case ActionType::INVALID_ROUND_END:
+				return new InvalidRoundEndAction();
 
 			default:
 				throw new InvalidActionException(sprintf("Action type '%s' is not valid in this context.", $type->getValue()));

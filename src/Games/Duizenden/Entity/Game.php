@@ -36,6 +36,8 @@ class Game
 
 	private ?int $round = null;
 
+	private ?int $turn = null;
+
     public function __construct()
     {
         $this->GamePlayers = new ArrayCollection();
@@ -234,4 +236,14 @@ class Game
 
 		return $this;
 	}
+
+    public function getTurn(): ?int
+    {
+        return $this->turn;
+    }
+
+    public function setTurn(?int $turn): void
+    {
+        $this->turn = $turn;
+    }
 }

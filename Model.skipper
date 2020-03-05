@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<skipper version="3.2.13.1414" mvc="Symfony" orm="Doctrine2" name="model" uuid="cea3ec92-bd9d-4391-940a-b784fe11aef6">
+<skipper version="3.2.22.1624" mvc="Symfony" orm="Doctrine2" name="model" uuid="cea3ec92-bd9d-4391-940a-b784fe11aef6">
   <module name="\Duizenden" local-name="Duizenden" namespace="\App\Games\Duizenden\Entity" local-namespace="\App\Games\Duizenden\Entity" export-format="Doctrine2Xml" export-path="config/model" uuid="a2d2131f-136f-483d-94e8-4de5c0a0d5ef">
     <entity name="\App\Games\Duizenden\Entity\GamePlayer" local-name="GamePlayer" namespace="\App\Games\Duizenden\Entity" uuid="58fff83a-322b-4715-9838-aac022c2caca">
       <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="54abd3e8-7a59-47bf-b10a-64ae013b2cc1"/>
@@ -13,13 +13,13 @@
       </orm-attributes>
     </entity>
     <association from="\App\Games\Duizenden\Entity\GamePlayer" to="\App\Games\Duizenden\Entity\Game" owner-alias="GamePlayers" inverse-alias="Game" many-owner="true" many-inverse="false" uuid="2e984a21-8e96-48b2-99eb-7e8c0e365425">
-      <association-field from="game_id" to="id"/>
+      <association-field from="game_id" to="id" uuid="fefdd032-f3f5-48c2-aa8f-388ee70a4d50"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
     <association from="\App\Games\Duizenden\Entity\GamePlayer" to="\App\Games\Duizenden\Entity\GamePlayerMeta" owner-alias="GamePlayers" inverse-alias="GamePlayerMeta" many-owner="true" many-inverse="false" parent-required="true" uuid="0ef9eafc-9f0a-468e-9cf0-466dcebef723">
-      <association-field from="game_player_meta_id" to="id"/>
+      <association-field from="game_player_meta_id" to="id" uuid="d0122d33-b106-4fd5-9720-7a873abda339"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
         <attribute name="side-inverse">
@@ -47,9 +47,10 @@
       <field name="discarded_pool" type="string" size="1300" required="true" uuid="02b453c8-5229-4d18-a0f8-5724d69836a7"/>
       <field name="is_first_card" type="boolean" required="true" uuid="0f31c9c4-8116-4338-a6b8-c76892d16f41"/>
       <field name="round" type="integer" uuid="a28232fe-aa12-44f2-9b09-0df08e31c3d0"/>
-      <index name="game_id_sequence" unique="true">
-        <index-field name="sequence"/>
-        <index-field name="game_id"/>
+      <field name="turn" type="integer" uuid="46305602-7d76-4e49-b7d4-205edf64bb36"/>
+      <index name="game_id_sequence" unique="true" uuid="1eff6cc1-e40a-4cec-9171-372155dec32d">
+        <index-field name="sequence" uuid="ff1db78c-c3c4-4f9f-9760-83350ca41033"/>
+        <index-field name="game_id" uuid="1121b6c1-4250-4086-88da-648453d6c957"/>
       </index>
       <orm-attributes>
         <attribute name="table">game</attribute>
@@ -57,19 +58,19 @@
       </orm-attributes>
     </entity>
     <association from="\App\Games\Duizenden\Entity\Game" to="\App\Games\Duizenden\Entity\Game" owner-alias="GameStates" inverse-alias="Game" many-owner="true" many-inverse="false" uuid="f24b8f7e-33ad-482e-b000-d2fe5d39cb89">
-      <association-field from="game_id" to="id"/>
+      <association-field from="game_id" to="id" uuid="a65ec08e-6898-4b98-9519-ed3699401dda"/>
       <orm-attributes>
         <attribute name="on-delete">SET NULL</attribute>
       </orm-attributes>
     </association>
     <association from="\App\Games\Duizenden\Entity\Game" to="\App\Games\Duizenden\Entity\GameMeta" inverse-alias="GameMeta" many-owner="true" many-inverse="false" parent-required="true" uuid="c7021508-445c-42eb-b344-dc0f2a07452c">
-      <association-field from="game_meta_id" to="id"/>
+      <association-field from="game_meta_id" to="id" uuid="67d33ca6-2957-4a73-a2a0-7da1a7b914e3"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
     <association from="\App\Games\Duizenden\Entity\Game" to="\App\Games\Duizenden\Entity\GamePlayer" owner-alias="CurrentPlayerGames" inverse-alias="CurrentPlayer" many-owner="true" many-inverse="false" uuid="2e0903dc-6706-4c4c-afe1-bd27b15c2f7b">
-      <association-field from="current_player_id" to="id"/>
+      <association-field from="current_player_id" to="id" uuid="557867cb-ba45-4333-bf80-e061b3f608eb"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
@@ -82,13 +83,14 @@
       <field name="first_meld_minimum_points" type="integer" uuid="a76e8fe5-6266-410a-bdf6-57478d2f6d07"/>
       <field name="round_finish_extra_points" type="integer" uuid="d55f3c60-7c2f-43fa-8b5d-7cb911564349"/>
       <field name="deck_rebuilder" type="string" uuid="867d12ec-e2f3-49af-a37a-69bfbe0489ee"/>
+      <field name="allow_first_turn_round_end" type="boolean" uuid="081624a1-4f64-4b82-99d4-cda2b589278a"/>
       <orm-attributes>
         <attribute name="table">game_meta</attribute>
         <attribute name="repository-class">App\Games\Duizenden\Repository\GameMetaRepository</attribute>
       </orm-attributes>
     </entity>
     <association from="\App\Games\Duizenden\Entity\GameMeta" to="\App\Games\Duizenden\Entity\GamePlayerMeta" inverse-alias="DealingPlayerMeta" many-owner="true" many-inverse="false" uuid="634ad429-9f9c-4aaf-b04f-7487e5b9e48f">
-      <association-field from="dealing_player_meta_id" to="id"/>
+      <association-field from="dealing_player_meta_id" to="id" uuid="07ea1f1c-26fb-4dff-99c5-c080f071337e"/>
       <orm-attributes>
         <attribute name="on-delete">SET NULL</attribute>
       </orm-attributes>
@@ -117,10 +119,10 @@
       </orm-attributes>
     </entity>
     <association from="\App\Games\Duizenden\Entity\GamePlayerMeta" to="\App\Entity\Player" owner-alias="GamePlayerMetas" inverse-alias="Player" many-owner="true" many-inverse="false" parent-required="true" uuid="883f0990-b63f-43f1-9e54-4a9f9dc10d79">
-      <association-field from="player_id" to="id"/>
+      <association-field from="player_id" to="id" uuid="1db7e45e-caf8-4f08-a21b-0f3199eef092"/>
     </association>
     <association from="\App\Games\Duizenden\Entity\GamePlayerMeta" to="\App\Games\Duizenden\Entity\GameMeta" inverse-alias="GameMeta" many-owner="true" many-inverse="false" parent-required="true" uuid="288b9004-ee5b-460d-9fc7-d620b70c7e7c">
-      <association-field from="game_meta_id" to="id"/>
+      <association-field from="game_meta_id" to="id" uuid="fa17aa34-4abb-4a0b-bf35-9dd657afde25"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
@@ -167,10 +169,10 @@
       </orm-attributes>
     </entity>
     <association from="\App\Chat\Entity\ChatMessage" to="\App\Entity\Player" inverse-alias="Player" many-owner="true" many-inverse="false" parent-required="true" uuid="3685f62a-1d0c-44e5-b47a-d597897a1bfa">
-      <association-field from="player_id" to="id"/>
+      <association-field from="player_id" to="id" uuid="18e7db08-58b4-476b-8b9c-cdf250460505"/>
     </association>
     <association from="\App\Chat\Entity\ChatMessage" to="\App\Chat\Entity\ChatRoom" owner-alias="ChatMessages" inverse-alias="ChatRoom" many-owner="true" many-inverse="false" parent-required="true" uuid="aa4f6e81-81df-4425-b3b3-12ced5eaec2c">
-      <association-field from="chat_room_id" to="id"/>
+      <association-field from="chat_room_id" to="id" uuid="e96d4e05-d83e-4120-8670-a9f33480f933"/>
     </association>
     <entity name="\App\Chat\Entity\ChatRoom" local-name="ChatRoom" namespace="\App\Chat\Entity" uuid="3cee7640-5caa-45b4-a81f-cf424e23bd4b">
       <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="fd709206-6533-45e9-9e7f-db3161555f68"/>
@@ -190,10 +192,10 @@
       </orm-attributes>
     </entity>
     <association from="\App\Chat\Entity\ChatRoomPlayer" to="\App\Entity\Player" inverse-alias="Player" many-owner="true" many-inverse="false" uuid="738a19d4-9ac1-48d8-84e9-7b43d0814fa4">
-      <association-field from="player_id" to="id"/>
+      <association-field from="player_id" to="id" uuid="e8286856-7892-46fc-8c13-5517c78a06c8"/>
     </association>
     <association from="\App\Chat\Entity\ChatRoomPlayer" to="\App\Chat\Entity\ChatRoom" owner-alias="ChatRoomPlayers" inverse-alias="ChatRoom" many-owner="true" many-inverse="false" uuid="0e0d5779-125e-4071-8aeb-17ba5c3a5085">
-      <association-field from="chat_room_id" to="id"/>
+      <association-field from="chat_room_id" to="id" uuid="730b909e-60de-4239-ba51-25b2e5eb43f3"/>
     </association>
     <orm-attributes>
       <attribute name="file-suffix">.orm</attribute>
@@ -213,7 +215,7 @@
       </orm-attributes>
     </entity>
     <association from="\App\Lobby\Entity\Invitation" to="\App\Lobby\Entity\Invitee" inverse-alias="Inviter" many-owner="true" many-inverse="false" uuid="9e6a0294-c6e6-4a2b-8d03-d511d16914b2">
-      <association-field from="inviter_id" to="id"/>
+      <association-field from="inviter_id" to="id" uuid="6ea2680a-867b-4256-8534-e4ec4b739442"/>
       <orm-attributes>
         <attribute name="on-delete">SET NULL</attribute>
       </orm-attributes>
@@ -228,10 +230,10 @@
       </orm-attributes>
     </entity>
     <association from="\App\Lobby\Entity\Invitee" to="\App\Entity\Player" inverse-alias="Player" many-owner="true" many-inverse="false" uuid="547ebf28-ae12-407b-865c-b66288d23da7">
-      <association-field from="player_id" to="id"/>
+      <association-field from="player_id" to="id" uuid="a382a364-d9a5-4c68-8f0c-c46cd7055b5d"/>
     </association>
     <association from="\App\Lobby\Entity\Invitee" to="\App\Lobby\Entity\Invitation" owner-alias="Invitees" inverse-alias="Invitation" many-owner="true" many-inverse="false" uuid="07ec329a-d165-4572-be87-49fadb9047f3">
-      <association-field from="invitation_id" to="id"/>
+      <association-field from="invitation_id" to="id" uuid="eefa4a4b-fd6a-4c0a-b318-fe7c19902bfb"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>

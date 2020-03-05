@@ -51,6 +51,7 @@ class Initializer
 		$state->setTargetScore($config->getTargetScore());
 		$state->setFirstMeldMinimumPoints($config->getFirstMeldMinimumPoints());
 		$state->setRoundFinishExtraPoints($config->getRoundFinishExtraPoints());
+		$state->setAllowFirstTurnRoundEnd($config->allowFirstTurnRoundEnd());
 
 		return $state;
 	}

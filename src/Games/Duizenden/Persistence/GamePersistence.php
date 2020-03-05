@@ -101,6 +101,8 @@ class GamePersistence
 			->setUndrawnPool([])
 			->setDiscardedPool([])
 			->setIsFirstCard(true)
+            ->setRound(0)
+            ->setTurn(0)
 			;
 
 		$this->entity_manager->persist($game_meta_entity);
@@ -126,12 +128,14 @@ class GamePersistence
 		$game_meta->setFirstMeldMinimumPoints($game->getState()->getFirstMeldMinimumPoints());
 		$game_meta->setRoundFinishExtraPoints($game->getState()->getRoundFinishExtraPoints());
 		$game_meta->setDeckRebuilder($game->getDeckRebuilder()->getName());
+		$game_meta->setAllowFirstTurnRoundEnd($game->getState()->allowFirstTurnRoundEnd());
 
 		($new_game_entity = clone $game_entity)
 			->setWorkflowMarking($workflow_marking)
 			->setSequence($new_game_entity->getSequence() + 1)
 			->setUndrawnPool($this->createPersistableCardPool($state->getUndrawnPool()))
-			->setRound(1);
+			->setRound(1)
+			->setTurn(1);
 
 		$dealing_game_player_meta = null;
 
@@ -188,6 +192,11 @@ class GamePersistence
 			->setUndrawnPool($this->createPersistableCardPool($state->getUndrawnPool()))
 			->setDiscardedPool($this->createPersistableCardPool($state->getDiscardedPool()))
 			->setIsFirstCard($state->getDiscardedPool()->isFirstCard());
+
+		if ($context['up_turn'] ?? false)
+		{
+			$new_game_entity->setTurn($new_game_entity->getTurn() + 1);
+		}
 
 		if ($context['up_round'] ?? false)
 		{

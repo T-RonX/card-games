@@ -92,6 +92,9 @@ class GameLoader
 		$state->setTargetScore($game_entity->getGameMeta()->getTargetScore());
 		$state->setFirstMeldMinimumPoints($game_entity->getGameMeta()->getFirstMeldMinimumPoints());
 		$state->setRoundFinishExtraPoints($game_entity->getGameMeta()->getRoundFinishExtraPoints());
+        $state->setRound($game_entity->getRound());
+        $state->setTurn($game_entity->getTurn());
+		$state->setAllowFirstTurnRoundEnd($game_entity->getGameMeta()->allowFirstTurnRoundEnd());
 
 		if ($current_player)
 		{

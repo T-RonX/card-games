@@ -19,6 +19,7 @@ use App\Enum\Enum;
  * @method static ActionType REORDER_CARDS()
  * @method static ActionType UNDO_LAST_ACTION()
  * @method static ActionType INVALID_FIRST_MELD()
+ * @method static ActionType INVALID_ROUND_END()
  */
 class ActionType extends Enum
 {
@@ -34,4 +35,5 @@ class ActionType extends Enum
 	public const REORDER_CARDS = 'reorder_cards';
 	public const UNDO_LAST_ACTION = 'undo_last_action';
 	public const INVALID_FIRST_MELD = 'invalid_first_meld';
+	public const INVALID_ROUND_END = 'invalid_round_end';
 }

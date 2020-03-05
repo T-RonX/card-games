@@ -87,16 +87,34 @@ class DiscardCard extends StateChangeAction
 		{
 			case DiscardCardResultType::END_TURN():
 				$state->getPlayers()->nextPayer();
-				$this->state_machine->apply($game, TransitionType::DISCARD_END_TURN()->getValue());
+				$this->state_machine->apply($game, TransitionType::DISCARD_END_TURN()->getValue(), [
+				    'up_turn' => true
+                ]);
 				break;
 
 			case DiscardCardResultType::END_ROUND():
+			    if (!$state->allowFirstTurnRoundEnd() && $state->getTurn() === 1)
+                {
+                    $this->revert_meld->revert($game->getId(), $state->getPlayers()->getCurrentPlayer());
+                    $result = DiscardCardResultType::INVALID_ROUND_END();
+                    break;
+                }
+
 				$dealer = $this->dealer_finder->findNextDealer($game);
 				$state->getPlayers()->setCurrentPlayer($dealer);
-				$this->state_machine->apply($game, TransitionType::DISCARD_END_ROUND()->getValue());
+				$this->state_machine->apply($game, TransitionType::DISCARD_END_ROUND()->getValue(), [
+                    'up_turn' => true
+                ]);
 				break;
 
 			case DiscardCardResultType::END_GAME():
+                if (!$state->allowFirstTurnRoundEnd() && $state->getTurn() === 1)
+                {
+                    $this->revert_meld->revert($game->getId(), $state->getPlayers()->getCurrentPlayer());
+                    $result = DiscardCardResultType::INVALID_ROUND_END();
+                    break;
+                }
+
 				$this->state_machine->apply($game, TransitionType::DISCARD_END_GAME()->getValue());
 				break;
 		}

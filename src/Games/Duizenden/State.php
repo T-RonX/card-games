@@ -25,18 +25,24 @@ class State
 
 	private int $round_finish_extra_points = 0;
 
-	public function __construct(
-		 $players,
+	private bool $allow_first_turn_round_end = false;
+
+    private int $round = 0;
+
+    private int $turn = 0;
+
+    public function __construct(
+		$players,
 		PlayerInterface $dealing_player,
 		CardPool $undrawn_pool,
 		DiscardedCardPool $discarded_pool
-	)
+    )
 	{
 		$this->undrawn_pool = $undrawn_pool;
 		$this->discarded_pool = $discarded_pool;
 		$this->players = $players;
 		$this->dealing_player = $dealing_player;
-	}
+    }
 
 	public function getUndrawnPool(): CardPool
 	{
@@ -99,4 +105,33 @@ class State
 	{
 		return $this->round_finish_extra_points;
 	}
+
+    public function getRound(): int
+    {
+        return $this->round;
+    }
+
+    public function setRound(int $round): void
+    {
+        $this->round = $round;
+    }
+
+    public function allowFirstTurnRoundEnd(): bool
+    {
+        return $this->allow_first_turn_round_end;
+    }
+
+    public function setAllowFirstTurnRoundEnd(bool $allow): void
+    {
+        $this->allow_first_turn_round_end = $allow;
+    }
+
+    public function getTurn(): int
+    {
+        return $this->turn;
+    }
+    public function setTurn(int $turn): void
+    {
+        $this->turn = $turn;
+    }
 }

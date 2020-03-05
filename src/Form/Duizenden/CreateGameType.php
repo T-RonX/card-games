@@ -67,6 +67,11 @@ class CreateGameType extends AbstractType
 			->add('round_finish_extra_points', IntegerType::class, [
 				'label' => 'Extra points for finishing a round',
 				'data' => 0
+			])
+			->add('allow_first_turn_round_end', CheckboxType::class, [
+                'required' => false,
+				'label' => 'Allow round finish in first turn',
+				'data' => false
 			]);
 	}
 

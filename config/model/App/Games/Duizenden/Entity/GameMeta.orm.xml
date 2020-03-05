@@ -9,6 +9,7 @@
     <field name="first_meld_minimum_points" type="integer" nullable="true"/>
     <field name="round_finish_extra_points" type="integer" nullable="true"/>
     <field name="deck_rebuilder" type="string" nullable="true"/>
+    <field name="allow_first_turn_round_end" type="boolean" nullable="true"/>
     <many-to-one field="DealingPlayerMeta" target-entity="App\Games\Duizenden\Entity\GamePlayerMeta">
       <join-columns>
         <join-column name="dealing_player_meta_id" referenced-column-name="id" on-delete="SET NULL"/>

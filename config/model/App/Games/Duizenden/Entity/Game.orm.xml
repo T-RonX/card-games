@@ -11,6 +11,7 @@
     <field name="discarded_pool" type="string" length="1300" nullable="false"/>
     <field name="is_first_card" type="boolean" nullable="false"/>
     <field name="round" type="integer" nullable="true"/>
+    <field name="turn" type="integer" nullable="true"/>
     <unique-constraints>
       <unique-constraint name="game_id_sequence" columns="sequence,game_id"/>
     </unique-constraints>

@@ -70,6 +70,10 @@ class DiscardCardController extends AbstractController
 				$this->notifyPlayers($game, $current_player, ActionType::INVALID_FIRST_MELD());
 				break;
 
+			case DiscardCardResultType::INVALID_ROUND_END():
+				$this->notifyPlayers($game, $current_player, ActionType::INVALID_ROUND_END());
+				break;
+
 			default:
 				$this->notifyPlayers($game, $current_player, ActionType::DISCARD_END_TURN());
 				break;

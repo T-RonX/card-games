@@ -23,6 +23,8 @@ class GameMeta implements UuidableInterface
 
 	private ?int $round_finish_extra_points = null;
 
+	private ?bool $allow_first_turn_round_end = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,4 +89,14 @@ class GameMeta implements UuidableInterface
 	{
 		return $this->round_finish_extra_points;
 	}
+
+    public function allowFirstTurnRoundEnd(): ?bool
+    {
+        return $this->allow_first_turn_round_end;
+    }
+
+    public function setAllowFirstTurnRoundEnd(?bool $allow): void
+    {
+        $this->allow_first_turn_round_end = $allow;
+    }
 }

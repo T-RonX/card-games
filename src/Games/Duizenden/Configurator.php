@@ -29,6 +29,8 @@ class Configurator
 
 	private int $round_finish_extra_points = 0;
 
+	private bool $allow_first_turn_round_end = false;
+
 	public function __construct()
 	{
 		$this->players = new Players();
@@ -155,4 +157,16 @@ class Configurator
 	{
 		return $this->round_finish_extra_points;
 	}
+
+    public function allowFirstTurnRoundEnd(): bool
+    {
+        return $this->allow_first_turn_round_end;
+    }
+
+    public function setAllowFirstTurnRoundEnd(bool $allow): self
+    {
+        $this->allow_first_turn_round_end = $allow;
+
+        return $this;
+    }
 }
