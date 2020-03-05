@@ -39,6 +39,7 @@
         "symfony/yaml": "5.0.*",
         "symfony/workflow": "5.0.*",
         "symfony/mercure-bundle": "*",
+        "symfony/messenger": "*",
         "adhocore/jwt": "*"
     },
     "require-dev": {
