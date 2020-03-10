@@ -51,10 +51,12 @@ class Hand {
                 }
             };
 
-            let events = $._data(card.get(0), 'events').mouseup;
+            let events = $._data(card.get(0), 'events');
+            let mouse_events = events ? events.mouseup : [];
+
             let has_event = false;
 
-            $.each( events, function(i,o) {
+            $.each(mouse_events, function(i,o) {
                 has_event = has_event || (o.handler.toString() === event.toString());
             });
 
