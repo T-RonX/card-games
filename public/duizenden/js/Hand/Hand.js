@@ -58,6 +58,7 @@ class Hand {
             let dragger = new HandCardDragger(this.z_fighter, card);
             card.data('dragger', dragger);
             card.draggable({
+                distance: 5,
                 revert: (is_valid_drop) => {
                     if (!is_valid_drop) {
                         this.redrawCards();
