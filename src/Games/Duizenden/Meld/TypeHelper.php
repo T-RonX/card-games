@@ -94,7 +94,7 @@ class TypeHelper
 		$card_count = count($cards);
 		$index = 0;
 
-		for ($i = 0; $i < $card_count - 1; ++$i)
+		for ($i = 0; $i < $card_count; ++$i)
 		{
 			if (!$cards[$i]->getSuit() instanceof Joker)
 			{
