@@ -17,14 +17,20 @@ class DroppableHand {
                     let cards = [];
 
                     this.hand.getHandContainer().getContainer().find('.selected').each(function (item) {
-                        cards.push($(this).data('card-id'));
+                        let id = $(this).data('card-id');
+                        let order = $(this).data('card-order');
+                        let data = {'id': id, 'order': order};
+                        cards.push(data);
                     });
 
                     const target = $(e.target);
-                    const target_id = target.data('card-order');
+                    let target_id = target.data('card-order');
 
                     if (cards.length) {
-                        $.post(this.path_draw_from_discarded.replace('111', '0').replace('000', cards.join()), null, function (data) {
+                        let cards_submit = cards.map(function(value, index) {return value['id'];});
+                        let orders = cards.map(function(value, index) {return value['order'];});
+                        target_id = this.getTargetFromDrop(orders, target_id);
+                        $.post(this.path_draw_from_discarded.replace('111', target_id).replace('000', cards_submit.join()), null, function (data) {
                             //location.reload();
                         });
                     } else {
@@ -62,5 +68,25 @@ class DroppableHand {
                 }
             }
         });
+    }
+
+    getTargetFromDrop(cards_orders, drop_target) {
+        cards_orders.sort();
+        const count = cards_orders.length;
+
+        let i = 0;
+        for (const cards_order of cards_orders) {
+            if (drop_target < cards_order) {
+                return i;
+            }
+
+            if (drop_target === cards_order) {
+                return i + 1;
+            }
+
+            ++i;
+        }
+
+        return count;
     }
 }

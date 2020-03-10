@@ -89,7 +89,7 @@ class DrawCardController extends AbstractController
 
 		if (null !== $meld_cards && $meld_cards->hasCards())
 		{
-			$this->draw_from_discarded_pool->drawAndMeld($game, $meld_cards->getCards());
+			$this->draw_from_discarded_pool->drawAndMeld($game, $meld_cards->getCards(), $target);
 
 			$action = ActionType::DRAW_FROM_DISCARDED_AND_MELD();
 		}

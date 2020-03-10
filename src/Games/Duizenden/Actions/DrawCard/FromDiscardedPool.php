@@ -58,12 +58,15 @@ class FromDiscardedPool extends StateChangeAction
 	 * @throws InvalidMeldException
 	 * @throws MeldException
 	 */
-	public function drawAndMeld(Game $game, array $meld_with): void
+	public function drawAndMeld(Game $game, array $meld_with, int $target = null): void
 	{
 		$state = $game->getState();
 
 		$card = $state->getDiscardedPool()->drawTopCard();
-		$cards = [...$meld_with, $card];
+        $cards = $meld_with;
+
+        $index = null === $target ? count($meld_with) : $target;
+        array_splice($cards, $index, 0, [$card]);
 
 		foreach ($meld_with as $card)
 		{
