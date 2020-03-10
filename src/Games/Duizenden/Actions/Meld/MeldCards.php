@@ -8,6 +8,7 @@ use App\CardPool\CardPool;
 use App\CardPool\Exception\CardNotFoundException;
 use App\Common\Meld\Exception\InvalidMeldException;
 use App\Common\Meld\Meld;
+use App\Common\Meld\MeldType;
 use App\Deck\Card\CardInterface;
 use App\Games\Duizenden\Actions\StateChangeAction;
 use App\Games\Duizenden\Exception\HandException;
@@ -66,8 +67,7 @@ class MeldCards extends StateChangeAction
 	 */
 	public function meldCards(State $state, array $cards): void
 	{
-		OrderHelper::orderCards($cards);
-		$meld_type = TypeHelper::detectMeldType($cards);
+        $meld_type = $this->createMeld($cards);
 
 		if (!$meld_type)
 		{
@@ -81,6 +81,44 @@ class MeldCards extends StateChangeAction
 
 		$state->getPlayers()->getCurrentPlayer()->getMelds()->addMeld($meld);
 	}
+
+    /**
+     * @param CardInterface[] $cards
+     *
+     * @throws MeldException
+     */
+	private function createMeld(array &$cards): ?MeldType
+    {
+        $meld_type = $this->getCustomOrderMeld($cards);
+
+        if (!$meld_type)
+        {
+            $meld_type = $this->getAutomaticOrderMeld($cards);
+        }
+
+        return $meld_type;
+    }
+
+    /**
+     * @param CardInterface[] $cards
+     *
+     * @throws MeldException
+     */
+    private function getCustomOrderMeld(array &$cards): ?MeldType
+    {
+        return TypeHelper::detectMeldType($cards);
+    }
+
+    /**
+     * @param CardInterface[] $cards
+     *
+     * @throws MeldException
+     */
+    private function getAutomaticOrderMeld(array &$cards): ?MeldType
+    {
+        OrderHelper::orderCards($cards);
+        return TypeHelper::detectMeldType($cards);
+    }
 
 	/**
 	 * @param CardInterface[] $cards
