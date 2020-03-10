@@ -43,13 +43,24 @@ class Hand {
 
     makeCardsSelectable() {
         for (const card of this.hand_container.getCards()) {
-            card.mouseup((e, x) => {
+            const event = (e, x) => {
                 let card = $(e.target);
 
                 if (!card.data('dragger').isDragging()) {
                     $(e.target).toggleClass('selected');
                 }
+            };
+
+            let events = $._data(card.get(0), 'events').mouseup;
+            let has_event = false;
+
+            $.each( events, function(i,o) {
+                has_event = has_event || (o.handler.toString() === event.toString());
             });
+
+            if (!has_event) {
+                card.mouseup(event);
+            }
         }
     }
 
