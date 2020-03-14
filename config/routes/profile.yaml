@@ -2,3 +2,8 @@ profile.view:
   path: /view
   methods: ['GET']
   controller: App\Controller\ProfileController::view
+
+profile.update:
+  path: /update
+  methods: ['POST']
+  controller: App\Controller\ProfileController::update

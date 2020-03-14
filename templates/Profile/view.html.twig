@@ -2,6 +2,11 @@
 
 {% block content %}
     <div class="content-padded">
-    Hi {{ user_provider.player.username }}.
+        Update profile. Current name is {{ user_provider.player.name }}<br/><br/><br/>
+    {{ form_start(form, {method: 'POST', action: path('profile.update')}) }}
+    {{ form_row(form._token) }}
+    {{ form_row(form.playername) }}
+    <input type="submit" value="Update">
+    {{ form_end(form) }}
     </div>
 {% endblock %}
