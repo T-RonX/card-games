@@ -30,7 +30,7 @@ class ProgrammaticLogin
 
     public function login(UserInterface $user): void
     {
-        $token = new UsernamePasswordToken($user, $user->getPassword(), "main", ['IS_AUTHENTICATED_FULLY']);
+        $token = new UsernamePasswordToken($user, $user->getPassword(), "main", $user->getRoles());
         $this->token_storage->setToken($token);
         $this->fireInteractiveLoginEvent($token);
     }

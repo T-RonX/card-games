@@ -42,6 +42,10 @@ security:
         check_path: '%authentication.user.check_path%'
         default_target_path: /lobby
         always_use_default_target_path: true
+      remember_me:
+        secret: '%env(APP_SECRET)%'
+        lifetime: 126144000 # 4 years
+        remember_me_parameter: authenticate_user[remember_me]
       logout:
         path: /logout
         target: /lobby
@@ -49,4 +53,4 @@ security:
   access_control:
     - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/user/(new|create)$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/, roles: [ROLE_USER, IS_AUTHENTICATED_REMEMBERED] }

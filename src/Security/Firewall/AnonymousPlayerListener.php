@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AnonymousPlayerListener
@@ -40,8 +41,9 @@ class AnonymousPlayerListener
     public function __invoke(RequestEvent $event): void
     {
         $request = $event->getRequest();
+        $token = $this->token_storage->getToken();
 
-        if (!$this->isUserAnonymous() || $this->isPathAllowed($request))
+        if (!$this->isUserAnonymous() || $this->isPathAllowed($request, $token))
         {
             return;
         }
@@ -116,9 +118,10 @@ class AnonymousPlayerListener
         return null === $token || $token instanceof AnonymousPlayerToken;
     }
 
-    private function isPathAllowed(Request $request): bool
+    private function isPathAllowed(Request $request, ?TokenInterface $token): bool
     {
-        return in_array($request->getPathInfo(), $this->allowed_paths);
+        return (null === $token && $request->getPathInfo() !== $this->validation_path) || // This statement represents the state the session cookie is expired and the remember_me cookie is being loaded.
+            in_array($request->getPathInfo(), $this->allowed_paths);
     }
 
     private function isAnonymousRequestAllowed(Request $request): bool

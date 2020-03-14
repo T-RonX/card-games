@@ -7,7 +7,7 @@ framework:
         handler_id: 'Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler'
         cookie_secure: auto
         cookie_samesite: lax
-        cookie_lifetime: 31536000
+        cookie_lifetime: 172800 # 2 days
 
     #esi: true
     #fragments: true

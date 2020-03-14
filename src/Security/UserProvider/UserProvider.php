@@ -34,8 +34,6 @@ class UserProvider implements UserProviderInterface
             throw $ex;
         }
 
-        $user->setRoles(['IS_AUTHENTICATED_FULLY']); // TODO: this should not be here.
-
         return $user;
     }
 

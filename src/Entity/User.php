@@ -17,7 +17,6 @@ class User implements UuidableInterface, UserInterface
     private string $password;
     private string $salt;
     private Player $Player;
-    private array $roles = [];
 
     public function getUsername(): string
     {
@@ -57,14 +56,7 @@ class User implements UuidableInterface, UserInterface
 
     public function getRoles(): array
     {
-        return $this->roles;
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
+        return ['ROLE_USER'];
     }
 
     public function getSalt(): ?string
