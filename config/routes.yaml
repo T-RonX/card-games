@@ -2,6 +2,9 @@ main:
   path: /
   controller: App\Controller\Main::saved
 
+authentication:
+    resource: "routes/authentication.yaml"
+
 game:
     resource: "routes/game.yaml"
     prefix:   /game

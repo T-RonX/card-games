@@ -8,14 +8,6 @@ lobby.say:
   requirements:
     message: .*
 
-lobby.new_registration:
-  path: /enter-name
-  methods: ['GET']
-  controller: App\Controller\MeetingLobby::newAnonymousPlayer
-
-lobby.create_registration: # Handled by App\Security\FirewallAnonymousPlayerListener
-  path: /save-name
-
 lobby.invite:
   path: /invitation/send
   methods: ['POST']

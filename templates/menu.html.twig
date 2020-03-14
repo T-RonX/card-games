@@ -15,7 +15,7 @@
         <a href="{{ path('lobby.show') }}"><li>Meeting lobby</li></a>
         <a href="{{ path('lobby.invitations') }}"><li>Invitations</li></a>
     {% if user_provider.isAuthenticated %}
-        <a title="{{ user_provider.player.uuid }}" href="{{ path('logout') }}"><li>Terminate</li></a>
+        <a title="{{ user_provider.player.uuid }}" href="{{ path('authentication.logout') }}"><li>Terminate</li></a>
     {% endif %}
     </ul>
 </nav>

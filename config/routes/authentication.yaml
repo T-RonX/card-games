@@ -1,2 +1,10 @@
-logout:
+authentication.logout:
   path: /logout
+
+authentication.login:
+  path: /login
+  methods: ['GET']
+  controller: App\Controller\AuthenticationController::login
+
+authentication.authenticate: # Handled by App\Security\FirewallAnonymousPlayerListener
+  path: /authenticate

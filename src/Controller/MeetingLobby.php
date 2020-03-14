@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Entity\Player;
 use App\Form\Lobby\InvitePlayersType;
-use App\Form\Lobby\NameType;
 use App\Lobby\Entity\Invitation;
 use App\Lobby\Exception\InvitationException;
 use App\Lobby\Inviter;
@@ -136,15 +135,6 @@ class MeetingLobby extends AbstractController
             'player' => $player,
             'invitations_create' => $invitations_create,
             'invitations_received' => $invitations_received
-        ]);
-    }
-
-    public function newAnonymousPlayer(): Response
-    {
-        $form = $this->createForm(NameType::class);
-
-        return $this->render('Lobby\name.html.twig', [
-            'form' => $form->createView()
         ]);
     }
 

@@ -22,10 +22,10 @@ security:
       pattern: ^/
       anonymous: true
       anonymous_player:
-        identification_path: /lobby/enter-name
-        validation_path: /lobby/save-name
+        identification_path: /login
+        validation_path: /authenticate
         success_path: /lobby
-        identification_form_type: App\Form\Lobby\NameType
+        identification_form_type: App\Form\Authentication\AnonymousLoginType
         identification_form_field: name
       provider: chain_provider
       logout:
@@ -33,5 +33,5 @@ security:
         target: /lobby
 
   access_control:
-    - { path: ^/lobby/enter-name|lobby/save-name, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/login|authenticate, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

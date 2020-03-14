@@ -50,15 +50,18 @@ class AnonymousPlayerListener
             if ($this->isAnonymousRequestAllowed($request))
             {
                 return;
-            } elseif ($this->isValidationRequest($request))
+            }
+            elseif ($this->isValidationRequest($request))
             {
                 $this->handleToken($this->getNameFromForm($request));
                 $this->setRedirectResponse($event, $this->success_path);
-            } else
+            }
+            else
             {
                 $this->setRedirectResponse($event, $this->identification_path);
             }
-        } catch (AuthenticationException $e)
+        }
+        catch (AuthenticationException $e)
         {
             $this->resetToken();
             $session = $request->getSession();
