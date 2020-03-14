@@ -14,9 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 class ProfileController extends AbstractController
 {
     private UserProvider $user_provider;
-    /**
-     * @var Updater
-     */
     private Updater $updater;
 
     public function __construct(
