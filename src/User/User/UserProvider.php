@@ -22,7 +22,7 @@ class UserProvider
 
     public function isRegistered(): bool
     {
-        return null !== $this->getPlayer()->getUser();
+        return null !== $this->getPlayer() && null !== $this->getPlayer()->getUser();
     }
 
     public function getUser(): ?User

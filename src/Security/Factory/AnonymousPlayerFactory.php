@@ -26,7 +26,7 @@ class AnonymousPlayerFactory implements SecurityFactoryInterface
             ->addMethodCall('setSuccessPath', [$config['success_path']])
             ->addMethodCall('setIdentificationFormType', [$config['identification_form_type']])
             ->addMethodCall('setIdentificationFormField', [$config['identification_form_field']])
-            ->addMethodCall('setUserAuthenticationCheckPath', [$container->getParameter('authentication.user.check_path')]);
+            ->addMethodCall('setAllowedPaths', [$container->getParameter('allowed_anonymous_paths')]);
 
         return [$provider_id, $listener_id, $default_entry_point];
     }

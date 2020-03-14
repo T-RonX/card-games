@@ -24,7 +24,7 @@ class AnonymousPlayerListener
     private string $identification_form_type;
     private string $identification_form_field;
     private FormFactoryInterface $form_factory;
-    private string $user_authentication_check_path;
+    private array $allowed_paths;
 
     public function __construct(
         TokenStorageInterface $token_storage,
@@ -41,7 +41,7 @@ class AnonymousPlayerListener
     {
         $request = $event->getRequest();
 
-        if (!$this->isUserAnonymous() || $this->isUserLoginAttempt($request))
+        if (!$this->isUserAnonymous() || $this->isPathAllowed($request))
         {
             return;
         }
@@ -116,9 +116,9 @@ class AnonymousPlayerListener
         return null === $token || $token instanceof AnonymousPlayerToken;
     }
 
-    private function isUserLoginAttempt(Request $request): bool
+    private function isPathAllowed(Request $request): bool
     {
-        return $request->getPathInfo() == $this->user_authentication_check_path;
+        return in_array($request->getPathInfo(), $this->allowed_paths);
     }
 
     private function isAnonymousRequestAllowed(Request $request): bool
@@ -165,8 +165,11 @@ class AnonymousPlayerListener
         $this->identification_form_field = $identification_form_field;
     }
 
-    public function setUserAuthenticationCheckPath(string $check_path): void
+    /**
+     * @param string[] $paths
+     */
+    public function setAllowedPaths(array $paths): void
     {
-        $this->user_authentication_check_path = $check_path;
+        $this->allowed_paths = $paths;
     }
 }

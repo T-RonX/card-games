@@ -1,5 +1,9 @@
 parameters:
   authentication.user.check_path: '/authenticate-user'
+  allowed_anonymous_paths:
+    - '%authentication.user.check_path%'
+    - '/user/new'
+    - '/user/create'
 
 security:
   providers:
@@ -43,5 +47,6 @@ security:
         target: /lobby
 
   access_control:
-    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/user/(new|create)$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

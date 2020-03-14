@@ -28,6 +28,11 @@ class UserController extends AbstractController
 
     public function newUser(): Response
     {
+        if ($this->user_provider->isRegistered())
+        {
+            return $this->redirectToRoute('profile.view');
+        }
+
         $form = $this->createForm(CreateType::class);
 
         return $this->render('User\new.html.twig', [
@@ -40,6 +45,11 @@ class UserController extends AbstractController
      */
     public function createUser(Request $request): Response
     {
+        if ($this->user_provider->isRegistered())
+        {
+            return $this->redirectToRoute('profile.view');
+        }
+
         $form = $this->createForm(CreateType::class);
 
         if ($form->handleRequest($request) && $form->isSubmitted() && $form->isValid())
