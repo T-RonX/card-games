@@ -22,6 +22,14 @@ body {
     background-repeat: repeat;
 }
 
+#content {
+    color: #ecedf0;
+}
+
+.content-padded {
+    padding: 2vmin 8vmin;
+}
+
 a {
     text-decoration: none;
 }

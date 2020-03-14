@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    <div class="content-padded">
     {% if game_metas|length %}
         {% for game_name, games in game_metas %}
             <h3>{{ game_name|capitalize }}</h3>
@@ -13,4 +14,5 @@
     {% else %}
         No current games
     {% endif %}
+    </div>
 {% endblock %}

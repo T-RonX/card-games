@@ -6,3 +6,4 @@ twig:
   globals:
     mercure_publish_url: '%env(MERCURE_PUBLISH_URL)%'
     uuid_placeholder: '00000000-0000-5000-a000-000000000000'
+    user_provider: '@App\User\User\UserProvider'

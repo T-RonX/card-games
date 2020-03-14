@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\User" table="user" repository-class="App\User\User\UserRepository">
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="uuid" type="string" unique="true" length="36" nullable="false"/>
+    <field name="username" type="string" unique="true" length="30" nullable="false"/>
+    <field name="password" type="string" length="2048" nullable="false"/>
+    <field name="salt" type="string" length="44" nullable="true"/>
+    <one-to-one field="Player" target-entity="App\Entity\Player" mapped-by="User"/>
+  </entity>
+</doctrine-mapping>

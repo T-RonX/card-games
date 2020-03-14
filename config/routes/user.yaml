@@ -1,0 +1,9 @@
+user.new_account:
+  path: /new
+  methods: ['GET']
+  controller: App\Controller\UserController::newUser
+
+user.create_account:
+  path: /create
+  methods: ['POST']
+  controller: App\Controller\UserController::createUSer

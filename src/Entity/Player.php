@@ -15,23 +15,21 @@ class Player implements UuidableInterface, UserInterface
 {
     use UuidTrait;
 
-	private ?int $id = null;
+    private ?int $id = null;
+    private string $name;
+    private ?User $User = null;
 
-	private string $name;
-
-    private bool $is_registered;
-
-	/**
-	 * @var GamePlayerMeta[]|Collection
-	 */
+    /**
+     * @var GamePlayerMeta[]|Collection
+     */
     private Collection $GamePlayerMetas;
 
     public function __construct()
-	{
-		$this->GamePlayerMetas = new ArrayCollection();
-	}
+    {
+        $this->GamePlayerMetas = new ArrayCollection();
+    }
 
-	public function getName(): ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -48,35 +46,45 @@ class Player implements UuidableInterface, UserInterface
         return $this->id;
     }
 
-	public function setIsRegistered(bool $is_registered): self
-	{
-		$this->is_registered = $is_registered;
+    public function getRoles(): array
+    {
+        return [];
+    }
 
-		return $this;
-	}
+    public function getPassword(): ?string
+    {
+        return null;
+    }
 
-	public function getRoles(): array
-	{
-		return [];
-	}
+    public function getSalt(): ?string
+    {
+        return null;
+    }
 
-	public function getPassword(): ?string
-	{
-		return null;
-	}
+    public function getUsername(): string
+    {
+        return $this->name;
+    }
 
-	public function getSalt(): ?string
-	{
-		return null;
-	}
+    public function eraseCredentials(): void
+    {
 
-	public function getUsername(): string
-	{
-		return $this->name;
-	}
+    }
 
-	public function eraseCredentials(): void
-	{
+    public function hasUser(): bool
+    {
+        return $this->User === null;
+    }
 
-	}
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->User = $user;
+
+        return $this;
+    }
 }

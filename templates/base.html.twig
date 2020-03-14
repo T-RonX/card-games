@@ -32,8 +32,8 @@
     {% block javascripts %}{% endblock %}
 </head>
 <body>
-{% if app.user %}{% include 'menu.html.twig' only %}{% endif %}
-{% block content %}{% endblock %}
+{% if user_provider.isAuthenticated %}{% include 'menu.html.twig' only %}{% endif %}
+<div id="content">{% block content %}{% endblock %}</div>
 {% block javascripts_end %}{% endblock %}
 </body>
 </html>

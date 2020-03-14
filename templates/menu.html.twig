@@ -4,13 +4,18 @@
     <span></span>
     <span></span>
     <ul id="menu">
-        <li id="name">Hi, {{ app.user.name }}!</li>
+        <li id="name">Hi, {{ user_provider.player.name }}!</li>
+    {% if user_provider.isAnonymous %}
+        <a href="{{ path('user.new_account') }}"><li>Create an account</li></a>
+    {% else %}
+        <a href="{{ path('profile.view') }}"><li>View profile</li></a>
+    {% endif %}
         <a href="{{ path('duizenden.new') }}"><li>Start new game</li></a>
         <a href="{{ path('game.saved') }}"><li>Load previous game</li></a>
         <a href="{{ path('lobby.show') }}"><li>Meeting lobby</li></a>
         <a href="{{ path('lobby.invitations') }}"><li>Invitations</li></a>
-    {% if app.user %}
-        <a title="{{ app.user.uuid }}" href="{{ path('logout') }}"><li>Terminate</li></a>
+    {% if user_provider.isAuthenticated %}
+        <a title="{{ user_provider.player.uuid }}" href="{{ path('logout') }}"><li>Terminate</li></a>
     {% endif %}
     </ul>
 </nav>

@@ -2,6 +2,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    <div class="content-padded">
     {% if invitations_create|length %}
         <div><b>Invitations created</b></div>
         {% for invitation in invitations_create|filter(invitation => invitation.invitees|length > 1) %}
@@ -38,6 +39,7 @@
             </div>
         {% endfor %}
     {% endif  %}
+    </div>
 {% endblock %}
 
 {% macro invitees(invitation, player_id) %}

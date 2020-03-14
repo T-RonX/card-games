@@ -6,7 +6,11 @@
     </id>
     <field name="uuid" type="string" unique="true" length="36" nullable="false"/>
     <field name="name" type="string" nullable="false"/>
-    <field name="is_registered" type="boolean" length="0" nullable="false"/>
+    <one-to-one field="User" target-entity="App\Entity\User" inversed-by="Player">
+      <join-columns>
+        <join-column name="user_id" referenced-column-name="id" unique="true"/>
+      </join-columns>
+    </one-to-one>
     <one-to-many field="GamePlayerMetas" target-entity="App\Games\Duizenden\Entity\GamePlayerMeta" mapped-by="Player"/>
   </entity>
 </doctrine-mapping>

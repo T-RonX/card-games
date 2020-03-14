@@ -295,7 +295,7 @@
 {% endblock %}
 
 {% set discarded_pool_is_first_card = game.state.discardedPool.firstCard %}
-{% set player = game.state.players.playerById(app.user.uuid) %}
+{% set player = game.state.players.playerById(user_provider.player.uuid) %}
 {% set current_player_id = game.state.players.currentPlayer.id %}
 {% set can_draw_from_discarded = player.id == current_player_id and workflow_can(game, 'draw_from_discarded') and ((not player.hasMelds and discarded_pool_is_first_card) or game.scoreCalculator.calculatePlayerMeldsScore(player) >= 30) %}
 
@@ -411,7 +411,7 @@ $(document).ready(() => {
     //let elem_style = document.querySelector('.card.table');
     const extend_meld_url = '{{ path('duizenden.extend_meld', { meld_id: '000', card: '111' }) }}';
     const connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:game_event:{{ game_subscriber_event_id(game) }}'));
-    const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ app.user.uuid }}', extend_meld_url, card_separation_melds);
+    const message_handler = new GameEventMessageHandler('{{ game.id }}', '{{ user_provider.player.uuid }}', extend_meld_url, card_separation_melds);
     const event_handler = new GameEvent(connection, message_handler);
     window.player_event_message_handler.setGameEventHandler(message_handler);
     event_handler.initialize();

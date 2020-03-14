@@ -137,12 +137,15 @@
       <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="277729ac-587c-403b-b42b-6e9e51d8609d"/>
       <field name="uuid" type="string" size="36" required="true" unique="true" uuid="36437528-a98e-412c-94d0-cc5bd0cb195b"/>
       <field name="name" type="string" required="true" uuid="778582d6-3c1b-4fb1-9cee-1245f2664005"/>
-      <field name="is_registered" type="boolean" size="0" required="true" uuid="c821b0bd-6d67-4e8a-a052-059625853a6a"/>
+      <field name="user_id" type="integer" unique="true" uuid="616c23be-94b2-42c0-b120-c294416b7b23"/>
       <orm-attributes>
         <attribute name="table">player</attribute>
         <attribute name="repository-class">App\Repository\PlayerRepository</attribute>
       </orm-attributes>
     </entity>
+    <association from="\App\Entity\Player" to="\App\Entity\User" owner-alias="Player" inverse-alias="User" many-owner="false" many-inverse="false" uuid="fc7886d3-5149-48c6-9db9-3f5f10e94198">
+      <association-field from="user_id" to="id" uuid="57b41a25-cedf-44f7-b5a7-efc72fb9333d"/>
+    </association>
     <entity name="\App\Entity\Session" local-name="Session" namespace="\App\Entity" uuid="d4d7a305-a8fe-4a2a-9202-c3d3f112cd54">
       <field name="id" type="string" size="128" required="true" unique="true" primary="true" uuid="c22c70cc-9320-4302-abad-0151e7401524"/>
       <field name="data" type="blob" uuid="7bf4c9ce-6488-403a-908a-bc7efc919b10"/>
@@ -150,6 +153,17 @@
       <field name="lifetime" type="integer" uuid="b80b7b1c-0386-4a9e-aea8-4b7257558782"/>
       <orm-attributes>
         <attribute name="table">session</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="\App\Entity\User" local-name="User" namespace="\App\Entity" uuid="33afd0ed-77b0-4626-86fb-f29e621aae67">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="9f75e4b2-2386-4d9c-bd4c-431375520a8b"/>
+      <field name="uuid" type="string" size="36" required="true" unique="true" uuid="69ec4f71-a2f0-48a9-b00d-9effc37aa784"/>
+      <field name="username" type="string" size="30" required="true" unique="true" uuid="20e90a6e-f98c-4bf1-8a8c-1317ac6aebce"/>
+      <field name="password" type="string" size="2048" required="true" uuid="9136169b-e320-44ec-b520-2c2c6662f8df"/>
+      <field name="salt" type="string" size="44" uuid="1e1c777b-6e9e-4cba-af9a-c868a6083176"/>
+      <orm-attributes>
+        <attribute name="table">user</attribute>
+        <attribute name="repository-class">App\User\User\UserRepository</attribute>
       </orm-attributes>
     </entity>
     <orm-attributes>
@@ -259,19 +273,21 @@
     <association uuid="aa4f6e81-81df-4425-b3b3-12ced5eaec2c" color="#969696"/>
     <association uuid="c7021508-445c-42eb-b344-dc0f2a07452c" color="#969696"/>
     <association uuid="f24b8f7e-33ad-482e-b000-d2fe5d39cb89" center-position-x="0" center-position-y="-20" color="#969696"/>
-    <entity uuid="0691c4dd-783f-48da-a11a-f4e0ad741940" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="50" size-x="0" size-x2="119" size-y="0" size-y2="73"/>
+    <association uuid="fc7886d3-5149-48c6-9db9-3f5f10e94198" color="#969696"/>
+    <entity uuid="0691c4dd-783f-48da-a11a-f4e0ad741940" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="58" position-y="50" size-x="0" size-x2="92" size-y="0" size-y2="73"/>
     <entity uuid="3380811d-9b6b-406a-ac95-394b4278addb" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="289" position-y="178" size-x="0" size-x2="147" size-y="0" size-y2="129"/>
+    <entity uuid="33afd0ed-77b0-4626-86fb-f29e621aae67" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="200" size-x="0" size-x2="98" size-y="0" size-y2="73"/>
     <entity uuid="3cee7640-5caa-45b4-a81f-cf424e23bd4b" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="50" size-x="0" size-x2="123" size-y="0" size-y2="45"/>
     <entity uuid="58fff83a-322b-4715-9838-aac022c2caca" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="289" position-y="28" size-x="0" size-x2="101" size-y="0" size-y2="45"/>
     <entity uuid="6dab956d-4887-4487-a026-523ade58afd4" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="39" position-y="278" size-x="0" size-x2="177" size-y="0" size-y2="101"/>
     <entity uuid="91adacc9-237c-4bf0-8a9d-c00ff9f7a171" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="250" position-y="50" size-x="0" size-x2="100" size-y="0" size-y2="59"/>
     <entity uuid="943deabe-eb87-425f-9f85-d0f9dca23994" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="50" size-x="0" size-x2="69" size-y="0" size-y2="31"/>
     <entity uuid="b190e747-a5c9-445f-b4da-06ee65de47a3" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="150" size-x="0" size-x2="135" size-y="0" size-y2="73"/>
-    <entity uuid="d4d7a305-a8fe-4a2a-9202-c3d3f112cd54" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="200" size-x="0" size-x2="93" size-y="0" size-y2="73"/>
+    <entity uuid="d4d7a305-a8fe-4a2a-9202-c3d3f112cd54" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="327" size-x="0" size-x2="93" size-y="0" size-y2="73"/>
     <entity uuid="ed23d10e-d188-4126-a915-0aeb06406e17" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="250" position-y="50" size-x="0" size-x2="104" size-y="0" size-y2="73"/>
     <entity uuid="f479ea46-f595-4d59-bb05-1e26e3c28cb4" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="39" position-y="28" size-x="0" size-x2="161" size-y="0" size-y2="101"/>
     <module uuid="1cea5b4d-337c-49ae-b398-41c121d9d0be" bg-color="#D6ECFF" position-x="50" position-y="600" size-x="0" size-x2="450" size-y="0" size-y2="300"/>
-    <module uuid="851ccd02-4a44-4cad-b221-7bf63aca835d" bg-color="#FEFCE8" position-x="650" position-y="50" size-x="0" size-x2="250" size-y="0" size-y2="350"/>
+    <module uuid="851ccd02-4a44-4cad-b221-7bf63aca835d" bg-color="#FEFCE8" position-x="650" position-y="50" size-x="0" size-x2="300" size-y="0" size-y2="450"/>
     <module uuid="a2d2131f-136f-483d-94e8-4de5c0a0d5ef" bg-color="#E4F3E8" position-x="61" position-y="72" size-x="11" size-x2="539" size-y="22" size-y2="478"/>
     <module uuid="fb629686-c16c-4d78-9287-3c7df1fbf4d2" bg-color="#FFE9D6" position-x="550" position-y="600" size-x="0" size-x2="450" size-y="0" size-y2="200"/>
     <project uuid="cea3ec92-bd9d-4391-940a-b784fe11aef6" size-x="0" size-x2="1100" size-y="0" size-y2="950"/>

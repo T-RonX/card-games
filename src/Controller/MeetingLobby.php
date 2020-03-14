@@ -14,6 +14,7 @@ use App\Lobby\Lobby;
 use App\Lobby\LobbyNotifier;
 use App\Mercure\SubscriberIdGenerator;
 use App\Security\Voter\InvitationVoter;
+use App\User\User\UserProvider;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,148 +26,146 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 class MeetingLobby extends AbstractController
 {
-	private Lobby $lobby;
+    private Lobby $lobby;
+    private Inviter $inviter;
+    private LobbyNotifier $notifier;
+    private SubscriberIdGenerator $subscriber_id_generator;
+    private AuthorizationCheckerInterface $authorization_checker;
+    private UserProvider $user_provider;
 
-	private Inviter $inviter;
+    public function __construct(
+        Lobby $lobby,
+        Inviter $inviter,
+        LobbyNotifier $notifier,
+        SubscriberIdGenerator $subscriber_id_generator,
+        AuthorizationCheckerInterface $authorization_checker,
+        UserProvider $user_provider
+    )
+    {
+        $this->lobby = $lobby;
+        $this->inviter = $inviter;
+        $this->notifier = $notifier;
+        $this->subscriber_id_generator = $subscriber_id_generator;
+        $this->authorization_checker = $authorization_checker;
+        $this->user_provider = $user_provider;
+    }
 
-	private LobbyNotifier $notifier;
+    public function show(): Response
+    {
+        $player = $this->user_provider->getPlayer();
+        $lobby = $this->getLobby();
 
-	private SubscriberIdGenerator $subscriber_id_generator;
+        $lobby->updatePlayerActivity($player);
 
-	private AuthorizationCheckerInterface $authorization_checker;
+        $form_select_players = $this->createForm(InvitePlayersType::class, null, [
+            'players' => $lobby->getPlayers(),
+            'current_player_id' => $player->getUuid()
+        ]);
 
-	public function __construct(
-		Lobby $lobby,
-		Inviter $inviter,
-		LobbyNotifier $notifier,
-		SubscriberIdGenerator $subscriber_id_generator,
-		AuthorizationCheckerInterface $authorization_checker
-	)
-	{
-		$this->lobby = $lobby;
-		$this->inviter = $inviter;
-		$this->notifier = $notifier;
-		$this->subscriber_id_generator = $subscriber_id_generator;
-		$this->authorization_checker = $authorization_checker;
-	}
+        $this->lobby->playerEntered($player);
 
-	public function show(): Response
-	{
-		$player = $this->getUser();
-		$lobby = $this->getLobby();
+        return $this->render('Lobby\lobby.html.twig', [
+            'lobby_id' => Lobby::ID,
+            'player_id' => $player->getId(),
+            'name' => $player->getName(),
+            'messages' => $lobby->getMessages(),
+            'form' => $form_select_players->createView(),
+        ]);
+    }
 
-		$lobby->updatePlayerActivity($player);
+    /**
+     * @throws Exception
+     */
+    public function invite(Request $request): Response
+    {
+        $player = $this->user_provider->getPlayer();
+        $lobby = $this->getLobby();
 
-		$form_select_players = $this->createForm(InvitePlayersType::class, null, [
-			'players' => $lobby->getPlayers(),
-			'current_player_id' => $player->getUuid()
-		]);
+        $form = $this->createForm(InvitePlayersType::class, null, [
+            'players' => $lobby->getPlayers(),
+            'current_player_id' => $player->getUuid()
+        ]);
 
-		$this->lobby->playerEntered($player);
+        if ($form->handleRequest($request) && $form->isSubmitted() && $form->isValid())
+        {
+            $players = $form['players']->getData();
+            $invitation = $this->inviter->createInvitation($player, $players);
+            $this->notifier->publishInvitation($invitation);
+        } else
+        {
+            $this->addFlash('error', $form->getErrors(true)[0]->getMessage());
+        }
 
-		return $this->render('Lobby\lobby.html.twig', [
-			'lobby_id' => Lobby::ID,
-			'player_id' => $player->getId(),
-			'name' => $player->getName(),
-			'messages' => $lobby->getMessages(),
-			'form' => $form_select_players->createView(),
-		]);
-	}
+        return $this->redirect($this->generateUrl('lobby.show'));
+    }
 
-	/**
-	 * @throws Exception
-	 */
-	public function invite(Request $request): Response
-	{
-		$player = $this->getUser();
-		$lobby = $this->getLobby();
+    /**
+     * @throws InvitationException
+     */
+    public function acceptInvitation(Request $request, Invitation $invitation): Response
+    {
+        $this->denyAccessUnlessGranted(InvitationVoter::ACCEPT, $invitation);
 
-		$form = $this->createForm(InvitePlayersType::class, null, [
-			'players' => $lobby->getPlayers(),
-			'current_player_id' => $player->getUuid()
-		]);
+        $player = $this->user_provider->getPlayer();
+        $this->inviter->acceptInvitation($player, $invitation);
 
-		if ($form->handleRequest($request) && $form->isSubmitted() && $form->isValid())
-		{
-			$players = $form['players']->getData();
-			$invitation = $this->inviter->createInvitation($player, $players);
-			$this->notifier->publishInvitation($invitation);
-		}
-		else
-		{
-			$this->addFlash('error', $form->getErrors(true)[0]->getMessage());
-		}
+        return $request->isXmlHttpRequest() ? new Response() : $this->redirectToRoute('lobby.invitations');
+    }
 
-		return $this->redirect($this->generateUrl('lobby.show'));
-	}
+    /**
+     * @throws InvitationException
+     */
+    public function declineInvitation(Request $request, Invitation $invitation): Response
+    {
+        $this->denyAccessUnlessGranted(InvitationVoter::DECLINE, $invitation);
 
-	/**
-	 * @throws InvitationException
-	 */
-	public function acceptInvitation(Request $request, Invitation $invitation): Response
-	{
-		$this->denyAccessUnlessGranted(InvitationVoter::ACCEPT, $invitation);
+        $player = $this->user_provider->getPlayer();
+        $this->inviter->declineInvitation($player, $invitation);
 
-		$player = $this->getUser();
-		$this->inviter->acceptInvitation($player, $invitation);
+        return $request->isXmlHttpRequest() ? new Response() : $this->redirectToRoute('lobby.invitations');
+    }
 
-		return $request->isXmlHttpRequest() ? new Response() : $this->redirectToRoute('lobby.invitations');
-	}
+    public function invitations(): Response
+    {
+        $player = $this->user_provider->getPlayer();
 
-	/**
-	 * @throws InvitationException
-	 */
-	public function declineInvitation(Request $request, Invitation $invitation): Response
-	{
-		$this->denyAccessUnlessGranted(InvitationVoter::DECLINE, $invitation);
+        $invitations_create = $this->inviter->getInvitationsByInviter($player);
+        $invitations_received = $this->inviter->getInvitationsByInvitee($player);
 
-		$player = $this->getUser();
-		$this->inviter->declineInvitation($player, $invitation);
+        return $this->render('Lobby\invitations.html.twig', [
+            'player' => $player,
+            'invitations_create' => $invitations_create,
+            'invitations_received' => $invitations_received
+        ]);
+    }
 
-		return $request->isXmlHttpRequest() ? new Response() : $this->redirectToRoute('lobby.invitations');
-	}
+    public function newAnonymousPlayer(): Response
+    {
+        $form = $this->createForm(NameType::class);
 
-	public function invitations(): Response
-	{
-		$player = $this->getUser();
+        return $this->render('Lobby\name.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 
-		$invitations_create = $this->inviter->getInvitationsByInviter($player);
-		$invitations_received = $this->inviter->getInvitationsByInvitee($player);
+    /**
+     * @throws Exception
+     */
+    public function conveyMessage(string $message): Response
+    {
+        $lobby = $this->getLobby();
+        $player = $this->user_provider->getPlayer();
 
-		return $this->render('Lobby\invitations.html.twig', [
-			'player' => $player,
-			'invitations_create' => $invitations_create,
-			'invitations_received' => $invitations_received
-		]);
-	}
+        $lobby->updatePlayerActivity($player);
+        $lobby->addMessage($message, $player);
 
-	public function newAnonymousPlayer(): Response
-	{
-		$form = $this->createForm(NameType::class);
+        return new Response('');
+    }
 
-		return $this->render('Lobby\name.html.twig', [
-			'form' => $form->createView()
-		]);
-	}
+    private function getLobby(): Lobby
+    {
+        $this->lobby->initialize();
 
-	/**
-	 * @throws Exception
-	 */
-	public function conveyMessage(string $message): Response
-	{
-		$lobby = $this->getLobby();
-		$player = $this->getUser();
-
-		$lobby->updatePlayerActivity($player);
-		$lobby->addMessage($message, $player);
-
-		return new Response('');
-	}
-
-	private function getLobby(): Lobby
-	{
-		$this->lobby->initialize();
-
-		return $this->lobby;
-	}
+        return $this->lobby;
+    }
 }

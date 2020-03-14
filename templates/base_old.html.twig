@@ -54,7 +54,7 @@
         {% endfor %}
         {% block body %}
         {% endblock %}
-        {% if app.user %}
+        {% if user_provider.isAuthenticated %}
 <script>
     $(document).ready(() => {
         const player_event_connection = new Connection('{{ mercure_publish_url }}?topic=' + encodeURIComponent('urn:player_event:{{ player_subscriber_event_id() }}'));

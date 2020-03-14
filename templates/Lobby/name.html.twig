@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    <div class="content-padded">
     {{ form_errors(form) }}
     {{ form_start(form, {method: 'POST', action: path('lobby.create_registration')}) }}
     <table>
@@ -12,4 +13,5 @@
         </tr>
     </table>
     {{ form_end(form) }}
+    </div>
 {% endblock %}
