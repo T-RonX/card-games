@@ -33,8 +33,8 @@ security:
       provider: chain_provider
       form_login:
         login_path: /login
-        username_parameter: authenticate_user[_username]
-        password_parameter: authenticate_user[_password]
+        username_parameter: authenticate_user[username]
+        password_parameter: authenticate_user[password]
         check_path: '%authentication.user.check_path%'
         default_target_path: /lobby
         always_use_default_target_path: true

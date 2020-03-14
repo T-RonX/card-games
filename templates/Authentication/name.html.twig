@@ -22,8 +22,8 @@
     {{ form_start(user_form, {method: 'POST', action: path('authentication.authenticate.user')}) }}
     <table>
     {{ form_row(user_form._token) }}
-    {{ form_row(user_form._username) }}
-    {{ form_row(user_form._password) }}
+    {{ form_row(user_form.username) }}
+    {{ form_row(user_form.password) }}
         <tr>
             <td></td>
             <td><input type="submit" value="Login"></td>

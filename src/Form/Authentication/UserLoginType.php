@@ -15,11 +15,11 @@ class UserLoginType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('_username', TextType::class, [
+			->add('username', TextType::class, [
 				'label' => 'Username',
 				'constraints' => [new Length(['min' => 2, 'max' => 30])]
 			])
-			->add('_password', PasswordType::class, [
+			->add('password', PasswordType::class, [
 				'label' => 'Password'
 			]);
 	}
