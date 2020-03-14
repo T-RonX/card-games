@@ -7,26 +7,25 @@ namespace App\Twig;
 use App\Entity\Player;
 use App\Games\Duizenden\Game;
 use App\Mercure\SubscriberIdGenerator;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use App\User\User\UserProvider;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class SubscriberEventIdExtension extends AbstractExtension
 {
-	private SubscriberIdGenerator $id_generator;
+    private SubscriberIdGenerator $id_generator;
+    private UserProvider $user_provider;
 
-	private TokenStorageInterface $token_storage;
+    public function __construct(
+        SubscriberIdGenerator $id_generator,
+        UserProvider $user_provider
+    )
+    {
+        $this->id_generator = $id_generator;
+        $this->user_provider = $user_provider;
+    }
 
-	public function __construct(
-		SubscriberIdGenerator $id_generator,
-		TokenStorageInterface $token_storage
-	)
-	{
-		$this->id_generator = $id_generator;
-		$this->token_storage = $token_storage;
-	}
-
-	public function getFunctions(): array
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('player_subscriber_event_id', [$this, 'generatePlayerSubscriberId']),
@@ -36,13 +35,12 @@ class SubscriberEventIdExtension extends AbstractExtension
 
     public function generatePlayerSubscriberId(): string
     {
-    	$token = $this->token_storage->getToken();
-    	$player = $token ? $token->getUser() : null;
+        $player = $this->user_provider->getPlayer();
 
-    	if (!$player instanceof Player)
-		{
-			return '';
-		}
+        if (!$player instanceof Player)
+        {
+            return '';
+        }
 
         return $this->id_generator->generate($player->getUuid());
     }
