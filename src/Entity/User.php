@@ -12,8 +12,8 @@ class User implements UuidableInterface, UserInterface
 {
     use UuidTrait;
 
-	private ?int $id = null;
-	private string $username;
+    private ?int $id = null;
+    private string $username;
     private string $password;
     private string $salt;
     private Player $Player;
@@ -69,7 +69,7 @@ class User implements UuidableInterface, UserInterface
 
     public function getSalt(): ?string
     {
-        return null;
+        return $this->salt;
     }
 
     public function setSalt(string $salt): self
@@ -81,6 +81,5 @@ class User implements UuidableInterface, UserInterface
 
     public function eraseCredentials(): void
     {
-        $this->password = '';
     }
 }

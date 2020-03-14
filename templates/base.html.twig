@@ -33,7 +33,16 @@
 </head>
 <body>
 {% if user_provider.isAuthenticated %}{% include 'menu.html.twig' only %}{% endif %}
-<div id="content">{% block content %}{% endblock %}</div>
+<div id="content">
+    {% for label, messages in app.flashes() %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% block content %}{% endblock %}
+</div>
 {% block javascripts_end %}{% endblock %}
 </body>
 </html>

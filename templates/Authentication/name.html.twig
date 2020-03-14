@@ -2,16 +2,38 @@
 
 {% block content %}
     <div class="content-padded">
-    {{ form_errors(form) }}
-    {{ form_start(form, {method: 'POST', action: path('authentication.authenticate')}) }}
+        <div style="margin-bottom: 2em">
+            <h3>Play anonymously</h3>
+    {{ form_errors(anonymous_form) }}
+    {{ form_start(anonymous_form, {method: 'POST', action: path('authentication.authenticate.anonymous')}) }}
     <table>
-    {{ form_row(form._token) }}
-    {{ form_row(form.name) }}
+    {{ form_row(anonymous_form._token) }}
+    {{ form_row(anonymous_form.name) }}
         <tr>
             <td></td>
-            <td><input type="submit" value="Create"></td>
+            <td><input type="submit" value="Play"></td>
         </tr>
     </table>
-    {{ form_end(form) }}
+    {{ form_end(anonymous_form) }}
+        </div>
+        <div style="margin-bottom: 2em">
+            <h3>Account login</h3>
+    {{ form_errors(user_form) }}
+    {{ form_start(user_form, {method: 'POST', action: path('authentication.authenticate.user')}) }}
+    <table>
+    {{ form_row(user_form._token) }}
+    {{ form_row(user_form._username) }}
+    {{ form_row(user_form._password) }}
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Login"></td>
+        </tr>
+    </table>
+    {{ form_end(user_form) }}
+        </div>
+    <div>
+        <h3>Create a new account</h3>
+        <a href="{{ path('user.new_account') }}">Click here</a>
+    </div>
     </div>
 {% endblock %}

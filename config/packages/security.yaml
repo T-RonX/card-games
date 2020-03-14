@@ -1,3 +1,6 @@
+parameters:
+  authentication.user.check_path: '/authenticate-user'
+
 security:
   providers:
     chain_provider:
@@ -23,15 +26,22 @@ security:
       anonymous: true
       anonymous_player:
         identification_path: /login
-        validation_path: /authenticate
+        validation_path: /authenticate-anonymous
         success_path: /lobby
         identification_form_type: App\Form\Authentication\AnonymousLoginType
         identification_form_field: name
       provider: chain_provider
+      form_login:
+        login_path: /login
+        username_parameter: authenticate_user[_username]
+        password_parameter: authenticate_user[_password]
+        check_path: '%authentication.user.check_path%'
+        default_target_path: /lobby
+        always_use_default_target_path: true
       logout:
         path: /logout
         target: /lobby
 
   access_control:
-    - { path: ^/login|authenticate, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

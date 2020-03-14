@@ -11,17 +11,17 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class AnonymousLoginType extends AbstractType
 {
-	public function buildForm(FormBuilderInterface $builder, array $options)
-	{
-		$builder
-			->add('name', TextType::class, [
-				'label' => 'Enter your name',
-				'constraints' => [new Length(['min' => 2, 'max' => 30])]
-			]);
-	}
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('name', TextType::class, [
+                'label' => 'Player name',
+                'constraints' => [new Length(['min' => 2, 'max' => 30])]
+            ]);
+    }
 
-	public function getBlockPrefix()
-	{
-		return 'lobby_name';
-	}
+    public function getBlockPrefix()
+    {
+        return 'authenticate_anonymous';
+    }
 }

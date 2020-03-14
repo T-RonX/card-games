@@ -68,7 +68,6 @@ class Player implements UuidableInterface, UserInterface
 
     public function eraseCredentials(): void
     {
-
     }
 
     public function hasUser(): bool

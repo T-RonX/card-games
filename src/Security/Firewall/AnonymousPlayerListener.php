@@ -24,6 +24,7 @@ class AnonymousPlayerListener
     private string $identification_form_type;
     private string $identification_form_field;
     private FormFactoryInterface $form_factory;
+    private string $user_authentication_check_path;
 
     public function __construct(
         TokenStorageInterface $token_storage,
@@ -40,7 +41,7 @@ class AnonymousPlayerListener
     {
         $request = $event->getRequest();
 
-        if (!$this->isUserAnonymous())
+        if (!$this->isUserAnonymous() || $this->isUserLoginAttempt($request))
         {
             return;
         }
@@ -50,18 +51,15 @@ class AnonymousPlayerListener
             if ($this->isAnonymousRequestAllowed($request))
             {
                 return;
-            }
-            elseif ($this->isValidationRequest($request))
+            } elseif ($this->isValidationRequest($request))
             {
                 $this->handleToken($this->getNameFromForm($request));
                 $this->setRedirectResponse($event, $this->success_path);
-            }
-            else
+            } else
             {
                 $this->setRedirectResponse($event, $this->identification_path);
             }
-        }
-        catch (AuthenticationException $e)
+        } catch (AuthenticationException $e)
         {
             $this->resetToken();
             $session = $request->getSession();
@@ -118,6 +116,11 @@ class AnonymousPlayerListener
         return null === $token || $token instanceof AnonymousPlayerToken;
     }
 
+    private function isUserLoginAttempt(Request $request): bool
+    {
+        return $request->getPathInfo() == $this->user_authentication_check_path;
+    }
+
     private function isAnonymousRequestAllowed(Request $request): bool
     {
         $token = $this->token_storage->getToken();
@@ -160,5 +163,10 @@ class AnonymousPlayerListener
     public function setIdentificationFormField(string $identification_form_field): void
     {
         $this->identification_form_field = $identification_form_field;
+    }
+
+    public function setUserAuthenticationCheckPath(string $check_path): void
+    {
+        $this->user_authentication_check_path = $check_path;
     }
 }
