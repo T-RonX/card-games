@@ -9,6 +9,7 @@ use App\Security\ProgrammaticLogin;
 use App\User\Exception\UsernameAlreadyInUseException;
 use App\User\Player\PlayerFactory;
 use App\User\User\UserFactory;
+use RuntimeException;
 
 class Creator
 {
@@ -34,11 +35,16 @@ class Creator
     /**
      * @throws UsernameAlreadyInUseException
      */
-    public function createUserAndLogin(?Player $player, string $username, string $password): void
+    public function createUserAndLogin(?Player $player, string $username, string $password, ?string $playername): void
     {
         if (null === $player)
         {
-            $player = $this->player_factory->create($username);
+            if (!$playername)
+            {
+                throw new RuntimeException("Unable to create user. Invalid playername given.");
+            }
+
+            $player = $this->player_factory->create($playername);
         }
 
         $user = $this->user_factory->create($player, $username, $password);

@@ -5,6 +5,7 @@
     {{ form_errors(form) }}
     {{ form_start(form, { action: path('user.create_account'), method: 'post' }) }}
     {{ form_row(form._token) }}
+    {{ form_row(form.playername) }}
     {{ form_row(form.username) }}
     {{ form_row(form.password) }}
     <input type="submit" value="Create">

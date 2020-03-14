@@ -33,7 +33,11 @@ class UserController extends AbstractController
             return $this->redirectToRoute('profile.view');
         }
 
-        $form = $this->createForm(CreateType::class);
+        $player = $this->user_provider->getPlayer();
+        $form = $this->createForm(CreateType::class, null, [
+            'playername' => $player ? $player->getName() : null,
+            'username' => $player ? $player->getName() : null
+        ]);
 
         return $this->render('User\new.html.twig', [
             'form' => $form->createView(),
@@ -54,10 +58,11 @@ class UserController extends AbstractController
 
         if ($form->handleRequest($request) && $form->isSubmitted() && $form->isValid())
         {
+            $playername = $form['playername']->getData();
             $username = $form['username']->getData();
             $password = $form['password']->getData();
 
-            $this->user_creator->createUserAndLogin($this->user_provider->getPlayer(), $username, $password);
+            $this->user_creator->createUserAndLogin($this->user_provider->getPlayer(), $username, $password, $playername);
 
             return $this->redirectToRoute('profile.view');
         }
