@@ -7,6 +7,7 @@ namespace App\Security\UserProvider;
 use App\Entity\User;
 use App\User\User\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -24,7 +25,15 @@ class UserProvider implements UserProviderInterface
      */
     public function loadUserByUsername(string $username): ?User
     {
-        $user =  $this->user_repository->loadUserByUsername($username);
+        $user = $this->user_repository->loadUserByUsername($username);
+
+        if (!$user)
+        {
+            $ex = new UsernameNotFoundException();
+            $ex->setUsername($username);
+            throw $ex;
+        }
+
         $user->setRoles(['IS_AUTHENTICATED_FULLY']); // TODO: this should not be here.
 
         return $user;
