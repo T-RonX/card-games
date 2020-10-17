@@ -6,7 +6,7 @@ namespace App\Doctrine;
 
 use App\Uuid\Uuid;
 use App\Uuid\UuidableInterface;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Exception;
 
 class GenerateUuidListener

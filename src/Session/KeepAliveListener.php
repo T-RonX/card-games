@@ -14,6 +14,5 @@ class KeepAliveListener
 {
 	public function __invoke(ResponseEvent $event): void
 	{
-		// todo
 	}
 }

@@ -8,7 +8,7 @@ use App\Entity\Player;
 use App\Lobby\Entity\Invitation;
 use App\Lobby\Entity\Invitee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 

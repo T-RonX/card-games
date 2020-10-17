@@ -8,7 +8,7 @@ use App\Entity\Player;
 use App\Games\Duizenden\Entity\Game;
 use App\Games\Duizenden\Workflow\MarkingType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
