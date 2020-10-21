@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Games\Duizenden\StateCompiler;
+namespace App\Games\Duizenden\Actions;
 
 use App\Enum\Enum;
 

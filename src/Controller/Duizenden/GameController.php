@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\Duizenden;
 
+use App\AI\Minimax\Minimax;
 use App\Cards\Standard\Exception\InvalidCardIdException;
+use App\Games\Duizenden\Event\GameEvent;
+use App\Games\Duizenden\Event\GameEventType;
+use App\Games\Duizenden\GameStarter;
 use App\Entity\Player;
 use App\Enum\Exception\EnumConstantsCouldNotBeResolvedException;
 use App\Enum\Exception\EnumNotDefinedException;
 use App\Form\Duizenden\CreateGameType;
-use App\Games\Duizenden\Configurator;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\GameDeleter;
 use App\Games\Duizenden\GameManipulator;
@@ -18,16 +21,14 @@ use App\Games\Duizenden\Notifier\GameNotifier;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\EmptyPlayerSetException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
-use App\Games\Duizenden\Player\PlayerFactory;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
 use App\Games\Duizenden\StateBuilder\StateBuilder;
-use App\Games\Duizenden\StateCompiler\ActionType;
+use App\Games\Duizenden\Actions\ActionType;
 use App\Games\Duizenden\StateCompiler\StateData;
 use App\Games\Duizenden\StateCompiler\TopicType;
 use App\Games\Duizenden\Workflow\MarkingType;
 use App\Lobby\Entity\Invitation;
-use App\Lobby\Inviter;
 use App\Lobby\LobbyNotifier;
 use App\Repository\PlayerRepository;
 use App\Security\Voter\Duizenden\GameVoter;
@@ -35,6 +36,7 @@ use App\Security\Voter\InvitationVoter;
 use App\User\User\UserProvider;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,37 +45,37 @@ class GameController extends AbstractController
 {
     use LoadGameTrait;
 
-    private PlayerFactory $player_factory;
     private PlayerRepository $player_repository;
     private GameDeleter $game_deleter;
-    private Inviter $inviter;
     private LobbyNotifier $lobby_notifier;
     private StateBuilder $state_builder;
     private GameManipulator $game_manipulator;
     private GameNotifier $game_notifier;
     private UserProvider $user_provider;
+	private GameStarter $game_starter;
+	private EventDispatcherInterface $event_dispatcher;
 
-    public function __construct(
+	public function __construct(
         PlayerRepository $player_repository,
-        PlayerFactory $player_factory,
         GameDeleter $game_deleter,
         GameManipulator $game_manipulator,
-        Inviter $inviter,
         LobbyNotifier $notifier,
         StateBuilder $state_builder,
         GameNotifier $game_notifier,
-        UserProvider $user_provider
-    )
+        UserProvider $user_provider,
+		GameStarter $game_starter,
+		EventDispatcherInterface $event_dispatcher
+	)
     {
         $this->player_repository = $player_repository;
-        $this->player_factory = $player_factory;
         $this->game_deleter = $game_deleter;
-        $this->inviter = $inviter;
         $this->lobby_notifier = $notifier;
         $this->state_builder = $state_builder;
         $this->game_manipulator = $game_manipulator;
         $this->game_notifier = $game_notifier;
         $this->user_provider = $user_provider;
+        $this->game_starter = $game_starter;
+	    $this->event_dispatcher = $event_dispatcher;
     }
 
     public function newGame(?Invitation $invitation = null): Response
@@ -107,6 +109,7 @@ class GameController extends AbstractController
              * @var Player $first_dealer
              */
             $players = $form->has('players') ? $form['players']->getData() : $invitation->getAllPlayers(true);
+            $num_ai_players = $form['ai_players']->getData();
             $initial_shuffle = $form['initial_shuffle']->getData();
             $initial_shuffle_algorithm = $form['initial_shuffle_algorithm']->getData();
             $is_dealer_random = $form['is_dealer_random']->getData();
@@ -115,30 +118,25 @@ class GameController extends AbstractController
             $first_meld_minimum_points = $form['first_meld_minimum_points']->getData();
             $round_finish_extra_points = $form['round_finish_extra_points']->getData();
             $allow_first_turn_round_end = $form['allow_first_turn_round_end']->getData();
-            $game_players = [];
 
-            foreach ($players as $player)
-            {
-                $game_players[] = $this->player_factory->create($player->getUuid());
-            }
+	        $game = $this->game_starter->start(
+	        	$players,
+		        $num_ai_players,
+		        $initial_shuffle,
+		        $initial_shuffle_algorithm,
+		        $first_dealer,
+		        $is_dealer_random,
+		        $target_score,
+		        $first_meld_minimum_points,
+		        $round_finish_extra_points,
+		        $allow_first_turn_round_end,
+		        $invitation
+	        );
 
-            $configurator = (new Configurator())
-                ->setPlayers($game_players)
-                ->setDoInitialShuffle($initial_shuffle)
-                ->setInitialShuffleAlgorithm($initial_shuffle ? $initial_shuffle_algorithm : null)
-                ->setFirstDealer($this->player_factory->create($first_dealer->getUuid()))
-                ->setIsDealerRandom($is_dealer_random)
-                ->setTargetScore($target_score)
-                ->setFirstMeldMinimumPoints($first_meld_minimum_points)
-                ->setRoundFinishExtraPoints($round_finish_extra_points)
-                ->setAllowFirstTurnRoundEnd($allow_first_turn_round_end);
-
-            $game = $this->create($configurator);
             $this->session->set('game_id', $game->getId());
 
             if ($invitation)
             {
-                $this->inviter->assignGame($invitation, $game->getId());
                 $this->lobby_notifier->publishInvitationGameStarted($invitation);
             }
 
@@ -150,44 +148,6 @@ class GameController extends AbstractController
         return $this->render('Duizenden\new.html.twig', [
             'form' => $form->createView(),
             'invitation' => $invitation
-        ]);
-    }
-
-    /**
-     * @throws EmptyPlayerSetException
-     * @throws InvalidDealerPlayerException
-     */
-    private function create(Configurator $configurator): Game
-    {
-        /** @var Game $game */
-        $game = $this->game_factory->create(Game::NAME);
-        $game->setCreatedMarking();
-        $game->configure($configurator);
-
-        return $game;
-    }
-
-    /**
-     * @throws EnumConstantsCouldNotBeResolvedException
-     * @throws EnumNotDefinedException
-     * @throws GameNotFoundException
-     * @throws InvalidCardIdException
-     * @throws NonUniqueResultException
-     * @throws PlayerNotFoundException
-     * @throws UnmappedCardException
-     */
-    public function playGameOld(string $uuid): Response
-    {
-        $this->session->set('game_id', $uuid);
-        $game = $this->loadGame($uuid);
-        $this->denyAccessUnlessGranted(GameVoter::ENTER_GAME, $game);
-
-        $state_data = $this->state_builder->createStateData($game);
-        $this->complementStateData($game, $state_data);
-
-        return $this->render('Duizenden\Play\game_old.html.twig', [
-            'game' => $game,
-            'state_data' => $state_data->create()
         ]);
     }
 
@@ -247,7 +207,7 @@ class GameController extends AbstractController
             return $invitation->getAllPlayers(true);
         }
 
-        return $this->player_repository->createQueryBuilder('p', 'p.uuid')->getQuery()->execute() ?? [];
+        return $this->player_repository->createQueryBuilder('p', 'p.uuid')->where("p.type = 'human'")->getQuery()->execute() ?? [];
     }
 
     /**

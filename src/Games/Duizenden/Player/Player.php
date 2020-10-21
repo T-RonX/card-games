@@ -6,21 +6,19 @@ namespace App\Games\Duizenden\Player;
 
 use App\CardPool\CardPool;
 use App\Common\Meld\Melds;
+use App\Player\PlayerType;
 use App\Shuffler\ShufflerInterface;
 
 class Player implements PlayerInterface
 {
 	private string $id;
-
 	private string $name;
-
 	private ShufflerInterface $shuffler;
-
 	private CardPool $hand;
-
 	private Melds $melds;
+	private PlayerType $type;
 
-	public function setId(string $id): PlayerInterface
+	public function setId(string $id): self
 	{
 		$this->id = $id;
 
@@ -32,7 +30,7 @@ class Player implements PlayerInterface
 		return $this->id;
 	}
 
-	public function setName(string $name): PlayerInterface
+	public function setName(string $name): self
 	{
 		$this->name = $name;
 
@@ -44,7 +42,7 @@ class Player implements PlayerInterface
 		return $this->name;
 	}
 
-	public function setShuffler(ShufflerInterface $shuffler): PlayerInterface
+	public function setShuffler(ShufflerInterface $shuffler): self
 	{
 		$this->shuffler = $shuffler;
 
@@ -56,7 +54,7 @@ class Player implements PlayerInterface
 		return $this->shuffler;
 	}
 
-	public function setHand(CardPool $hand): PlayerInterface
+	public function setHand(CardPool $hand): self
 	{
 		$this->hand = $hand;
 
@@ -68,7 +66,7 @@ class Player implements PlayerInterface
 		return $this->hand;
 	}
 
-	public function setMelds(Melds $melds): PlayerInterface
+	public function setMelds(Melds $melds): self
 	{
 		$this->melds = $melds;
 
@@ -87,6 +85,23 @@ class Player implements PlayerInterface
 
 	public function equals(PlayerInterface $player): bool
 	{
-		return $player instanceof Player && $player->getId() == $this->id;
+		return $player instanceof self && $player->getId() === $this->id;
+	}
+
+	public function isType(PlayerType $type): bool
+	{
+		return $this->type->equals($type);
+	}
+
+	public function setType(PlayerType $type): self
+	{
+		$this->type = $type;
+
+		return $this;
+	}
+
+	public function getType(): PlayerType
+	{
+		return $this->type;
 	}
 }

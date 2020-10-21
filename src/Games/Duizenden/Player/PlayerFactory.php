@@ -14,7 +14,6 @@ use App\Shufflers\ShufflerType;
 class PlayerFactory
 {
 	private ShufflerFactory $shuffler_factory;
-
 	private PlayerRepository $player_repository;
 
 	public function __construct(
@@ -40,7 +39,8 @@ class PlayerFactory
 			->setName($player->getName())
 			->setHand($hand ?? new CardPool())
 			->setMelds($melds ?? new Melds())
-			->setShuffler($shuffler ?? $this->shuffler_factory->create(ShufflerType::OVERHAND()));
+			->setShuffler($shuffler ?? $this->shuffler_factory->create(ShufflerType::OVERHAND()))
+			->setType($player->getType());
 	}
 
 	private function generateId(): int

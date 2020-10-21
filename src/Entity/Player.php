@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Games\Duizenden\Entity\GamePlayerMeta;
+use App\Player\PlayerType;
 use App\Uuid\UuidableInterface;
 use App\Uuid\UuidTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,6 +19,7 @@ class Player implements UuidableInterface, UserInterface
     private ?int $id = null;
     private string $name;
     private ?User $User = null;
+    private string $type;
 
     /**
      * @var GamePlayerMeta[]|Collection
@@ -83,6 +85,18 @@ class Player implements UuidableInterface, UserInterface
     public function setUser(?User $user): self
     {
         $this->User = $user;
+
+        return $this;
+    }
+
+    public function getType(): PlayerType
+    {
+        return PlayerType::createEnum($this->type);
+    }
+
+    public function setType(PlayerType $type): self
+    {
+        $this->type = $type->getValue();
 
         return $this;
     }

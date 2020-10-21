@@ -97,4 +97,22 @@ class Melds implements Iterator, Countable
 	{
 		return end($this->melds);
 	}
+
+	/**
+	 * @return Meld[]
+	 */
+	public function getMelds(): array
+	{
+		return $this->melds;
+	}
+
+	public function getPointer(): int
+	{
+		return $this->pointer;
+	}
+
+	public function setPointer(int $pointer): void
+	{
+		$this->pointer = $pointer;
+	}
 }

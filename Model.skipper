@@ -135,9 +135,10 @@
   <module name="\App" local-name="App" namespace="\App\Entity" local-namespace="\App\Entity" export-format="Doctrine2Xml" export-path="config/model" uuid="851ccd02-4a44-4cad-b221-7bf63aca835d">
     <entity name="\App\Entity\Player" local-name="Player" namespace="\App\Entity" uuid="0691c4dd-783f-48da-a11a-f4e0ad741940">
       <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="277729ac-587c-403b-b42b-6e9e51d8609d"/>
+      <field name="user_id" type="integer" unique="true" uuid="616c23be-94b2-42c0-b120-c294416b7b23"/>
       <field name="uuid" type="string" size="36" required="true" unique="true" uuid="36437528-a98e-412c-94d0-cc5bd0cb195b"/>
       <field name="name" type="string" required="true" uuid="778582d6-3c1b-4fb1-9cee-1245f2664005"/>
-      <field name="user_id" type="integer" unique="true" uuid="616c23be-94b2-42c0-b120-c294416b7b23"/>
+      <field name="type" type="string" required="true" uuid="2225d4f3-1748-4bb2-bae8-71d950ae88ca"/>
       <orm-attributes>
         <attribute name="table">player</attribute>
         <attribute name="repository-class">App\Repository\PlayerRepository</attribute>

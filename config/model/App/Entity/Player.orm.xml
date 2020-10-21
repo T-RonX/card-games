@@ -6,6 +6,7 @@
     </id>
     <field name="uuid" type="string" unique="true" length="36" nullable="false"/>
     <field name="name" type="string" nullable="false"/>
+    <field name="type" type="string" nullable="false"/>
     <one-to-one field="User" target-entity="App\Entity\User" inversed-by="Player">
       <join-columns>
         <join-column name="user_id" referenced-column-name="id" unique="true"/>

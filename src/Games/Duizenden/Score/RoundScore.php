@@ -19,6 +19,14 @@ class RoundScore
 	}
 
 	/**
+	 * @param PlayerScore[] $player_scores
+	 */
+	public function setPlayerScores(array $player_scores): void
+	{
+		$this->player_scores = $player_scores;
+	}
+
+	/**
 	 * @return PlayerScore[]
 	 */
 	public function getPlayerScores(): array

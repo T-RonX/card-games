@@ -9,6 +9,7 @@
 {% if form.players is defined %}
     {{ form_row(form.players) }}
 {% endif %}
+    {{ form_row(form.ai_players) }}
     {{ form_row(form.is_dealer_random) }}
     {{ form_row(form.first_dealer) }}
     {{ form_row(form.initial_shuffle) }}

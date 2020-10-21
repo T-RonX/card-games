@@ -17,7 +17,7 @@ class State
 
 	private Players $players;
 
-	private PlayerInterface$dealing_player;
+	private PlayerInterface $dealing_player;
 
 	private int $target_score = 1000;
 
@@ -116,7 +116,7 @@ class State
         $this->round = $round;
     }
 
-    public function allowFirstTurnRoundEnd(): bool
+    public function getAllowFirstTurnRoundEnd(): bool
     {
         return $this->allow_first_turn_round_end;
     }

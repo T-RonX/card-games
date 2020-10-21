@@ -7,6 +7,8 @@ namespace  App\Games\Duizenden\Actions\Deal;
 use App\CardPool\Exception\EmptyCardPoolException;
 use App\Games\Duizenden\Actions\StateChangeAction;
 use App\Games\Duizenden\Dealer\DealerFinder;
+use App\Games\Duizenden\Event\GameEvent;
+use App\Games\Duizenden\Event\GameEventType;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
@@ -15,22 +17,25 @@ use App\Games\Duizenden\Workflow\MarkingType;
 use App\Games\Duizenden\Workflow\TransitionType;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Workflow\StateMachine;
 
 class Deal extends StateChangeAction
 {
 	private const CARDS_PER_PLAYER = 13;
-
 	private DealerFinder $dealer_finder;
+	private EventDispatcherInterface $event_dispatcher;
 
 	public function __construct(
 		StateMachine $state_machine,
-		DealerFinder $dealer_finder
+		DealerFinder $dealer_finder,
+		EventDispatcherInterface $event_dispatcher
 	)
 	{
 		parent::__construct($state_machine);
 
 		$this->dealer_finder = $dealer_finder;
+		$this->event_dispatcher = $event_dispatcher;
 	}
 
 	/**
@@ -69,6 +74,11 @@ class Deal extends StateChangeAction
 		$this->state_machine->apply($game, TransitionType::DEAL()->getValue(), [
 			'up_round' => $is_round_end
 		]);
+
+		if (!$this->isSandboxed())
+		{
+			$this->event_dispatcher->dispatch(new GameEvent($game), GameEventType::TURN_STARTED()->getValue());
+		}
 
 		return $dealer;
 	}

@@ -172,4 +172,9 @@ class CardPool implements CardPoolInterface, Countable
 	{
 		return count($this->cards);
 	}
+
+	public function getPointer(): int
+	{
+		return $this->pointer;
+	}
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Security\UserProvider;
 
 use App\Entity\Player;
+use App\Player\PlayerType;
 use App\Repository\PlayerRepository;
 use App\User\Player\PlayerFactory;
 use Doctrine\ORM\NonUniqueResultException;
@@ -32,7 +33,7 @@ class AnonymousPlayerProvider implements UserProviderInterface
 
     private function registerPlayer(string $name): Player
     {
-        $player = $this->player_factory->create($name);
+        $player = $this->player_factory->create($name, PlayerType::HUMAN());
         $this->registerInSession($player);
 
         return $player;

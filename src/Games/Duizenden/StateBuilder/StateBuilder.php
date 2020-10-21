@@ -7,7 +7,7 @@ namespace App\Games\Duizenden\StateBuilder;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
-use App\Games\Duizenden\StateCompiler\ActionType;
+use App\Games\Duizenden\Actions\ActionType;
 use App\Games\Duizenden\StateCompiler\StateCompiler;
 use App\Games\Duizenden\StateCompiler\StateData;
 use App\Games\Duizenden\Workflow\TransitionType;
@@ -16,16 +16,18 @@ use Symfony\Component\Workflow\StateMachine;
 class StateBuilder
 {
 	private StateCompiler $state_compiler;
-
 	private StateMachine $state_machine;
+	private AllowedActions $allowed_actions;
 
 	public function __construct(
 		StateCompiler $state_compiler,
-		StateMachine $state_machine
+		StateMachine $state_machine,
+		AllowedActions $allowed_actions
 	)
 	{
 		$this->state_compiler = $state_compiler;
 		$this->state_machine = $state_machine;
+		$this->allowed_actions = $allowed_actions;
 	}
 
 	/**
@@ -53,7 +55,7 @@ class StateBuilder
 			->setFirstMeldMinimumPoints($game->getState()->getFirstMeldMinimumPoints())
 			->setRoundFinishExtraPoints($game->getState()->getRoundFinishExtraPoints())
 			->setCurrentPlayer($state->getPlayers()->getCurrentPlayer())
-			->setAllowedActions($this->createAllowedActions($game))
+			->setAllowedActions($this->allowed_actions->getAllowedActions($game))
 			->setUndrawnPool($state->getUndrawnPool())
 			->setDiscardedPool($state->getDiscardedPool())
 			->setPlayers($state->getPlayers()->getFreshLoopIterator());
@@ -78,53 +80,5 @@ class StateBuilder
 		{
 			$state_data->setPlayerScore($player, $score->getTotalPlayerScore($player->getId()));
 		}
-	}
-
-	/**
-	 * @return ActionType[]
-	 */
-	private function createAllowedActions(Game $game): array
-	{
-		$actions = [];
-
-		foreach ($this->state_machine->getEnabledTransitions($game) as $marking)
-		{
-			switch ($marking->getName())
-			{
-				case TransitionType::DEAL:
-					$actions[] = ActionType::DEAL();
-					break;
-
-				case TransitionType::DISCARD_END_TURN:
-					$actions[] = ActionType::DISCARD_END_TURN();
-					break;
-
-				case TransitionType::DISCARD_END_ROUND:
-					$actions[] = ActionType::DISCARD_END_ROUND();
-					break;
-
-				case TransitionType::DISCARD_END_GAME:
-					$actions[] = ActionType::DISCARD_END_GAME();
-					break;
-
-				case TransitionType::DRAW_FROM_UNDRAWN:
-					$actions[] = ActionType::DRAW_FROM_UNDRAWN();
-					break;
-
-				case TransitionType::DRAW_FROM_DISCARDED:
-					$actions[] = ActionType::DRAW_FROM_DISCARDED();
-					break;
-
-				case TransitionType::MELD:
-					$actions[] = ActionType::MELD_CARDS();
-					break;
-
-				case TransitionType::EXTEND_MELD:
-					$actions[] = ActionType::EXTEND_MELD();
-					break;
-			}
-		}
-
-		return array_unique($actions);
 	}
 }

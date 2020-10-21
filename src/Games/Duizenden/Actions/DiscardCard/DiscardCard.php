@@ -11,6 +11,8 @@ use App\Games\Duizenden\Actions\QueenOfSpadesTrait;
 use App\Games\Duizenden\Actions\StateChangeAction;
 use App\Games\Duizenden\Dealer\DealerFinder;
 use App\Games\Duizenden\DiscardCardResultType;
+use App\Games\Duizenden\Event\GameEvent;
+use App\Games\Duizenden\Event\GameEventType;
 use App\Games\Duizenden\Exception\DiscardCardException;
 use App\Games\Duizenden\Game;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
@@ -21,6 +23,7 @@ use App\Games\Duizenden\State;
 use App\Games\Duizenden\Workflow\TransitionType;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Workflow\StateMachine;
 
 class DiscardCard extends StateChangeAction
@@ -28,16 +31,16 @@ class DiscardCard extends StateChangeAction
     use QueenOfSpadesTrait;
 
 	private RevertMeld $revert_meld;
-
 	private ScoreCalculator $score_calculator;
-
 	private DealerFinder $dealer_finder;
+	private EventDispatcherInterface $event_dispatcher;
 
 	public function __construct(
 		StateMachine $state_machine,
 		RevertMeld $revert_meld,
 		ScoreCalculator $score_calculator,
-		DealerFinder $dealer_finder
+		DealerFinder $dealer_finder,
+		EventDispatcherInterface $event_dispatcher
 	)
 	{
 		parent::__construct($state_machine);
@@ -45,6 +48,7 @@ class DiscardCard extends StateChangeAction
 		$this->revert_meld = $revert_meld;
 		$this->score_calculator = $score_calculator;
 		$this->dealer_finder = $dealer_finder;
+		$this->event_dispatcher = $event_dispatcher;
 	}
 
 	/**
@@ -60,8 +64,8 @@ class DiscardCard extends StateChangeAction
 		$state = $game->getState();
 
 		if (
-			$state->getPlayers()->getCurrentPlayer()->getHand()->getCardCount() > 1 &&
-			$this->isCardQueenOfSpades($card)
+			$this->isCardQueenOfSpades($card) &&
+			$state->getPlayers()->getCurrentPlayer()->getHand()->getCardCount() > 1
 		)
 		{
 			throw new DiscardCardException(sprintf(
@@ -91,10 +95,11 @@ class DiscardCard extends StateChangeAction
 				$this->state_machine->apply($game, TransitionType::DISCARD_END_TURN()->getValue(), [
 				    'up_turn' => true
                 ]);
+				$this->triggerTurnStartedEvent($game);
 				break;
 
 			case DiscardCardResultType::END_ROUND():
-			    if (!$state->allowFirstTurnRoundEnd() && $state->getTurn() === 1)
+			    if (!$state->getAllowFirstTurnRoundEnd() && $state->getTurn() === 1)
                 {
                     $this->revert_meld->revert($game->getId(), $state->getPlayers()->getCurrentPlayer());
                     $result = DiscardCardResultType::INVALID_ROUND_END();
@@ -106,10 +111,11 @@ class DiscardCard extends StateChangeAction
 				$this->state_machine->apply($game, TransitionType::DISCARD_END_ROUND()->getValue(), [
                     'up_turn' => true
                 ]);
+				$this->triggerTurnStartedEvent($game);
 				break;
 
 			case DiscardCardResultType::END_GAME():
-                if (!$state->allowFirstTurnRoundEnd() && $state->getTurn() === 1)
+                if (!$state->getAllowFirstTurnRoundEnd() && $state->getTurn() === 1)
                 {
                     $this->revert_meld->revert($game->getId(), $state->getPlayers()->getCurrentPlayer());
                     $result = DiscardCardResultType::INVALID_ROUND_END();
@@ -188,5 +194,13 @@ class DiscardCard extends StateChangeAction
 		}
 
 		return $score;
+	}
+
+	private function triggerTurnStartedEvent(Game $game): void
+	{
+		if (!$this->isSandboxed())
+		{
+			$this->event_dispatcher->dispatch(new GameEvent($game), GameEventType::TURN_STARTED()->getValue());
+		}
 	}
 }

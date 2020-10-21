@@ -51,7 +51,6 @@ class Main extends AbstractController
                 return $this->redirect($this->generateUrl('duizenden.play', [
                     'uuid' => $uuid
                 ]));
-                break;
 
             default:
                 throw new Exception(sprintf("Game '%s' with id '%s' could not be loaded.", $game_name, $uuid));

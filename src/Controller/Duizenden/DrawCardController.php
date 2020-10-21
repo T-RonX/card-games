@@ -20,7 +20,7 @@ use App\Games\Duizenden\Meld\Exception\MeldException;
 use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
-use App\Games\Duizenden\StateCompiler\ActionType;
+use App\Games\Duizenden\Actions\ActionType;
 use App\Games\Duizenden\StateCompiler\TopicType;
 use App\Security\Voter\Duizenden\GameVoter;
 use Doctrine\ORM\NonUniqueResultException;

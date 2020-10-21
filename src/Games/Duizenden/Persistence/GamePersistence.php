@@ -128,7 +128,7 @@ class GamePersistence
 		$game_meta->setFirstMeldMinimumPoints($game->getState()->getFirstMeldMinimumPoints());
 		$game_meta->setRoundFinishExtraPoints($game->getState()->getRoundFinishExtraPoints());
 		$game_meta->setDeckRebuilder($game->getDeckRebuilder()->getName());
-		$game_meta->setAllowFirstTurnRoundEnd($game->getState()->allowFirstTurnRoundEnd());
+		$game_meta->setAllowFirstTurnRoundEnd($game->getState()->getAllowFirstTurnRoundEnd());
 
 		($new_game_entity = clone $game_entity)
 			->setWorkflowMarking($workflow_marking)
@@ -285,7 +285,7 @@ class GamePersistence
 	{
 		$ids = [];
 
-		foreach ($players as $player)
+		foreach ($players->getFreshLoopIterator() as $player)
 		{
 			$ids[] = $player->getId();
 		}

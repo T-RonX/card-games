@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User;
 
 use App\Entity\Player;
+use App\Player\PlayerType;
 use App\Security\ProgrammaticLogin;
 use App\User\Exception\UsernameAlreadyInUseException;
 use App\User\Player\PlayerFactory;
@@ -44,7 +45,7 @@ class Creator
                 throw new RuntimeException("Unable to create user. Invalid playername given.");
             }
 
-            $player = $this->player_factory->create($playername);
+            $player = $this->player_factory->create($playername, PlayerType::HUMAN());
         }
 
         $user = $this->user_factory->create($player, $username, $password);

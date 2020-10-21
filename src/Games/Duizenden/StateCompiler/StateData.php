@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Games\Duizenden\StateCompiler;
 
 use App\CardPool\CardPoolInterface;
+use App\Games\Duizenden\Actions\ActionType;
 use App\Games\Duizenden\Initializer\DiscardedCardPool;
 use App\Games\Duizenden\Player\Player;
 use App\Games\Duizenden\Player\PlayerInterface;

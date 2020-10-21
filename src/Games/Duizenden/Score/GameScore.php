@@ -56,4 +56,9 @@ class GameScore
 
 		return $score;
 	}
+	
+	public function getRoundFinishExtraPoints(): int
+	{
+		return $this->round_finish_extra_points;
+	}
 }

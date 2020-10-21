@@ -22,7 +22,7 @@ class Players implements Iterator, Countable
 	private int $pointer = 0;
 
 	/**
-	 * @return PlayerInterface[]
+	 * @return PlayerInterface[]|Player[]
 	 */
 	public function getPlayers(): array
 	{
@@ -47,7 +47,7 @@ class Players implements Iterator, Countable
 	 */
 	public function setCurrentPlayer(PlayerInterface $player): void
 	{
-		for ($i = 0; $i < count($this); ++$i)
+		for ($i = 0, $c = count($this); $i < $c; ++$i)
 		{
 			if ($this->players[$i]->equals($player))
 			{
@@ -84,9 +84,9 @@ class Players implements Iterator, Countable
 
 	public function getRandomPlayer(): ?PlayerInterface
 	{
-		$key = max(0, rand(0, $this->count() - 1));
+		$key = max(0, random_int(0, $this->count() - 1));
 
-		return array_key_exists($key, $this->players) ? $this->players[$key] : null;
+		return $this->players[$key] ?? null;
 	}
 
 	public function nextPayer(): void
@@ -221,5 +221,15 @@ class Players implements Iterator, Countable
 	public function count(): int
 	{
 		return count($this->players);
+	}
+
+	public function getPointer(): int
+	{
+		return $this->pointer;
+	}
+
+	public function setPointer(int $pointer): void
+	{
+		$this->pointer = $pointer;
 	}
 }

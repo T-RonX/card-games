@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Games\Duizenden\StateCompiler;
 
+use App\Games\Duizenden\Actions\ActionType;
+
 class AbstractAction implements ActionInterface
 {
 	private ActionType $type;

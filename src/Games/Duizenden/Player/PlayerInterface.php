@@ -6,6 +6,7 @@ namespace App\Games\Duizenden\Player;
 
 use App\CardPool\CardPool;
 use App\Common\Meld\Melds;
+use App\Player\PlayerType;
 use App\Shuffler\ShufflerInterface;
 
 interface PlayerInterface
@@ -33,4 +34,8 @@ interface PlayerInterface
 	public function hasMelds(): bool;
 
 	public function equals(PlayerInterface $player): bool;
+
+	public function isType(PlayerType $type): bool;
+
+	public function setType(PlayerType $type): self;
 }

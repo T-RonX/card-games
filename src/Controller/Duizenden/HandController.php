@@ -14,7 +14,7 @@ use App\Games\Duizenden\Persistence\Exception\GameNotFoundException;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
-use App\Games\Duizenden\StateCompiler\ActionType;
+use App\Games\Duizenden\Actions\ActionType;
 use App\Security\Voter\Duizenden\GameVoter;
 use App\User\User\UserProvider;
 use Doctrine\ORM\NonUniqueResultException;

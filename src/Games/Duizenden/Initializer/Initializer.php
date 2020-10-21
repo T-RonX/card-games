@@ -46,6 +46,7 @@ class Initializer
 		$pack = $this->createInitialPack($shuffler);
 		$config->getPlayers()->resetCards();
 		$dealing_player = $this->getDealingPlayerFromConfigurator($config);
+		$config->getPlayers()->setCurrentPlayer($dealing_player);
 
 		$state = new State($config->getPlayers(), $dealing_player, $pack, new DiscardedCardPool());
 		$state->setTargetScore($config->getTargetScore());

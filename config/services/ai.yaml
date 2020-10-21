@@ -1,0 +1,21 @@
+services:
+  _defaults:
+    autowire: true
+
+  App\Games\Duizenden\AI\ActionGenerator\SequenceCalculator\DealSequence:
+      tags: [ 'app.duizenden.ai.sequence_calculator' ]
+
+  app.duizenden.ai.action_generator:
+    class: App\Games\Duizenden\AI\ActionGenerator\ActionGenerator
+    shared: false
+    arguments: [ !tagged 'app.duizenden.ai.sequence_calculator' ]
+    tags: [ 'app.minimax.action_generator' ]
+
+  App\AI\Minimax\State\PossibleStateFactory:
+    arguments: [ !tagged 'app.minimax.action_generator' ]
+
+  App\Games\Duizenden\AI\ContextCloner:
+    tags: [ 'app.duizenden.ai.context_cloner' ]
+
+  App\AI\Minimax\Context\ContextCloner:
+    arguments: [ !tagged 'app.duizenden.ai.context_cloner' ]

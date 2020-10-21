@@ -10,7 +10,7 @@ use App\Games\Duizenden\Notifier\GameNotifier;
 use App\Games\Duizenden\Player\Exception\PlayerNotFoundException;
 use App\Games\Duizenden\Player\PlayerInterface;
 use App\Games\Duizenden\Score\Exception\UnmappedCardException;
-use App\Games\Duizenden\StateCompiler\ActionType;
+use App\Games\Duizenden\Actions\ActionType;
 use App\Games\Duizenden\StateCompiler\TopicType;
 
 trait NotifyPlayersTrait
