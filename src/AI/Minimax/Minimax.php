@@ -19,13 +19,13 @@ class Minimax
 		$this->state_factory = $state_factory;
 	}
 
-	public function findBestAction(ContextInterface $context)
+	public function findBestActionSequence(ContextInterface $context): ActionSequence
 	{
 		$state_tree = $this->state_factory->create($context);
 
 		$this->minimax($state_tree, 4, -PHP_INT_MAX, PHP_INT_MAX, true);
 
-		$action = $this->getFirstViableActionSequence($state_tree);
+		return $this->getFirstViableActionSequence($state_tree);
 	}
 
 	private function getFirstViableActionSequence(PossibleState $state): ActionSequence
@@ -73,7 +73,7 @@ class Minimax
 
 		foreach ($state->getActionsSequences() as $action_sequence)
 		{
-			$action_sequence->executeSequence();
+			$action_sequence->executeSequenceInSandbox();
 			$score = $this->minimax($action_sequence->getResultingState(), $depth - 1, $alpha, $beta, false);
 			$max_score = max($max_score, $score);
 			$alpha = max($alpha, $score);
@@ -93,7 +93,7 @@ class Minimax
 
 		foreach($state->getActionsSequences() as $action_sequence)
 		{
-			$action_sequence->executeSequence();
+			$action_sequence->executeSequenceInSandbox();
 			$score = $this->minimax($action_sequence->getResultingState(), $depth - 1, $alpha, $beta, true);
 			$min_score = min($min_score, $score);
 			$beta = min($beta, $score);

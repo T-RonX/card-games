@@ -38,12 +38,12 @@ class PersistingMarkingStore implements MarkingStoreInterface
 	{
 		if ($this->is_sandboxed)
 		{
-			if ($this->current_marking_sandboxed === null && $this->current_marking === null)
+			if ($this->current_marking_sandboxed === null)
 			{
-				throw new RuntimeException("Can not get empty marking when marking store is in in_memory mode.");
+				throw new RuntimeException("Can not get empty marking when marking store is in sandbox mode.");
 			}
 
-			return $this->current_marking_sandboxed ?? $this->current_marking;
+			return $this->current_marking_sandboxed;
 		}
 
 		return $this->current_marking ?? $this->current_marking = new Marking([$this->game_persistence->getMarking($game) => 1]);
@@ -70,10 +70,10 @@ class PersistingMarkingStore implements MarkingStoreInterface
 		$this->game_persistence->persist($game, key($marking->getPlaces()), $context);
 	}
 
-	private function setIsSandboxed(bool $in_memory): void
+	private function setIsSandboxed(bool $is_sandboxed): void
 	{
-		$this->is_sandboxed = $in_memory;
-		$this->current_marking_sandboxed = null;
+		$this->is_sandboxed = $is_sandboxed;
+		$this->current_marking_sandboxed = $this->current_marking ? clone $this->current_marking : null;
 	}
 
 	public function isSandboxed(): bool

@@ -47,10 +47,18 @@ class ActionSequence
 
 	public function executeSequence(): void
 	{
-		$this->getMarkingStore()->sandbox(fn() => $this->runSequence());
+		foreach ($this->actions as $action)
+		{
+			$action->runAndGetNewContext($this->initial_context);
+		}
 	}
 
-	private function runSequence(): void
+	public function executeSequenceInSandbox(): void
+	{
+		$this->getMarkingStore()->sandbox(fn() => $this->runSequenceSandboxed());
+	}
+
+	private function runSequenceSandboxed(): void
 	{
 		$new_context = $this->initial_context;
 		$last_action = null;
