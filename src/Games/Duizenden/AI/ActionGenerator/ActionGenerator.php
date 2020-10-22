@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Games\Duizenden\AI\ActionGenerator;
 
-use App\AI\Minimax\Action\AbstractActionGenerator;
+use App\AI\Minimax\Action\ActionGeneratorInterface;
 use App\AI\Minimax\Context\ContextInterface;
 use App\Games\Duizenden\AI\Context\Context;
 use App\Games\Duizenden\Game;
+use Generator;
 use RuntimeException;
 
-class ActionGenerator extends AbstractActionGenerator
+class ActionGenerator implements ActionGeneratorInterface
 {
 	/**
 	 * @var SequenceCalculatorInterface[]
@@ -22,12 +23,12 @@ class ActionGenerator extends AbstractActionGenerator
 		$this->sequence_calculators = $sequence_calculators;
 	}
 
-	protected function createActionSequences(ContextInterface $context): array
+	public function getActionSequences(ContextInterface $context): Generator
 	{
 		$context = $this->validateContext($context);
 		$sequence_calculator = $this->getSequenceCalculator($context->getAllowedActions());
 
-		return $sequence_calculator->getActionSequences($context);
+		return yield from $sequence_calculator->getActionSequences($context);
 	}
 
 	private function getSequenceCalculator(array $allowed_actions): SequenceCalculatorInterface

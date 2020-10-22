@@ -7,13 +7,14 @@ namespace App\Games\Duizenden\AI\ActionGenerator;
 use App\AI\Minimax\Action\ActionSequence;
 use App\Games\Duizenden\Actions\ActionType;
 use App\Games\Duizenden\AI\Context\Context;
+use Generator;
 
 interface SequenceCalculatorInterface
 {
 	/**
-	 * @return ActionSequence[]
+	 * @return ActionSequence[]|Generator
 	 */
-	public function getActionSequences(Context $context): array;
+	public function getActionSequences(Context $context): Generator;
 
 	/**
 	 * @param ActionType[] $actions

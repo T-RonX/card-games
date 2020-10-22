@@ -73,7 +73,15 @@ class PersistingMarkingStore implements MarkingStoreInterface
 	private function setIsSandboxed(bool $is_sandboxed): void
 	{
 		$this->is_sandboxed = $is_sandboxed;
-		$this->current_marking_sandboxed = $this->current_marking ? clone $this->current_marking : null;
+
+		if ($is_sandboxed)
+		{
+			$this->current_marking_sandboxed = $this->current_marking ? clone $this->current_marking : null;
+		}
+		else
+		{
+			$this->current_marking_sandboxed = null;
+		}
 	}
 
 	public function isSandboxed(): bool

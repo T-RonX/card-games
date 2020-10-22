@@ -166,6 +166,8 @@ class GameController extends AbstractController
         $game = $this->loadGame($uuid);
         $this->denyAccessUnlessGranted(GameVoter::ENTER_GAME, $game);
 
+        $this->event_dispatcher->dispatch(new GameEvent($game), GameEventType::TURN_STARTED()->getValue());
+
         $state_data = $this->state_builder->createStateData($game);
         $this->complementStateData($game, $state_data);
 

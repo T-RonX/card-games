@@ -2,6 +2,9 @@ services:
   _defaults:
     autowire: true
 
+  App\Games\Duizenden\AI\ActionGenerator\SequenceCalculator\TurnSequence:
+    tags: [ 'app.duizenden.ai.sequence_calculator' ]
+
   App\Games\Duizenden\AI\ActionGenerator\SequenceCalculator\DealSequence:
       tags: [ 'app.duizenden.ai.sequence_calculator' ]
 

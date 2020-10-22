@@ -11,16 +11,13 @@ use App\Games\Duizenden\Actions\Deal\Deal;
 use App\Games\Duizenden\AI\ActionGenerator\SequenceCalculatorInterface;
 use App\Games\Duizenden\AI\Context\Context;
 use App\Games\Duizenden\StateBuilder\AllowedActions;
-use App\Games\Duizenden\Workflow\PersistingMarkingStore;
 use Closure;
+use Generator;
 
 class DealSequence implements SequenceCalculatorInterface
 {
 	private Deal $deal;
 	private ActionSequenceFactory $action_sequence_factory;
-	/**
-	 * @var AllowedActions
-	 */
 	private AllowedActions $allowed_actions;
 
 	public function __construct(
@@ -30,19 +27,18 @@ class DealSequence implements SequenceCalculatorInterface
 	)
 	{
 		$this->action_sequence_factory = $action_sequence_factory;
-		$this->deal = $deal;
 		$this->allowed_actions = $allowed_actions;
+		$this->deal = $deal;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getActionSequences(Context $context): array
+	public function getActionSequences(Context $context): Generator
 	{
-		return [
-			$this->action_sequence_factory->create($context, [
+		yield $this->action_sequence_factory->create($context, [
 				new Action($this->getActionCallback(), true)
-			])];
+			]);
 	}
 
 	private function getActionCallback(): Closure

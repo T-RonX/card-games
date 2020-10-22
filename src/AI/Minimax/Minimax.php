@@ -23,7 +23,7 @@ class Minimax
 	{
 		$state_tree = $this->state_factory->create($context);
 
-		$this->minimax($state_tree, 4, -PHP_INT_MAX, PHP_INT_MAX, true);
+		$this->minimax($state_tree, 3, -PHP_INT_MAX, PHP_INT_MAX, true);
 
 		return $this->getFirstViableActionSequence($state_tree);
 	}

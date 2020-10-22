@@ -23,7 +23,6 @@ class PossibleStateFactory
 	public function create(ContextInterface $context, bool $is_final_action = false): PossibleState
 	{
 		$action_generator = $this->getActionGenerator($context->getGame()->getName());
-		$action_generator->setContext($context);
 
 		return new PossibleState($action_generator, $context, $is_final_action);
 	}

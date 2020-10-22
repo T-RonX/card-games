@@ -7,6 +7,7 @@ namespace App\AI\Minimax\State;
 use App\AI\Minimax\Action\ActionGeneratorInterface;
 use App\AI\Minimax\Action\ActionSequence;
 use App\AI\Minimax\Context\ContextInterface;
+use Generator;
 use RuntimeException;
 
 class PossibleState
@@ -14,6 +15,8 @@ class PossibleState
 	private ?ActionGeneratorInterface $action_generator;
 	private ?int $score = null;
 	private bool $is_final_action;
+	private ContextInterface $context;
+	private ?array $actions = null;
 
 	public function __construct(
 		?ActionGeneratorInterface $action_generator,
@@ -27,12 +30,21 @@ class PossibleState
 	}
 
 	/**
-	 * @return ActionSequence[]
+	 * @return ActionSequence[]|Generator
 	 */
-	public function getActionsSequences(): iterable
+	public function getActionsSequences(): Generator
 	{
-		foreach ($this->action_generator->getActionSequences() as $action_sequence)
+		if ($this->actions !== null)
 		{
+			foreach($this->actions as $action)
+			{
+				yield $action;
+			}
+		}
+
+		foreach ($this->action_generator->getActionSequences($this->context) as $action_sequence)
+		{
+			$this->actions[] = $action_sequence;
 			yield $action_sequence;
 		}
 

@@ -22,9 +22,6 @@ class ActionSequence
 	private PossibleStateFactory $possible_state_factory;
 	private PossibleState $resulting_state;
 	private ContextCloner $context_cloner;
-	/**
-	 * @var StateMachine
-	 */
 	private StateMachine $state_machine;
 
 	/**
@@ -49,25 +46,37 @@ class ActionSequence
 	{
 		foreach ($this->actions as $action)
 		{
-			$action->runAndGetNewContext($this->initial_context);
+			$action->execute($this->initial_context);
 		}
 	}
 
 	public function executeSequenceInSandbox(): void
 	{
-		$this->getMarkingStore()->sandbox(fn() => $this->runSequenceSandboxed());
+		$this->getMarkingStore()->sandbox(fn() => $this->dryRunSequence());
 	}
 
-	private function runSequenceSandboxed(): void
+	private function dryRunSequence(): void
 	{
-		$new_context = $this->initial_context;
+		$new_context = $this->context_cloner->cloneContext($this->initial_context);
 		$last_action = null;
 
 		foreach ($this->actions as $action)
 		{
-			$cloned_context = $this->context_cloner->cloneContext($new_context);
-			$new_context = $action->runAndGetNewContext($cloned_context);
+			try
+			{
+				$new_context = $action->execute($new_context);
+			}
+			catch (SequenceNotValidException $e)
+			{
+				throw $e;
+			}
+
 			$last_action = $action;
+		}
+
+		if ($last_action === null && count($this->actions))
+		{
+			throw new RuntimeException("Non of the predicted action sequences could be run successfully.");
 		}
 
 		$is_last_action = $last_action !== null && $last_action->isIsFinalAction();

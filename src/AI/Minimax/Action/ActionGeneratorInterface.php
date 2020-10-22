@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\AI\Minimax\Action;
 
 use App\AI\Minimax\Context\ContextInterface;
+use Generator;
 
 interface ActionGeneratorInterface
 {
 	public function getGameName(): string;
 
-	public function getActionSequences(): iterable;
-
-	public function setContext(ContextInterface $context): void;
+	/**
+	 * @return ActionSequence[]|Generator
+	 */
+	public function getActionSequences(ContextInterface $context): Generator;
 }

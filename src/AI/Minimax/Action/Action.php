@@ -18,7 +18,7 @@ class Action
 		$this->is_final_action = $is_final_action;
 	}
 
-	public function runAndGetNewContext(ContextInterface $context): ContextInterface
+	public function execute(ContextInterface $context): ContextInterface
 	{
 		$closure = $this->invoker;
 
